@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "akri-bakes-backend"
+version = "0.1.0"
+description = "Akri Bakes order API"
+authors = ["Akri Bakes <noreply@akribakes.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.111.0"
+uvicorn = {extras = ["standard"], version = "^0.30.0"}
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

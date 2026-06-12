@@ -35,10 +35,11 @@ export default function CheckoutPage() {
   });
   const [payment, setPayment] = useState("Pay at Store");
   const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const update = (field) => (event) => setForm((current) => ({ ...current, [field]: event.target.value }));
 
-  const handlePlaceOrder = () => {
+  const handlePlaceOrder = async () => {
     if (!form.name.trim() || !form.phone.trim() || !form.pickupDate) {
       setError("Please enter your name, phone number, and pickup date.");
       return;
@@ -47,8 +48,15 @@ export default function CheckoutPage() {
       setError("Your cart is empty.");
       return;
     }
-    const order = placeOrder({ ...form, payment });
-    router.push(`/order-confirmation?id=${order.orderId}`);
+    setError("");
+    setSubmitting(true);
+    try {
+      const order = await placeOrder({ ...form, payment });
+      router.push(`/order-confirmation?id=${order.orderId}`);
+    } catch (err) {
+      setError(err.message || "Could not place order. Please try again.");
+      setSubmitting(false);
+    }
   };
 
   if (ready && items.length === 0) {
