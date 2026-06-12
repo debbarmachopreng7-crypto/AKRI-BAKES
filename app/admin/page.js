@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { useCart } from "../../components/CartContext";
+import AdminGate from "../../components/AdminGate";
 
 const statuses = ["Pending", "Ready For Pickup", "Completed"];
 
@@ -30,6 +31,7 @@ export default function AdminPage() {
   }, [orders]);
 
   return (
+    <AdminGate>
     <main>
       <section className="border-b border-[#e5e5e5] bg-[#fafafa] py-20">
         <div className="mx-auto max-w-5xl px-4 text-center">
@@ -109,5 +111,6 @@ export default function AdminPage() {
         </div>
       </section>
     </main>
+    </AdminGate>
   );
 }
