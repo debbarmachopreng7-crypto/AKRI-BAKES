@@ -28,7 +28,7 @@ function ItemDetails({ item }) {
 }
 
 export default function CartPage() {
-  const { items, removeItem, subtotal, ready } = useCart();
+  const { items, removeItem, updateQuantity, subtotal, ready } = useCart();
 
   return (
     <main>
@@ -59,21 +59,46 @@ export default function CartPage() {
             <div className="rounded-[2rem] border border-[#e5e5e5] bg-white p-8 shadow-sm">
               <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
                 <div className="space-y-6">
-                  {items.map((item) => (
-                    <div key={item.id} className="flex items-start justify-between border-b border-[#f0f0f0] pb-5 last:border-b-0 last:pb-0">
-                      <ItemDetails item={item} />
-                      <div className="text-right">
-                        <p className="font-medium text-[#111111]">₹{item.price}</p>
-                        <button
-                          type="button"
-                          onClick={() => removeItem(item.id)}
-                          className="mt-3 text-sm font-medium text-[#999999] underline transition hover:text-[#111111]"
-                        >
-                          Remove
-                        </button>
+                  {items.map((item) => {
+                    const quantity = item.quantity ?? 1;
+                    return (
+                      <div key={item.id} className="flex items-start justify-between border-b border-[#f0f0f0] pb-5 last:border-b-0 last:pb-0">
+                        <ItemDetails item={item} />
+                        <div className="text-right">
+                          <p className="font-medium text-[#111111]">₹{item.price * quantity}</p>
+                          {quantity > 1 ? (
+                            <p className="mt-1 text-xs text-[#666666]">₹{item.price} each</p>
+                          ) : null}
+                          <div className="mt-3 flex items-center justify-end gap-3">
+                            <button
+                              type="button"
+                              onClick={() => updateQuantity(item.id, -1)}
+                              aria-label="Decrease quantity"
+                              className="flex h-8 w-8 items-center justify-center rounded-full border border-[#e5e5e5] text-lg text-[#111111] transition hover:bg-[#f5f5f5]"
+                            >
+                              −
+                            </button>
+                            <span className="min-w-[1.5rem] text-center text-sm font-medium text-[#111111]">{quantity}</span>
+                            <button
+                              type="button"
+                              onClick={() => updateQuantity(item.id, 1)}
+                              aria-label="Increase quantity"
+                              className="flex h-8 w-8 items-center justify-center rounded-full border border-[#e5e5e5] text-lg text-[#111111] transition hover:bg-[#f5f5f5]"
+                            >
+                              +
+                            </button>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => removeItem(item.id)}
+                            className="mt-3 text-sm font-medium text-[#999999] underline transition hover:text-[#111111]"
+                          >
+                            Remove
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
 
                 <div className="rounded-[2rem] border border-[#e5e5e5] bg-[#fafafa] p-6">

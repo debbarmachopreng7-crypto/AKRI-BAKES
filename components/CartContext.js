@@ -54,13 +54,43 @@ export function CartProvider({ children }) {
   }, [orders, ready]);
 
   const addItem = (item) => {
-    setItems((current) => [
-      ...current,
-      { id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`, quantity: 1, ...item },
-    ]);
+    setItems((current) => {
+      const match = current.find(
+        (existing) =>
+          existing.type === "menu" &&
+          item.type === "menu" &&
+          existing.name === item.name &&
+          existing.size === item.size &&
+          (existing.message || "") === (item.message || "") &&
+          (existing.pickupDate || "") === (item.pickupDate || "") &&
+          (existing.pickupTime || "") === (item.pickupTime || ""),
+      );
+      if (match) {
+        return current.map((existing) =>
+          existing.id === match.id
+            ? { ...existing, quantity: (existing.quantity ?? 1) + 1 }
+            : existing,
+        );
+      }
+      return [
+        ...current,
+        { id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`, quantity: 1, ...item },
+      ];
+    });
   };
 
   const removeItem = (id) => setItems((current) => current.filter((item) => item.id !== id));
+
+  const updateQuantity = (id, delta) =>
+    setItems((current) =>
+      current
+        .map((item) =>
+          item.id === id
+            ? { ...item, quantity: Math.max(0, (item.quantity ?? 1) + delta) }
+            : item,
+        )
+        .filter((item) => (item.quantity ?? 1) > 0),
+    );
 
   const clearCart = () => setItems([]);
 
@@ -134,6 +164,7 @@ export function CartProvider({ children }) {
     ready,
     addItem,
     removeItem,
+    updateQuantity,
     clearCart,
     subtotal,
     count,

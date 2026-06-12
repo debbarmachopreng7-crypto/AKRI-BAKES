@@ -215,12 +215,17 @@ export default function CheckoutPage() {
             <div className="rounded-[2rem] border border-[#e5e5e5] bg-[#fafafa] p-8 shadow-sm">
               <h2 className="font-serif text-2xl font-semibold text-[#111111]">Order Summary</h2>
               <div className="mt-5 space-y-3 text-[#333333]">
-                {items.map((item) => (
-                  <p key={item.id} className="flex items-center justify-between text-sm">
-                    <span>{item.name} ({item.size})</span>
-                    <span>₹{item.price}</span>
-                  </p>
-                ))}
+                {items.map((item) => {
+                  const quantity = item.quantity ?? 1;
+                  return (
+                    <p key={item.id} className="flex items-center justify-between text-sm">
+                      <span>
+                        {item.name} ({item.size}){quantity > 1 ? ` × ${quantity}` : ""}
+                      </span>
+                      <span>₹{item.price * quantity}</span>
+                    </p>
+                  );
+                })}
                 <p className="flex items-center justify-between border-t border-[#e5e5e5] pt-3"><span>Subtotal</span><span>₹{subtotal}</span></p>
                 {isDelivery ? (
                   <p className="flex items-center justify-between">

@@ -84,12 +84,15 @@ export default function AdminPage() {
                           </p>
                         ) : null}
                         <ul className="mt-3 space-y-1 text-sm text-[#333333]">
-                          {order.items.map((item) => (
-                            <li key={item.id}>
-                              {item.name} ({item.size}) — ₹{item.price}
-                              {item.message ? ` • “${item.message}”` : ""}
-                            </li>
-                          ))}
+                          {order.items.map((item) => {
+                            const quantity = item.quantity ?? 1;
+                            return (
+                              <li key={item.id}>
+                                {item.name} ({item.size}){quantity > 1 ? ` × ${quantity}` : ""} — ₹{item.price * quantity}
+                                {item.message ? ` • “${item.message}”` : ""}
+                              </li>
+                            );
+                          })}
                         </ul>
                       </div>
 
