@@ -36,7 +36,7 @@ export default function CartPage() {
         <div className="mx-auto max-w-5xl px-4 text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#666666]">Shopping Cart</p>
           <h1 className="mt-5 font-serif text-5xl font-semibold text-[#111111]">Your Cart</h1>
-          <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-[#333333]">Pickup only. No delivery. No shipping. Review your cake, pickup date, and time before checkout.</p>
+          <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-[#333333]">Pickup or delivery available. Review your cake, then choose pickup or delivery and pay at checkout.</p>
         </div>
       </section>
 
@@ -79,8 +79,8 @@ export default function CartPage() {
                 <div className="rounded-[2rem] border border-[#e5e5e5] bg-[#fafafa] p-6">
                   <div className="space-y-3 text-[#333333]">
                     <p className="flex items-center justify-between"><span>Subtotal</span><span>₹{subtotal}</span></p>
-                    <p className="flex items-center justify-between"><span>Pickup fee</span><span>₹0</span></p>
-                    <p className="flex items-center justify-between border-t border-[#e5e5e5] pt-3 text-lg font-semibold text-[#111111]"><span>Total</span><span>₹{subtotal}</span></p>
+                    <p className="text-sm text-[#666666]">Delivery charge (if any) is calculated at checkout based on your area.</p>
+                    <p className="flex items-center justify-between border-t border-[#e5e5e5] pt-3 text-lg font-semibold text-[#111111]"><span>Subtotal</span><span>₹{subtotal}</span></p>
                   </div>
                   <Link href="/checkout" className="mt-6 inline-flex w-full justify-center rounded-full bg-[#111111] px-6 py-3 font-medium text-white transition hover:bg-[#333333]">
                     Checkout

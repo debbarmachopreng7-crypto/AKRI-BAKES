@@ -27,7 +27,7 @@ export default function HomePage() {
 
             <div className="mt-10 grid gap-4 sm:grid-cols-3">
               {[
-                "Pickup only",
+                "Pickup & delivery",
                 "Live price calculator",
                 "Custom cakes",
               ].map((item) => (
@@ -72,9 +72,9 @@ export default function HomePage() {
           <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#666666]">Why Akri Bakes</p>
-              <h2 className="mt-4 font-serif text-4xl font-semibold text-[#111111]">A bakery storefront built around pickup-first ordering.</h2>
+              <h2 className="mt-4 font-serif text-4xl font-semibold text-[#111111]">A bakery storefront built for easy pickup and delivery ordering.</h2>
               <p className="mt-6 max-w-xl leading-8 text-[#333333]">
-                Browse the menu, add to cart, optionally build your own cake, choose pickup date and time, pay at store or in advance, and collect your order from Akri Bakes.
+                Browse the menu, add to cart, optionally build your own cake, choose pickup or delivery, pay at store, Cash on Delivery, or in advance, and enjoy your order from Akri Bakes.
               </p>
             </div>
 
@@ -100,7 +100,7 @@ export default function HomePage() {
           <div className="grid gap-6 md:grid-cols-3">
             {[
               ["Store Hours", "9:00 AM - 7:00 PM"],
-              ["Pickup Only", "No delivery. No shipping."],
+              ["Pickup & Delivery", "Pickup free, or delivery with area-based charges."],
               ["Admin Dashboard", "Track today’s orders, pending pickups, and custom requests."],
             ].map(([title, text]) => (
               <div key={title} className="rounded-[2rem] border border-[#e5e5e5] bg-white p-7 shadow-sm">

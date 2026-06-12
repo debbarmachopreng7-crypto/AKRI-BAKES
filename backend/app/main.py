@@ -67,6 +67,10 @@ class OrderCreate(BaseModel):
     pickupTime: str
     notes: Optional[str] = ""
     payment: str
+    method: Optional[str] = "Pickup"
+    deliveryArea: Optional[str] = ""
+    address: Optional[str] = ""
+    deliveryCharge: float = 0
     items: list[CartItem]
     total: float
 
@@ -126,6 +130,10 @@ def create_order(payload: OrderCreate) -> dict:
             "pickupTime": payload.pickupTime,
             "notes": payload.notes or "",
             "payment": payload.payment,
+            "method": payload.method or "Pickup",
+            "deliveryArea": payload.deliveryArea or "",
+            "address": payload.address or "",
+            "deliveryCharge": payload.deliveryCharge or 0,
             "items": items,
             "total": payload.total,
             "status": "Pending",

@@ -79,7 +79,7 @@ export function CartProvider({ children }) {
       const res = await fetch(`${API_BASE}/orders`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...details, items, total: subtotal }),
+        body: JSON.stringify({ ...details, items, total: details.total ?? subtotal }),
       });
       if (!res.ok) throw new Error("Could not place order. Please try again.");
       const order = await res.json();
@@ -92,11 +92,11 @@ export function CartProvider({ children }) {
     const order = {
       orderId,
       items,
-      total: subtotal,
       status: "Pending",
       hasCustomCake: items.some((item) => item.type === "custom"),
       createdAt: new Date().toISOString(),
       ...details,
+      total: details.total ?? subtotal,
     };
     setOrders((current) => [order, ...current]);
     clearCart();
