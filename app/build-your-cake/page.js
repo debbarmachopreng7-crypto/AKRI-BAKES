@@ -71,7 +71,7 @@ export default function BuildYourCakePage() {
         <div className="mx-auto max-w-5xl px-4 text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#666666]">Build Your Cake</p>
           <h1 className="mt-5 font-serif text-5xl font-semibold text-[#111111]">Design your cake and see the price update instantly.</h1>
-          <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-[#333333]">Pick an occasion, size, flavour, frosting, and decoration. Then choose your pickup date and time. No delivery. No shipping. Pickup only.</p>
+          <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-[#333333]">Pick an occasion, size, flavour, frosting, and decoration. Then choose pickup or delivery and your date and time at checkout.</p>
         </div>
       </section>
 

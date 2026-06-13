@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { useCart } from "../../components/CartContext";
+import AdminGate from "../../components/AdminGate";
 
 const statuses = ["Pending", "Ready For Pickup", "Completed"];
 
@@ -30,6 +31,7 @@ export default function AdminPage() {
   }, [orders]);
 
   return (
+    <AdminGate>
     <main>
       <section className="border-b border-[#e5e5e5] bg-[#fafafa] py-20">
         <div className="mx-auto max-w-5xl px-4 text-center">
@@ -65,19 +67,32 @@ export default function AdminPage() {
                       <div>
                         <div className="flex items-center gap-3">
                           <p className="font-serif text-xl font-semibold text-[#111111]">{order.orderId}</p>
+                          <span className={`rounded-full px-3 py-1 text-xs font-medium ${order.method === "Delivery" ? "bg-[#111111] text-white" : "border border-[#e5e5e5] text-[#333333]"}`}>
+                            {order.method || "Pickup"}
+                          </span>
                           {order.hasCustomCake ? (
                             <span className="rounded-full bg-[#111111] px-3 py-1 text-xs font-medium text-white">Custom Cake</span>
                           ) : null}
                         </div>
                         <p className="mt-2 text-sm text-[#333333]">{order.name} • {order.phone}</p>
-                        <p className="mt-1 text-sm text-[#666666]">Pickup: {order.pickupDate} {order.pickupTime} • {order.payment}</p>
+                        <p className="mt-1 text-sm text-[#666666]">
+                          {order.method === "Delivery" ? "Delivery" : "Pickup"}: {order.pickupDate} {order.pickupTime} • {order.payment}
+                        </p>
+                        {order.method === "Delivery" ? (
+                          <p className="mt-1 text-sm text-[#666666]">
+                            To: {order.deliveryArea} (₹{order.deliveryCharge}) — {order.address}
+                          </p>
+                        ) : null}
                         <ul className="mt-3 space-y-1 text-sm text-[#333333]">
-                          {order.items.map((item) => (
-                            <li key={item.id}>
-                              {item.name} ({item.size}) — ₹{item.price}
-                              {item.message ? ` • “${item.message}”` : ""}
-                            </li>
-                          ))}
+                          {order.items.map((item) => {
+                            const quantity = item.quantity ?? 1;
+                            return (
+                              <li key={item.id}>
+                                {item.name} ({item.size}){quantity > 1 ? ` × ${quantity}` : ""} — ₹{item.price * quantity}
+                                {item.message ? ` • “${item.message}”` : ""}
+                              </li>
+                            );
+                          })}
                         </ul>
                       </div>
 
@@ -109,5 +124,6 @@ export default function AdminPage() {
         </div>
       </section>
     </main>
+    </AdminGate>
   );
 }
