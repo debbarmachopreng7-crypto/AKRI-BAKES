@@ -1,7 +1,12 @@
 import json
 import os
+import random
+import smtplib
 import sqlite3
+import string
+import time
 from datetime import datetime, timezone
+from email.mime.text import MIMEText
 from pathlib import Path
 from typing import Optional
 
@@ -9,9 +14,44 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-STATUSES = ["Pending", "Ready For Pickup", "Completed"]
+STATUSES = ["Awaiting Payment Confirmation", "Pending", "Ready For Pickup", "Completed"]
+
+# ── OTP in-memory store ──────────────────────────────────────────
+otp_store: dict[str, dict] = {}
+
+SMTP_EMAIL = os.environ.get("SMTP_EMAIL", "Akribake2020@gmail.com")
+SMTP_PASS = os.environ.get("SMTP_PASSWORD", "")
+ADMIN_EMAIL = "Akribake2020@gmail.com"
+ADMIN_PHONE = "8259917757"
 
 
+def generate_otp() -> str:
+    return str(random.randint(100000, 999999))
+
+
+def send_otp_email(recipient: str, otp: str) -> bool:
+    if not SMTP_PASS:
+        return False
+    try:
+        msg = MIMEText(
+            f"Your OTP for Akri Bakes admin access is: {otp}\n\n"
+            f"This OTP expires in 5 minutes.\n\n"
+            f"If you did not request this, please ignore."
+        )
+        msg["Subject"] = "Admin OTP — Akri Bakes"
+        msg["From"] = f"Akri Bakes Admin <{SMTP_EMAIL}>"
+        msg["To"] = recipient
+
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+            server.login(SMTP_EMAIL, SMTP_PASS)
+            server.send_message(msg)
+        return True
+    except Exception as exc:
+        print(f"Email send failed: {exc}")
+        return False
+
+
+# ── Database ─────────────────────────────────────────────────────
 def resolve_db_path() -> str:
     candidate = os.environ.get("DB_PATH", "/data/akri.db")
     try:
@@ -49,6 +89,7 @@ def init_db() -> None:
         conn.commit()
 
 
+# ── Pydantic models ──────────────────────────────────────────────
 class CartItem(BaseModel):
     id: Optional[str] = None
     name: str
@@ -79,6 +120,18 @@ class StatusUpdate(BaseModel):
     status: str
 
 
+class OTPSendRequest(BaseModel):
+    email: Optional[str] = None
+    phone: Optional[str] = None
+
+
+class OTPVerifyRequest(BaseModel):
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    otp: str
+
+
+# ── FastAPI app ──────────────────────────────────────────────────
 app = FastAPI(title="Akri Bakes API")
 
 app.add_middleware(
@@ -89,7 +142,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 init_db()
 
 
@@ -99,10 +151,66 @@ def startup() -> None:
 
 
 @app.get("/")
+@app.get("/api/healthz")
 def health() -> dict:
     return {"status": "ok", "service": "akri-bakes-api"}
 
 
+# ── OTP endpoints ────────────────────────────────────────────────
+@app.post("/api/otp/send")
+def otp_send(payload: OTPSendRequest) -> dict:
+    identifier = payload.email or payload.phone
+    if not identifier:
+        raise HTTPException(status_code=400, detail="Email or phone is required.")
+
+    if payload.email and payload.email.lower() != ADMIN_EMAIL.lower():
+        raise HTTPException(status_code=403, detail="Unauthorized email.")
+    if payload.phone and payload.phone != ADMIN_PHONE:
+        raise HTTPException(status_code=403, detail="Unauthorized phone.")
+
+    otp = generate_otp()
+    otp_store[identifier] = {"otp": otp, "expires_at": time.time() + 300, "attempts": 0}
+
+    sent = False
+    if payload.email:
+        sent = send_otp_email(payload.email, otp)
+
+    return {
+        "success": True,
+        "message": f"OTP sent to {identifier}",
+        "email_sent": sent,
+        # In dev (no SMTP), return OTP so it can be shown
+        **({"otp": otp, "warning": "SMTP not configured — OTP shown for development."} if not sent else {}),
+    }
+
+
+@app.post("/api/otp/verify")
+def otp_verify(payload: OTPVerifyRequest) -> dict:
+    identifier = payload.email or payload.phone
+    if not identifier or not payload.otp:
+        raise HTTPException(status_code=400, detail="Email/phone and OTP are required.")
+
+    record = otp_store.get(identifier)
+    if not record:
+        raise HTTPException(status_code=401, detail="No OTP requested. Request a new one.")
+
+    if time.time() > record["expires_at"]:
+        otp_store.pop(identifier, None)
+        raise HTTPException(status_code=401, detail="OTP expired. Request a new one.")
+
+    if record["attempts"] >= 5:
+        otp_store.pop(identifier, None)
+        raise HTTPException(status_code=401, detail="Too many failed attempts. Request a new OTP.")
+
+    record["attempts"] += 1
+    if record["otp"] != payload.otp:
+        raise HTTPException(status_code=401, detail="Incorrect OTP. Try again.")
+
+    otp_store.pop(identifier, None)
+    return {"success": True, "message": "OTP verified successfully."}
+
+
+# ── Order endpoints ──────────────────────────────────────────────
 @app.get("/orders")
 def list_orders() -> list[dict]:
     with connect() as conn:
@@ -136,7 +244,7 @@ def create_order(payload: OrderCreate) -> dict:
             "deliveryCharge": payload.deliveryCharge or 0,
             "items": items,
             "total": payload.total,
-            "status": "Pending",
+            "status": payload.status if hasattr(payload, 'status') else "Pending",
             "hasCustomCake": has_custom,
             "createdAt": created_at,
         }

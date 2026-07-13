@@ -45,7 +45,7 @@ export default function ContactPage() {
                   </p>
 
                   <p>
-                    📞 +91 XXXXXXXXXX
+                    📞 8259917757
                   </p>
 
                   <p>

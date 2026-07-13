@@ -15,14 +15,35 @@ const playfair = Playfair_Display({
 });
 
 export const metadata = {
-  title: "Akri Bakes",
-  description: "Premium Cakes & Patisserie for Every Celebration in Nagaland.",
+  title: {
+    template: "%s — Akri Bakes",
+    default: "Akri Bakes — Premium Cakes & Patisserie in Dimapur, Nagaland",
+  },
+  description: "Order custom celebration cakes, cheesecakes, mousse cakes, and more in Dimapur, Nagaland. Pickup or delivery available. Freshly baked with premium ingredients.",
+  keywords: ["cakes", "bakery", "Dimapur", "Nagaland", "celebration cakes", "cheesecakes", "mousse cakes", "custom cakes", "Akri Bakes"],
+  openGraph: {
+    title: "Akri Bakes — Premium Cakes & Patisserie",
+    description: "Freshly baked celebration cakes, cheesecakes, mousse & more in Dimapur, Nagaland.",
+    url: "https://akribakes.com",
+    siteName: "Akri Bakes",
+    locale: "en_IN",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Akri Bakes",
+    description: "Premium Cakes & Patisserie in Dimapur, Nagaland.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
-      <body className="min-h-screen overflow-x-hidden bg-white text-[#111111] antialiased">
+      <body className="min-h-screen overflow-x-hidden bg-[#F9F8F6] text-[#26110B] antialiased">
         <CartProvider>
           <Navbar />
           {children}

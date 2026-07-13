@@ -49,7 +49,7 @@ export default function FAQPage() {
             </h3>
 
             <p className="mt-3 leading-7 text-[#333333]">
-              Currently orders are available for store pickup.
+              Yes. Delivery is available across Dimapur with area-based charges. You can choose delivery at checkout — charges range from ₹100 to ₹280 depending on your area.
             </p>
           </div>
 

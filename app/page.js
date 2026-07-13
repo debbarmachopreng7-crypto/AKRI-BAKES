@@ -1,131 +1,242 @@
+"use client";
 import Link from "next/link";
+import { motion } from "framer-motion";
+import { FadeIn, SlideUp, StaggerContainer, StaggerItem } from "../components/animations";
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.15, delayChildren: 0.3 },
+  },
+};
+
+const heroItem = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+};
+
+const categories = [
+  { title: "Celebration Cakes", desc: "Black Forest, Red Velvet, Tiramisu & more", from: 800, href: "/cakes?tab=celebration" },
+  { title: "Cheesecakes", desc: "New York, Lotus Biscoff, Basque Burnt & more", from: 600, href: "/cakes?tab=cheesecake" },
+  { title: "Plain Cakes", desc: "Butter, Lemon, Carrot, Walnut & more", from: 380, href: "/menu" },
+  { title: "Bento Cakes", desc: "Petite individual cakes in many flavours", from: 350, href: "/menu" },
+  { title: "Mousse Cakes", desc: "Mango, Hazelnut, Banoffee & more", from: 1000, href: "/cakes?tab=mousse" },
+  { title: "Pies & Tarts", desc: "Key Lime, Lemon Meringue, Banoffee & more", from: 70, href: "/menu" },
+];
 
 export default function HomePage() {
   return (
     <main>
-      <section className="bg-white py-12 lg:py-16">
-        <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 lg:grid-cols-2">
-          <div className="max-w-2xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.35em] text-[#666666]">Akri Bakes</p>
-            <h1 className="mt-5 font-serif text-5xl font-semibold leading-tight text-[#111111] md:text-6xl">
-              Premium Cakes &amp; Patisserie
-              <br />
-              for Every Celebration in Nagaland.
-            </h1>
-            <p className="mt-6 max-w-xl text-lg leading-8 text-[#333333]">
-              Tea House • Coffee • French Patisserie • Pan-Asian Bakery Style.
-            </p>
+      {/* ── HERO ─────────────────────────────────────────────── */}
+      <section className="relative overflow-hidden bg-[#8B7E74] py-24 md:py-32">
+        <motion.div
+          className="absolute inset-0 opacity-10"
+          animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+          style={{
+            backgroundImage: "radial-gradient(circle at 30% 50%, rgba(255,255,255,0.4) 0%, transparent 50%)",
+            backgroundSize: "200% 200%",
+          }}
+        />
+        <motion.div className="mx-auto max-w-4xl px-4 text-center" variants={containerVariants} initial="hidden" animate="visible">
+          <motion.h1 variants={heroItem} className="font-serif text-5xl font-bold leading-tight text-white md:text-7xl">
+            Akri Bakes
+          </motion.h1>
+          <motion.p variants={heroItem} className="mt-4 text-sm font-medium uppercase tracking-[0.3em] text-white/80">
+            Premium Cakes &amp; Patisserie for Every Celebration in Nagaland.
+          </motion.p>
+          <motion.p variants={heroItem} className="mt-6 text-sm text-white/60">
+            Tea House &middot; Coffee &middot; French Patisserie &middot; Pan-Asian Bakery Style
+          </motion.p>
+          <motion.div variants={heroItem} className="mt-10 flex flex-wrap items-center justify-center gap-4">
+            <Link
+              href="/menu"
+              className="rounded-full bg-[#BC6153] px-8 py-3.5 text-sm font-medium text-white shadow-lg shadow-[#BC6153]/30 transition hover:bg-[#A85547] hover:shadow-xl hover:shadow-[#BC6153]/40 hover:-translate-y-0.5 active:scale-95"
+            >
+              Order Online
+            </Link>
+            <Link
+              href="/build-your-cake"
+              className="rounded-full border border-white/60 px-8 py-3.5 text-sm font-medium text-white transition hover:bg-white/10 hover:-translate-y-0.5 active:scale-95"
+            >
+              Build Your Cake
+            </Link>
+          </motion.div>
+        </motion.div>
+      </section>
 
-            <div className="mt-8 flex flex-wrap gap-4">
-              <Link href="/menu" className="rounded-full bg-[#111111] px-6 py-3 font-medium text-white transition hover:bg-[#333333]">
-                Order Online
-              </Link>
-              <Link href="/build-your-cake" className="rounded-full border border-[#111111] px-6 py-3 font-medium text-[#111111] transition hover:bg-[#f5f5f5]">
-                Build Your Cake
-              </Link>
-            </div>
-
-            <div className="mt-10 grid gap-4 sm:grid-cols-3">
-              {[
-                "Pickup & delivery",
-                "Live price calculator",
-                "Custom cakes",
-              ].map((item) => (
-                <div key={item} className="rounded-3xl border border-[#e5e5e5] bg-[#fafafa] px-4 py-4 text-sm font-medium text-[#222222] shadow-sm">
-                  {item}
+      {/* ── BUILD YOUR CAKE ──────────────────────────────────── */}
+      <SlideUp>
+        <section className="bg-[#F9F8F6] py-20">
+          <div className="mx-auto max-w-6xl px-4">
+            <motion.div
+              className="rounded-[24px] bg-[#26110B] p-10 md:p-14"
+              whileHover={{ scale: 1.005 }}
+              transition={{ type: "spring", stiffness: 200, damping: 25 }}
+            >
+              <div className="grid items-center gap-10 md:grid-cols-2">
+                <div>
+                  <h2 className="font-serif text-3xl font-bold text-white md:text-4xl">
+                    Build Your Cake
+                  </h2>
+                  <p className="mt-5 max-w-lg leading-relaxed text-white/70">
+                    Design your own cake from scratch — choose the occasion, size, flavor, 
+                    frosting and decorations. Watch the price update instantly, upload an 
+                    inspiration photo, and reserve your pickup. The standout feature that 
+                    sets Akri Bakes apart.
+                  </p>
+                  <Link
+                    href="/build-your-cake"
+                    className="mt-8 inline-flex rounded-full bg-[#BC6153] px-8 py-3.5 text-sm font-medium text-white shadow-lg shadow-[#BC6153]/20 transition hover:bg-[#A85547] hover:shadow-xl hover:shadow-[#BC6153]/30 hover:-translate-y-0.5 active:scale-95"
+                  >
+                    Start Designing &rarr;
+                  </Link>
                 </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="relative">
-            <div className="absolute -left-6 top-10 h-32 w-32 rounded-full bg-black/10 blur-3xl" />
-            <div className="absolute -right-4 bottom-8 h-40 w-40 rounded-full bg-black/5 blur-3xl" />
-            <img
-              src="/about/about-bakery.jpg"
-              alt="Akri Bakes bakery"
-              className="relative rounded-[2rem] border border-[#e5e5e5] shadow-[0_25px_60px_rgba(0,0,0,0.10)]"
-            />
-          </div>
-        </div>
-      </section>
-
-      <section className="border-t border-[#e5e5e5] py-16">
-        <div className="mx-auto max-w-6xl px-4">
-          <div className="grid gap-6 md:grid-cols-3">
-            {[
-              ["AUTHENTIC RECIPES", "Traditional home-style recipes using fresh ingredients."],
-              ["BAKED WITH LOVE", "Every recipe is prepared with care and attention to detail."],
-              ["HONESTLY PRICED", "Premium quality baked goods at the right prices."],
-            ].map(([title, text]) => (
-              <div key={title} className="rounded-[2rem] border border-[#e5e5e5] bg-white p-7 shadow-sm">
-                <p className="text-xs font-semibold tracking-[0.3em] text-[#666666] uppercase">{title}</p>
-                <p className="mt-4 text-sm leading-7 text-[#333333]">{text}</p>
+                <motion.div
+                  className="flex items-center justify-center"
+                  animate={{ rotate: [0, 5, -5, 0] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <div className="text-8xl md:text-9xl">🎂</div>
+                </motion.div>
               </div>
-            ))}
+            </motion.div>
           </div>
-        </div>
-      </section>
+        </section>
+      </SlideUp>
 
-      <section className="border-t border-[#e5e5e5] bg-[#fafafa] py-20">
+      {/* ── OUR MENU ─────────────────────────────────────────── */}
+      <section className="bg-[#F9F8F6] pb-20">
         <div className="mx-auto max-w-6xl px-4">
-          <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#666666]">Why Akri Bakes</p>
-              <h2 className="mt-4 font-serif text-4xl font-semibold text-[#111111]">A bakery storefront built for easy pickup and delivery ordering.</h2>
-              <p className="mt-6 max-w-xl leading-8 text-[#333333]">
-                Browse the menu, add to cart, optionally build your own cake, choose pickup or delivery, pay at store, Cash on Delivery, or in advance, and enjoy your order from Akri Bakes.
+          <FadeIn>
+            <div className="text-center">
+              <h2 className="font-serif text-4xl font-bold text-[#26110B]">Our Menu</h2>
+              <p className="mt-3 text-sm text-[#8B7355]">
+                Fresh baked daily &middot; Order for pickup or delivery across Dimapur
               </p>
             </div>
+          </FadeIn>
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              {[
-                ["Birthday Cakes", "Celebration-ready cakes for all ages."],
-                ["Wedding Cakes", "Elegant designs for your special day."],
-                ["Church Events", "Special cakes for church gatherings and programs."],
-                ["Graduations", "Proud moments deserve a custom cake."],
-              ].map(([title, text]) => (
-                <div key={title} className="rounded-[2rem] border border-[#e5e5e5] bg-white p-6 shadow-sm">
-                  <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#111111]">{title}</p>
-                  <p className="mt-3 text-sm leading-7 text-[#333333]">{text}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="border-t border-[#e5e5e5] py-20">
-        <div className="mx-auto max-w-6xl px-4">
-          <div className="grid gap-6 md:grid-cols-3">
-            {[
-              ["Store Hours", "9:00 AM - 7:00 PM"],
-              ["Pickup & Delivery", "Pickup free, or delivery with area-based charges."],
-              ["Admin Dashboard", "Track today’s orders, pending pickups, and custom requests."],
-            ].map(([title, text]) => (
-              <div key={title} className="rounded-[2rem] border border-[#e5e5e5] bg-white p-7 shadow-sm">
-                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#666666]">{title}</p>
-                <p className="mt-4 text-sm leading-7 text-[#333333]">{text}</p>
-              </div>
+          <StaggerContainer className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {categories.map((cat) => (
+              <StaggerItem key={cat.title}>
+                <motion.div
+                  whileHover={{ y: -6, boxShadow: "0 20px 40px rgba(0,0,0,0.1)" }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                >
+                  <Link
+                    href={cat.href}
+                    className="group block rounded-[20px] border border-[#E8E0D8] bg-white p-7 shadow-sm"
+                  >
+                    <h3 className="font-serif text-xl font-bold text-[#26110B] group-hover:underline">{cat.title}</h3>
+                    <p className="mt-2 text-sm leading-6 text-[#8B7355]">{cat.desc}</p>
+                    <p className="mt-4 text-xs font-semibold uppercase tracking-[0.15em] text-[#BC6153]">
+                      FROM &rsquo;{cat.from}
+                    </p>
+                  </Link>
+                </motion.div>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
+
+          <FadeIn delay={0.4}>
+            <div className="mt-12 text-center">
+              <Link
+                href="/menu"
+                className="inline-flex rounded-full border border-[#BC6153] px-8 py-3 text-sm font-medium text-[#BC6153] transition hover:bg-[#BC6153] hover:text-white hover:-translate-y-0.5 active:scale-95"
+              >
+                View Full Menu &amp; Prices
+              </Link>
+            </div>
+          </FadeIn>
         </div>
       </section>
 
-      <section className="border-t border-[#e5e5e5] py-20">
-        <div className="mx-auto max-w-6xl px-4">
-          <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#666666]">Visit Akri Bakes</p>
-              <h2 className="mt-4 font-serif text-4xl font-semibold text-[#111111]">Zion Hospital Road, Purana Bazar, Dimapur, Nagaland</h2>
-              <p className="mt-6 max-w-xl leading-8 text-[#333333]">Phone: 8259917757<br />Store Hours: 9:00 AM - 7:00 PM</p>
+      {/* ── OUR STORY ────────────────────────────────────────── */}
+      <SlideUp>
+        <section className="border-y border-[#E8E0D8] bg-white py-20">
+          <div className="mx-auto max-w-4xl px-4 text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#8B7355]">Our Story</p>
+            <h2 className="mt-5 font-serif text-4xl font-bold text-[#26110B]">Homemade, Heartmade</h2>
+            <p className="mx-auto mt-6 max-w-3xl leading-relaxed text-[#26110B]">
+              Akri Bakes started in the kitchen of our home in Dimapur, driven by a love 
+              for baking and a desire to bring truly exceptional cakes to Nagaland. Every 
+              cake is made from scratch using real ingredients — no premixes, no shortcuts. 
+              From classic cheesecakes to custom celebration cakes, each order receives the 
+              same care and attention we&rsquo;d give our own family table.
+            </p>
+            <div className="mt-8 flex flex-wrap justify-center gap-8 text-sm">
+              <div>
+                <p className="text-2xl font-bold text-[#BC6153]">30+</p>
+                <p className="mt-1 text-[#8B7355]">Cake Flavours</p>
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-[#BC6153]">7&ndash;10</p>
+                <p className="mt-1 text-[#8B7355]">Days Advance Order</p>
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-[#BC6153]">Dimapur</p>
+                <p className="mt-1 text-[#8B7355]">Pickup &amp; Delivery</p>
+              </div>
             </div>
+          </div>
+        </section>
+      </SlideUp>
 
-            <div className="rounded-[2rem] border border-[#e5e5e5] bg-white p-8 shadow-sm">
-              <div className="space-y-4 text-[#333333]">
-                <p><span className="font-medium text-[#111111]">Phone:</span> 8259917757</p>
-                <p><span className="font-medium text-[#111111]">Location:</span> Zion Hospital Road, Purana Bazar, Dimapur, Nagaland</p>
-                <p><span className="font-medium text-[#111111]">Hours:</span> 9:00 AM - 7:00 PM</p>
+      {/* ── WHY CHOOSE US ────────────────────────────────────── */}
+      <section className="bg-[#F9F8F6] py-20">
+        <div className="mx-auto max-w-6xl px-4">
+          <FadeIn>
+            <div className="text-center">
+              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#8B7355]">Why Akri Bakes</p>
+              <h2 className="mt-5 font-serif text-4xl font-bold text-[#26110B]">Crafted With Care</h2>
+            </div>
+          </FadeIn>
+          <StaggerContainer className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { title: "Handcrafted", desc: "Every cake is baked to order, by hand, using traditional techniques and real ingredients.", icon: "🥄" },
+              { title: "Premium Ingredients", desc: "Belgian chocolate, European butter, fresh cream, and seasonal fruits — never any shortcuts.", icon: "🧈" },
+              { title: "Custom Designs", desc: "Upload a photo, describe your vision, and our bakers will bring it to life.", icon: "🎨" },
+              { title: "Local Delivery", desc: "Free pickup in Dimapur or affordable delivery across the city. We make it easy.", icon: "🛵" },
+            ].map((item) => (
+              <StaggerItem key={item.title}>
+                <motion.div
+                  className="rounded-[20px] border border-[#E8E0D8] bg-white p-7 text-center shadow-sm"
+                  whileHover={{ y: -4, boxShadow: "0 16px 32px rgba(0,0,0,0.08)" }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                >
+                  <div className="text-4xl">{item.icon}</div>
+                  <h3 className="mt-5 font-serif text-lg font-bold text-[#26110B]">{item.title}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-[#8B7355]">{item.desc}</p>
+                </motion.div>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
+        </div>
+      </section>
+
+      {/* ── INFO / CONTACT ───────────────────────────────────── */}
+      <section className="bg-[#26110B] py-20 text-white">
+        <div className="mx-auto max-w-6xl px-4">
+          <div className="grid gap-10 md:grid-cols-3">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/50">Visit Us</p>
+              <p className="mt-4 text-lg font-medium">Dimapur, Nagaland</p>
+              <p className="mt-2 text-sm text-white/60">Pickup by appointment<br />Delivery available across Dimapur</p>
+            </div>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/50">Hours</p>
+              <p className="mt-4 text-lg font-medium">Order in Advance</p>
+              <p className="mt-2 text-sm text-white/60">We require 7&ndash;10 days notice<br />for all custom cake orders</p>
+            </div>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/50">Get in Touch</p>
+              <p className="mt-4 text-lg font-medium">8259917757</p>
+              <p className="mt-2 text-sm text-white/60">Akribake2020@gmail.com</p>
+              <div className="mt-4 flex gap-3">
+                <a href="tel:8259917757" className="rounded-full bg-white/10 px-4 py-2 text-xs font-medium text-white transition hover:bg-white/20">Call</a>
+                <a href="mailto:Akribake2020@gmail.com" className="rounded-full bg-white/10 px-4 py-2 text-xs font-medium text-white transition hover:bg-white/20">Email</a>
               </div>
             </div>
           </div>

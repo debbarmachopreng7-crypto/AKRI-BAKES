@@ -1,27 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "../../components/CartContext";
 import { deliveryAreas, getDeliveryCharge } from "../../components/deliveryAreas";
+import { UPI_APPS, generateUPILink } from "../../components/upiConfig";
+import Breadcrumbs from "../../components/Breadcrumbs";
 
 const timeSlots = [
-  "9:00 AM",
-  "10:00 AM",
-  "11:00 AM",
-  "12:00 PM",
-  "1:00 PM",
-  "2:00 PM",
-  "3:00 PM",
-  "4:00 PM",
-  "5:00 PM",
-  "6:00 PM",
-  "7:00 PM",
+  "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM",
+  "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM", "6:00 PM", "7:00 PM",
 ];
-
-const pickupPayments = ["Pay at Store", "UPI", "PhonePe", "Google Pay", "Paytm"];
-const deliveryPayments = ["Cash on Delivery (COD)", "UPI", "PhonePe", "Google Pay", "Paytm"];
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -38,12 +28,16 @@ export default function CheckoutPage() {
     address: "",
     notes: "",
   });
-  const [payment, setPayment] = useState("Pay at Store");
+  const [payment, setPayment] = useState(null);
+  const [selectedApp, setSelectedApp] = useState(null);
+  const [upiPaid, setUpiPaid] = useState(false);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
 
+  useEffect(() => { document.title = "Checkout — Akri Bakes"; }, []);
+
   const isDelivery = method === "Delivery";
-  const paymentMethods = isDelivery ? deliveryPayments : pickupPayments;
 
   const deliveryCharge = useMemo(
     () => (isDelivery ? getDeliveryCharge(form.area) : 0),
@@ -51,36 +45,66 @@ export default function CheckoutPage() {
   );
   const total = subtotal + deliveryCharge;
 
-  const update = (field) => (event) => setForm((current) => ({ ...current, [field]: event.target.value }));
+  const update = (field) => (event) => {
+    setForm((current) => ({ ...current, [field]: event.target.value }));
+    setFieldErrors((prev) => ({ ...prev, [field]: "" }));
+    setError("");
+  };
+
+  const inputClass = (field) =>
+    `w-full rounded-2xl border bg-[#F9F8F6] px-4 py-3 text-[#26110B] outline-none transition ${
+      fieldErrors[field] ? "border-red-400" : "border-[#E8E0D8] focus:border-[#26110B]"
+    }`;
 
   const selectMethod = (next) => {
     setMethod(next);
-    setPayment(next === "Delivery" ? deliveryPayments[0] : pickupPayments[0]);
+    setPayment(null);
+    setSelectedApp(null);
+    setUpiPaid(false);
+    setFieldErrors({});
+    setError("");
   };
 
-  const handlePlaceOrder = async () => {
-    if (!form.name.trim() || !form.phone.trim() || !form.pickupDate) {
-      setError(`Please enter your name, phone number, and ${isDelivery ? "delivery" : "pickup"} date.`);
-      return;
-    }
-    if (isDelivery && (!form.area || !form.address.trim())) {
-      setError("Please choose your delivery area and enter your delivery address.");
-      return;
-    }
-    if (items.length === 0) {
-      setError("Your cart is empty.");
-      return;
-    }
-    setError("");
+  const handleCOD = () => {
+    if (!validate()) return;
+    placeAndRedirect("cod");
+  };
+
+  const handleStore = () => {
+    if (!validate()) return;
+    placeAndRedirect("store");
+  };
+
+  const handleAppTap = (app) => {
+    if (!validate()) return;
+    setSelectedApp(app);
+    setPayment(app.id);
+    setUpiPaid(true);
+    const ref = `AKRI-${Date.now().toString(36).toUpperCase()}`;
+    window.open(generateUPILink(total, ref, app.id), "_blank");
+  };
+
+  const handleUPITap = () => {
+    if (!validate()) return;
+    setPayment("upi");
+    setSelectedApp(null);
+    setUpiPaid(true);
+    const ref = `AKRI-${Date.now().toString(36).toUpperCase()}`;
+    window.open(generateUPILink(total, ref), "_blank");
+  };
+
+  const handleConfirmUPI = async () => {
     setSubmitting(true);
     try {
+      const appLabel = selectedApp ? selectedApp.label : "UPI";
       const order = await placeOrder({
         ...form,
         method,
-        payment,
+        payment: `${appLabel} (UPI)`,
         deliveryArea: isDelivery ? form.area : "",
         deliveryCharge,
         total,
+        status: "Awaiting Payment Confirmation",
       });
       router.push(`/order-confirmation?id=${order.orderId}`);
     } catch (err) {
@@ -89,14 +113,77 @@ export default function CheckoutPage() {
     }
   };
 
+  const placeAndRedirect = async (type) => {
+    setSubmitting(true);
+    try {
+      const label = type === "cod" ? "Cash on Delivery (COD)" : "Pay at Store";
+      const order = await placeOrder({
+        ...form,
+        method,
+        payment: label,
+        deliveryArea: isDelivery ? form.area : "",
+        deliveryCharge,
+        total,
+        status: "Pending",
+      });
+      router.push(`/order-confirmation?id=${order.orderId}`);
+    } catch (err) {
+      setError(err.message || "Could not place order. Please try again.");
+      setSubmitting(false);
+    }
+  };
+
+  const validate = () => {
+    const errs = {};
+    if (!form.name.trim() || form.name.trim().length < 2) {
+      errs.name = "Enter your full name";
+    }
+    const phoneClean = form.phone.replace(/\s+/g, "");
+    if (!phoneClean) {
+      errs.phone = "Enter your phone number";
+    } else if (!/^[6-9]\d{9}$/.test(phoneClean)) {
+      errs.phone = "Enter a valid 10-digit Indian phone number";
+    }
+    if (!form.pickupDate) {
+      errs.pickupDate = `Select your ${isDelivery ? "delivery" : "pickup"} date`;
+    } else {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const selected = new Date(form.pickupDate + "T00:00:00");
+      if (selected < today) {
+        errs.pickupDate = "Date cannot be in the past";
+      }
+    }
+    if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      errs.email = "Enter a valid email or leave it empty";
+    }
+    if (isDelivery) {
+      if (!form.area) errs.area = "Select your delivery area";
+      if (!form.address.trim()) errs.address = "Enter your delivery address";
+    }
+    if (items.length === 0) {
+      setError("Your cart is empty.");
+      return false;
+    }
+    if (Object.keys(errs).length > 0) {
+      setFieldErrors(errs);
+      setError(Object.values(errs)[0]);
+      return false;
+    }
+    setFieldErrors({});
+    setError("");
+    return true;
+  };
+
   if (ready && items.length === 0) {
     return (
       <main>
-        <section className="flex min-h-[60vh] items-center border-b border-[#e5e5e5] bg-[#fafafa] py-20">
+        <Breadcrumbs items={[{ label: "Checkout" }]} />
+        <section className="flex min-h-[60vh] items-center border-b border-[#E8E0D8] bg-[#F9F8F6] py-20">
           <div className="mx-auto max-w-3xl px-4 text-center">
-            <h1 className="font-serif text-4xl font-semibold text-[#111111]">Your cart is empty</h1>
-            <p className="mt-4 text-[#333333]">Add a cake to your cart before checking out.</p>
-            <Link href="/menu" className="mt-8 inline-flex rounded-full bg-[#111111] px-6 py-3 font-medium text-white transition hover:bg-[#333333]">
+            <h1 className="font-serif text-4xl font-bold text-[#26110B]">Your cart is empty</h1>
+            <p className="mt-4 text-[#26110B]/70">Add a cake to your cart before checking out.</p>
+            <Link href="/menu" className="mt-8 inline-flex rounded-full bg-[#BC6153] px-6 py-3 font-medium text-white transition hover:bg-[#A85547]">
               Browse Menu
             </Link>
           </div>
@@ -107,147 +194,171 @@ export default function CheckoutPage() {
 
   return (
     <main>
-      <section className="border-b border-[#e5e5e5] bg-[#fafafa] py-20">
+      <Breadcrumbs items={[{ label: "Checkout" }]} />
+      <section className="border-b border-[#E8E0D8] bg-[#F9F8F6] py-20">
         <div className="mx-auto max-w-5xl px-4 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#666666]">Checkout</p>
-          <h1 className="mt-5 font-serif text-5xl font-semibold text-[#111111]">Order Details</h1>
-          <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-[#333333]">Choose pickup or delivery. Pay at store, Cash on Delivery, or pay in advance by UPI.</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#8B7355]">Checkout</p>
+          <h1 className="mt-5 font-serif text-5xl font-bold text-[#26110B]">Order Details</h1>
         </div>
       </section>
 
       <section className="py-20">
         <div className="mx-auto max-w-6xl px-4 grid gap-8 lg:grid-cols-[1fr_360px]">
-          <div className="rounded-[2rem] border border-[#e5e5e5] bg-white p-8 shadow-sm">
+          <div className="rounded-[20px] border border-[#E8E0D8] bg-white p-8 shadow-sm">
+            {/* Pickup / Delivery */}
             <div className="mb-8">
-              <span className="mb-3 block text-xs font-semibold uppercase tracking-[0.25em] text-[#666666]">How would you like your order?</span>
+              <span className="mb-3 block text-xs font-semibold uppercase tracking-[0.25em] text-[#8B7355]">How would you like your order?</span>
               <div className="grid grid-cols-2 gap-3">
                 {["Pickup", "Delivery"].map((option) => (
-                  <button
-                    key={option}
-                    type="button"
-                    onClick={() => selectMethod(option)}
+                  <button key={option} type="button" onClick={() => selectMethod(option)}
                     className={`rounded-2xl border px-4 py-3 text-sm font-medium transition ${
                       method === option
-                        ? "border-[#111111] bg-[#111111] text-white"
-                        : "border-[#e5e5e5] bg-white text-[#333333] hover:bg-[#f5f5f5]"
-                    }`}
-                  >
+                        ? "border-[#26110B] bg-[#26110B] text-white"
+                        : "border-[#E8E0D8] bg-white text-[#26110B] hover:bg-[#EDE8E0]"
+                    }`}>
                     {option}
                   </button>
                 ))}
               </div>
             </div>
 
+            {/* Customer info */}
             <div className="grid gap-5 md:grid-cols-2">
-              <label className="block text-sm font-medium text-[#333333]">
-                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.25em] text-[#666666]">Name</span>
-                <input value={form.name} onChange={update("name")} className="w-full rounded-2xl border border-[#e5e5e5] bg-[#fafafa] px-4 py-3 text-[#111111] outline-none focus:border-[#111111]" />
+              <label className="block text-sm font-medium text-[#26110B]">
+                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.25em] text-[#8B7355]">Name</span>
+                <input value={form.name} onChange={update("name")} className={inputClass("name")} placeholder="Your full name" />
+                {fieldErrors.name ? <p className="mt-1 text-xs text-red-500">{fieldErrors.name}</p> : null}
               </label>
-              <label className="block text-sm font-medium text-[#333333]">
-                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.25em] text-[#666666]">Phone Number</span>
-                <input value={form.phone} onChange={update("phone")} inputMode="tel" className="w-full rounded-2xl border border-[#e5e5e5] bg-[#fafafa] px-4 py-3 text-[#111111] outline-none focus:border-[#111111]" />
+              <label className="block text-sm font-medium text-[#26110B]">
+                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.25em] text-[#8B7355]">Phone Number</span>
+                <input value={form.phone} onChange={update("phone")} inputMode="tel" className={inputClass("phone")} placeholder="10-digit mobile number" />
+                {fieldErrors.phone ? <p className="mt-1 text-xs text-red-500">{fieldErrors.phone}</p> : null}
               </label>
-              <label className="block text-sm font-medium text-[#333333]">
-                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.25em] text-[#666666]">Email (Optional)</span>
-                <input value={form.email} onChange={update("email")} type="email" className="w-full rounded-2xl border border-[#e5e5e5] bg-[#fafafa] px-4 py-3 text-[#111111] outline-none focus:border-[#111111]" />
+              <label className="block text-sm font-medium text-[#26110B]">
+                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.25em] text-[#8B7355]">Email (Optional)</span>
+                <input value={form.email} onChange={update("email")} type="email" className={inputClass("email")} />
+                {fieldErrors.email ? <p className="mt-1 text-xs text-red-500">{fieldErrors.email}</p> : null}
               </label>
-              <label className="block text-sm font-medium text-[#333333]">
-                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.25em] text-[#666666]">{isDelivery ? "Delivery Date" : "Pickup Date"}</span>
-                <input value={form.pickupDate} onChange={update("pickupDate")} type="date" className="w-full rounded-2xl border border-[#e5e5e5] bg-[#fafafa] px-4 py-3 text-[#111111] outline-none focus:border-[#111111]" />
+              <label className="block text-sm font-medium text-[#26110B]">
+                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.25em] text-[#8B7355]">{isDelivery ? "Delivery Date" : "Pickup Date"}</span>
+                <input value={form.pickupDate} onChange={update("pickupDate")} type="date" className={inputClass("pickupDate")} />
+                {fieldErrors.pickupDate ? <p className="mt-1 text-xs text-red-500">{fieldErrors.pickupDate}</p> : null}
               </label>
-              <label className="block text-sm font-medium text-[#333333]">
-                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.25em] text-[#666666]">{isDelivery ? "Delivery Time" : "Pickup Time"}</span>
-                <select value={form.pickupTime} onChange={update("pickupTime")} className="w-full rounded-2xl border border-[#e5e5e5] bg-[#fafafa] px-4 py-3 text-[#111111] outline-none focus:border-[#111111]">
-                  {timeSlots.map((slot) => (
-                    <option key={slot} value={slot}>{slot}</option>
-                  ))}
+              <label className="block text-sm font-medium text-[#26110B]">
+                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.25em] text-[#8B7355]">{isDelivery ? "Delivery Time" : "Pickup Time"}</span>
+                <select value={form.pickupTime} onChange={update("pickupTime")} className="w-full rounded-2xl border border-[#E8E0D8] bg-[#F9F8F6] px-4 py-3 text-[#26110B] outline-none focus:border-[#26110B]">
+                  {timeSlots.map((slot) => <option key={slot} value={slot}>{slot}</option>)}
                 </select>
               </label>
 
               {isDelivery ? (
-                <label className="block text-sm font-medium text-[#333333]">
-                  <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.25em] text-[#666666]">Delivery Area</span>
-                  <select value={form.area} onChange={update("area")} className="w-full rounded-2xl border border-[#e5e5e5] bg-[#fafafa] px-4 py-3 text-[#111111] outline-none focus:border-[#111111]">
-                    <option value="">Select your area…</option>
-                    {deliveryAreas.map((area) => (
-                      <option key={area.name} value={area.name}>{area.name} — ₹{area.charge}</option>
-                    ))}
-                  </select>
-                </label>
+                <>
+                  <label className="block text-sm font-medium text-[#26110B]">
+                    <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.25em] text-[#8B7355]">Delivery Area</span>
+                    <select value={form.area} onChange={update("area")} className={inputClass("area")}>
+                      <option value="">Select your area&hellip;</option>
+                      {deliveryAreas.map((area) => <option key={area.name} value={area.name}>{area.name} &mdash; ₹{area.charge}</option>)}
+                    </select>
+                    {fieldErrors.area ? <p className="mt-1 text-xs text-red-500">{fieldErrors.area}</p> : null}
+                  </label>
+                  <label className="md:col-span-2 block text-sm font-medium text-[#26110B]">
+                    <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.25em] text-[#8B7355]">Delivery Address</span>
+                    <textarea value={form.address} onChange={update("address")} placeholder="House / building, landmark, etc." className={`${inputClass("address")} h-24`} />
+                    {fieldErrors.address ? <p className="mt-1 text-xs text-red-500">{fieldErrors.address}</p> : null}
+                  </label>
+                </>
               ) : null}
 
-              {isDelivery ? (
-                <label className="md:col-span-2 block text-sm font-medium text-[#333333]">
-                  <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.25em] text-[#666666]">Delivery Address</span>
-                  <textarea value={form.address} onChange={update("address")} placeholder="House / building, landmark, etc." className="h-24 w-full rounded-2xl border border-[#e5e5e5] bg-[#fafafa] px-4 py-3 text-[#111111] outline-none focus:border-[#111111]" />
-                </label>
-              ) : null}
-
-              <label className="md:col-span-2 block text-sm font-medium text-[#333333]">
-                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.25em] text-[#666666]">Notes</span>
-                <textarea value={form.notes} onChange={update("notes")} className="h-32 w-full rounded-2xl border border-[#e5e5e5] bg-[#fafafa] px-4 py-3 text-[#111111] outline-none focus:border-[#111111]" />
+              <label className="md:col-span-2 block text-sm font-medium text-[#26110B]">
+                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.25em] text-[#8B7355]">Notes</span>
+                <textarea value={form.notes} onChange={update("notes")} className="h-32 w-full rounded-2xl border border-[#E8E0D8] bg-[#F9F8F6] px-4 py-3 text-[#26110B] outline-none focus:border-[#26110B]" />
               </label>
             </div>
           </div>
 
+          {/* ── Payment / Summary ─────────────────────────── */}
           <div className="space-y-8">
-            <div className="rounded-[2rem] border border-[#e5e5e5] bg-white p-8 shadow-sm">
-              <h2 className="font-serif text-2xl font-semibold text-[#111111]">Payment</h2>
-              <p className="mt-3 text-sm leading-7 text-[#333333]">{isDelivery ? "Pay cash on delivery (COD) or pay in advance by UPI." : "Pay at store or make an advance payment using your preferred method."}</p>
-              <div className="mt-6 space-y-3">
-                {paymentMethods.map((option) => (
-                  <button
-                    key={option}
-                    type="button"
-                    onClick={() => setPayment(option)}
-                    className={`block w-full rounded-2xl border px-4 py-3 text-left text-sm font-medium transition ${
-                      payment === option
-                        ? "border-[#111111] bg-[#111111] text-white"
-                        : "border-[#e5e5e5] bg-white text-[#333333]"
-                    }`}
-                  >
-                    {option}
+            <div className="rounded-[20px] border border-[#E8E0D8] bg-white p-7 shadow-sm">
+              <h2 className="font-serif text-2xl font-bold text-[#26110B]">Payment Method</h2>
+
+              {error ? <p className="mt-3 text-sm font-medium text-red-600">{error}</p> : null}
+
+              <div className="mt-5 space-y-2">
+                {/* COD / Pay at Store */}
+                {isDelivery ? (
+                  <button type="button" onClick={handleCOD} disabled={submitting}
+                    className="flex w-full items-center gap-3 rounded-2xl border border-[#E8E0D8] px-4 py-3.5 text-left text-sm font-medium text-[#26110B] transition hover:bg-[#EDE8E0] disabled:opacity-50 disabled:cursor-not-allowed">
+                    <span className="text-lg">💵</span>
+                    <span>{submitting ? "Placing Order…" : "Cash on Delivery (COD)"}</span>
                   </button>
-                ))}
+                ) : (
+                  <button type="button" onClick={handleStore} disabled={submitting}
+                    className="flex w-full items-center gap-3 rounded-2xl border border-[#E8E0D8] px-4 py-3.5 text-left text-sm font-medium text-[#26110B] transition hover:bg-[#EDE8E0] disabled:opacity-50 disabled:cursor-not-allowed">
+                    <span className="text-lg">🏪</span>
+                    <span>{submitting ? "Placing Order…" : "Pay at Store"}</span>
+                  </button>
+                )}
+
+                <p className="pt-4 pb-1 text-xs font-semibold uppercase tracking-[0.25em] text-[#8B7355]">Pay Online</p>
+
+                {/* UPI generic */}
+                <button type="button" onClick={handleUPITap}
+                  className="flex w-full items-center gap-3 rounded-2xl border border-[#E8E0D8] px-4 py-3.5 text-left text-sm font-medium text-[#26110B] transition hover:bg-[#EDE8E0]">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#812CA1] text-xs font-bold text-white">UPI</span>
+                  <span>Pay via UPI</span>
+                </button>
+
+                {/* GPay / Paytm / PhonePe */}
+                <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                  {UPI_APPS.map((app) => (
+                    <button key={app.id} type="button" onClick={() => handleAppTap(app)}
+                      className="flex flex-col items-center gap-1.5 rounded-2xl border border-[#E8E0D8] px-3 py-4 text-center text-xs font-medium text-[#26110B] transition hover:bg-[#EDE8E0]">
+                      <span className="flex items-center justify-center">{app.icon}</span>
+                      <span>{app.label}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
+
+              {/* Message shown after any UPI payment tap */}
+              {(payment === "upi" || (selectedApp && payment === selectedApp.id)) ? (
+                <p className="mt-3 text-xs text-[#8B7355] text-center">
+                  Pay ₹{total} in the app, then tap <strong>Place Order</strong> below.
+                </p>
+              ) : null}
             </div>
 
-            <div className="rounded-[2rem] border border-[#e5e5e5] bg-[#fafafa] p-8 shadow-sm">
-              <h2 className="font-serif text-2xl font-semibold text-[#111111]">Order Summary</h2>
-              <div className="mt-5 space-y-3 text-[#333333]">
+            {/* Order Summary */}
+            <div className="rounded-[20px] border border-[#E8E0D8] bg-[#F9F8F6] p-7 shadow-sm">
+              <h2 className="font-serif text-2xl font-bold text-[#26110B]">Order Summary</h2>
+              <div className="mt-5 space-y-3 text-sm text-[#26110B]/80">
                 {items.map((item) => {
-                  const quantity = item.quantity ?? 1;
+                  const qty = item.quantity ?? 1;
                   return (
-                    <p key={item.id} className="flex items-center justify-between text-sm">
-                      <span>
-                        {item.name} ({item.size}){quantity > 1 ? ` × ${quantity}` : ""}
-                      </span>
-                      <span>₹{item.price * quantity}</span>
+                    <p key={item.id} className="flex items-center justify-between">
+                      <span>{item.name} ({item.size}){qty > 1 ? ` × ${qty}` : ""}</span>
+                      <span>₹{item.price * qty}</span>
                     </p>
                   );
                 })}
-                <p className="flex items-center justify-between border-t border-[#e5e5e5] pt-3"><span>Subtotal</span><span>₹{subtotal}</span></p>
+                <p className="flex items-center justify-between border-t border-[#E8E0D8] pt-3"><span>Subtotal</span><span>₹{subtotal}</span></p>
                 {isDelivery ? (
                   <p className="flex items-center justify-between">
                     <span>Delivery{form.area ? ` (${form.area})` : ""}</span>
                     <span>{form.area ? `₹${deliveryCharge}` : "Select area"}</span>
                   </p>
-                ) : (
-                  <p className="flex items-center justify-between"><span>Pickup fee</span><span>₹0</span></p>
-                )}
-                <p className="flex items-center justify-between border-t border-[#e5e5e5] pt-3 text-lg font-semibold text-[#111111]"><span>Total</span><span>₹{total}</span></p>
+                ) : <p className="flex items-center justify-between"><span>Pickup</span><span>Free</span></p>}
+                <p className="flex items-center justify-between border-t border-[#E8E0D8] pt-3 text-lg font-bold text-[#26110B]"><span>Total</span><span>₹{total}</span></p>
               </div>
 
               {error ? <p className="mt-4 text-sm font-medium text-red-600">{error}</p> : null}
 
-              <button
-                type="button"
-                onClick={handlePlaceOrder}
-                disabled={submitting}
-                className="mt-6 inline-flex w-full justify-center rounded-full bg-[#111111] px-6 py-3 font-medium text-white transition hover:bg-[#333333] disabled:opacity-60"
-              >
-                {submitting ? "Placing Order…" : "Place Order"}
-              </button>
+              {payment === "upi" || (selectedApp && payment === selectedApp.id) ? (
+                <button type="button" onClick={handleConfirmUPI} disabled={!upiPaid || submitting}
+                  className="mt-5 inline-flex w-full justify-center rounded-full bg-[#BC6153] px-6 py-3 font-medium text-white transition hover:bg-[#A85547] disabled:opacity-50 disabled:cursor-not-allowed">
+                  {submitting ? "Placing Order…" : "Place Order"}
+                </button>
+              ) : null}
             </div>
           </div>
         </div>
