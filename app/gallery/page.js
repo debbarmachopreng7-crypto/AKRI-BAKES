@@ -5,12 +5,12 @@ import { motion } from "framer-motion";
 import { FadeIn, StaggerContainer, StaggerItem } from "../../components/animations";
 
 const allItems = [
-  { title: "Wedding 1", label: "Wedding" },
-  { title: "Wedding 2", label: "Wedding" },
-  { title: "Birthday 1", label: "Birthday" },
-  { title: "Birthday 2", label: "Birthday" },
-  { title: "Church 1", label: "Church" },
-  { title: "Seasonal Feature", label: "Gallery" },
+  { title: "Wedding 1", label: "Wedding", image: "/gallery/wedding-1.jpg" },
+  { title: "Wedding 2", label: "Wedding", image: "/gallery/wedding-2.jpg" },
+  { title: "Birthday 1", label: "Birthday", image: "/gallery/birthday-1.jpg" },
+  { title: "Birthday 2", label: "Birthday", image: "/gallery/birthday-2.jpg" },
+  { title: "Church 1", label: "Church", image: "/gallery/church-1.jpg" },
+  { title: "Seasonal Feature", label: "Gallery", image: "/gallery/seasonal-1.jpg" },
 ];
 
 const filterTabs = ["All", "Wedding", "Birthday", "Church", "Gallery"];
@@ -57,8 +57,18 @@ export default function GalleryPage() {
             {filtered.map((item) => (
               <StaggerItem key={item.title}>
               <div className="overflow-hidden rounded-[2rem] border border-[#e5e5e5] bg-white shadow-sm">
-                <div className="flex h-72 items-center justify-center bg-[linear-gradient(135deg,#f5f5f5_0%,#ffffff_50%,#ececec_100%)]">
-                  <div className="rounded-full border border-[#d9d9d9] px-5 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-[#666666]">
+                <div className="relative flex h-72 items-center justify-center overflow-hidden bg-[linear-gradient(135deg,#f5f5f5_0%,#ffffff_50%,#ececec_100%)]">
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    loading="lazy"
+                    className="h-full w-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.style.display = "none";
+                      e.currentTarget.nextElementSibling.style.display = "flex";
+                    }}
+                  />
+                  <div style={{ display: "none" }} className="absolute rounded-full border border-[#d9d9d9] px-5 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-[#666666]">
                     {item.label}
                   </div>
                 </div>
