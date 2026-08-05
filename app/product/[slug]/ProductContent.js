@@ -4,6 +4,7 @@ import { FadeIn, SlideUp, StaggerContainer, StaggerItem } from "../../../compone
 import ProductOrder from "./ProductOrder";
 import SocialShare from "../../../components/SocialShare";
 import Breadcrumbs from "../../../components/Breadcrumbs";
+import { getCakeImage } from "../../../lib/cakeImages";
 
 export default function ProductContent({ product }) {
   const priceLabel = product.price2
@@ -29,10 +30,20 @@ export default function ProductContent({ product }) {
         <section className="py-20">
           <div className="mx-auto grid max-w-6xl gap-12 px-4 lg:grid-cols-2">
             <motion.div
-              className="rounded-[2rem] border border-[#e5e5e5] bg-[linear-gradient(135deg,#f5f5f5_0%,#ffffff_50%,#ececec_100%)] shadow-sm min-h-[300px]"
+              className="relative overflow-hidden rounded-[2rem] border border-[#e5e5e5] bg-[linear-gradient(135deg,#f5f5f5_0%,#ffffff_50%,#ececec_100%)] shadow-sm min-h-[300px]"
               whileHover={{ scale: 1.02 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            />
+            >
+              {getCakeImage(product.name) && (
+                <img
+                  src={getCakeImage(product.name)}
+                  alt={product.name}
+                  loading="lazy"
+                  className="absolute inset-0 h-full w-full object-cover"
+                  onError={(e) => { e.currentTarget.style.display = "none"; }}
+                />
+              )}
+            </motion.div>
             <StaggerContainer>
               <StaggerItem>
                 <p className="text-sm font-semibold uppercase tracking-[0.35em] text-[#666666]">Premium Cake</p>
