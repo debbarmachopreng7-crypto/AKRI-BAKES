@@ -83,19 +83,22 @@ const feedPhotos = [
 
 const testimonials = [
   {
-    quote: "Thank you for choosing your desserts and cake from us — every detail, every flavour, perfect.",
+    quote:
+      "Our wedding desserts were the highlight of the evening — guests kept asking who made them. The cake was exactly what we dreamed of, and everything arrived on time.",
     name: "Esther & Neeraj",
     tag: "Wedding · December 2025",
   },
   {
-    quote: "Privileged to spread our desserts on their special day. The couple and every guest loved it.",
+    quote:
+      "The cake looked even better than the reference photos we sent. Fresh, perfectly sweet, and delivery was smooth. Thank you for being part of our big day.",
     name: "Anung & Joel",
     tag: "Wedding · November 2025",
   },
   {
-    quote: "Serving sweetness on moments that matter the most — beautifully captured and deeply loved.",
-    name: "A Wedding Weekend",
-    tag: "Celebration · 13.11.25",
+    quote:
+      "Our dessert table was stunning — people took photos before they even touched a thing. Beautiful flavours and a team that clearly cares. Highly recommended.",
+    name: "Yangthy & Lendi",
+    tag: "Wedding · October 2025",
   },
 ];
 
@@ -149,6 +152,55 @@ function InstagramIcon({ className = "h-4 w-4" }) {
       <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
       <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
       <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+    </svg>
+  );
+}
+
+function Icon({ name, className = "h-6 w-6" }) {
+  const paths = {
+    layers: (
+      <>
+        <path d="M12 2 2 7l10 5 10-5-10-5z" />
+        <path d="m2 17 10 5 10-5" />
+        <path d="m2 12 10 5 10-5" />
+      </>
+    ),
+    confirm: (
+      <>
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+        <path d="m9 10 2 2 4-4" />
+      </>
+    ),
+    bake: (
+      <>
+        <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z" />
+        <path d="M10 7h4" />
+      </>
+    ),
+    delivery: (
+      <>
+        <path d="M1 3h15v13H1z" />
+        <path d="M16 8h4l3 3v5h-7V8z" />
+        <circle cx="5.5" cy="18.5" r="2.5" />
+        <circle cx="18.5" cy="18.5" r="2.5" />
+      </>
+    ),
+    handcrafted: (
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+    ),
+    ingredients: (
+      <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+    ),
+    design: (
+      <>
+        <path d="M12 20h9" />
+        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+      </>
+    ),
+  };
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      {paths[name]}
     </svg>
   );
 }
@@ -337,15 +389,17 @@ export default function HomePage() {
           </FadeIn>
           <StaggerContainer className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {[
-              { step: "01", title: "Choose", desc: "Pick from our menu or design your own custom cake.", icon: "🎂" },
-              { step: "02", title: "Confirm", desc: "Place your order online or message us your vision.", icon: "📝" },
-              { step: "03", title: "We bake", desc: "Handcrafted fresh to order — 7 to 10 days advance.", icon: "🥄" },
-              { step: "04", title: "Enjoy", desc: "Pickup in Dimapur or delivery across the city.", icon: "🛵" },
+              { step: "01", title: "Choose", desc: "Pick from our menu or design your own custom cake.", icon: "layers" },
+              { step: "02", title: "Confirm", desc: "Place your order online or message us your vision.", icon: "confirm" },
+              { step: "03", title: "We bake", desc: "Handcrafted fresh to order — 7 to 10 days advance.", icon: "bake" },
+              { step: "04", title: "Enjoy", desc: "Pickup in Dimapur or delivery across the city.", icon: "delivery" },
             ].map((item) => (
               <StaggerItem key={item.step}>
                 <div className="rounded-[20px] border border-[#E8E0D8] bg-[#F9F8F6] p-7 text-center shadow-sm">
                   <p className="font-serif text-4xl font-bold text-[#BC6153]/30">{item.step}</p>
-                  <div className="mx-auto mt-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#26110B] text-2xl">{item.icon}</div>
+                  <div className="mx-auto mt-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#26110B] text-white">
+                    <Icon name={item.icon} className="h-6 w-6" />
+                  </div>
                   <h3 className="mt-5 font-serif text-lg font-bold text-[#26110B]">{item.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-[#8B7355]">{item.desc}</p>
                 </div>
@@ -430,10 +484,10 @@ export default function HomePage() {
           </FadeIn>
           <StaggerContainer className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {[
-              { title: "Handcrafted", desc: "Every cake is baked to order, by hand, using traditional techniques and real ingredients.", icon: "🥄" },
-              { title: "Premium Ingredients", desc: "Belgian chocolate, European butter, fresh cream, and seasonal fruits — never any shortcuts.", icon: "🧈" },
-              { title: "Custom Designs", desc: "Upload a photo, describe your vision, and our bakers will bring it to life.", icon: "🎨" },
-              { title: "Local Delivery", desc: "Free pickup in Dimapur or affordable delivery across the city. We make it easy.", icon: "🛵" },
+              { title: "Handcrafted", desc: "Every cake is baked to order, by hand, using traditional techniques and real ingredients.", icon: "handcrafted" },
+              { title: "Premium Ingredients", desc: "Belgian chocolate, European butter, fresh cream, and seasonal fruits — never any shortcuts.", icon: "ingredients" },
+              { title: "Custom Designs", desc: "Upload a photo, describe your vision, and our bakers will bring it to life.", icon: "design" },
+              { title: "Local Delivery", desc: "Free pickup in Dimapur or affordable delivery across the city. We make it easy.", icon: "delivery" },
             ].map((item) => (
               <StaggerItem key={item.title}>
                 <motion.div
@@ -441,7 +495,9 @@ export default function HomePage() {
                   whileHover={{ y: -4, boxShadow: "0 16px 32px rgba(0,0,0,0.08)" }}
                   transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 >
-                  <div className="text-4xl">{item.icon}</div>
+                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#F9F8F6] text-[#BC6153]">
+                    <Icon name={item.icon} className="h-7 w-7" />
+                  </div>
                   <h3 className="mt-5 font-serif text-lg font-bold text-[#26110B]">{item.title}</h3>
                   <p className="mt-3 text-sm leading-relaxed text-[#8B7355]">{item.desc}</p>
                 </motion.div>
