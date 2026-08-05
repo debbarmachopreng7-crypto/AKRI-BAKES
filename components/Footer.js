@@ -46,6 +46,14 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} Akri Bakes &middot; Zion Hospital Road, Purana Bazar, Dimapur, Nagaland &middot; 8259917757
           </p>
           <div className="flex items-center gap-4">
+            <a
+              href="https://www.instagram.com/akri_bakes/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-[#8B7355] transition-colors hover:text-[#26110B]"
+            >
+              Instagram
+            </a>
             <Link href="/contact" className="text-sm text-[#8B7355] transition-colors hover:text-[#26110B]">Contact</Link>
             <Link href="/admin" className="text-sm text-[#8B7355] transition-colors hover:text-[#26110B]">Staff</Link>
           </div>

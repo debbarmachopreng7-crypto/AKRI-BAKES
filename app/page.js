@@ -216,6 +216,69 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── FROM THE GALLERY ─────────────────────────────────── */}
+      <section className="border-y border-[#E8E0D8] bg-white py-20">
+        <div className="mx-auto max-w-6xl px-4">
+          <FadeIn>
+            <div className="text-center">
+              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#8B7355]">Fresh From Our Kitchen</p>
+              <h2 className="mt-5 font-serif text-4xl font-bold text-[#26110B]">Real Cakes, Real Moments</h2>
+              <p className="mx-auto mt-3 max-w-xl text-[#8B7355]">
+                A glimpse of the cakes leaving our kitchen every week. Follow @akri_bakes on Instagram for the full feed.
+              </p>
+            </div>
+          </FadeIn>
+
+          <StaggerContainer className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { src: "/AKRI-BAKES/gallery/signature-chocolate-cake.jpg", label: "Signature Chocolate" },
+              { src: "/AKRI-BAKES/products/celebration-04.jpg", label: "Red Velvet" },
+              { src: "/AKRI-BAKES/gallery/wedding-1.jpg", label: "Wedding Cake" },
+              { src: "/AKRI-BAKES/products/celebration-10.jpg", label: "Dark Chocolate Truffle" },
+              { src: "/AKRI-BAKES/gallery/birthday-1.jpg", label: "Birthday Cake" },
+              { src: "/AKRI-BAKES/products/celebration-19.jpg", label: "Rainbow Cake" },
+              { src: "/AKRI-BAKES/gallery/signature-cheesecake.jpg", label: "Signature Cheesecake" },
+              { src: "/AKRI-BAKES/products/celebration-01.jpg", label: "Black Forest" },
+            ].map((photo) => (
+              <StaggerItem key={photo.src}>
+                <Link href="/gallery" className="group block overflow-hidden rounded-[20px] border border-[#E8E0D8] shadow-sm">
+                  <div className="relative aspect-[4/5] overflow-hidden bg-[#E8E0D8]">
+                    <img
+                      src={photo.src}
+                      alt={`${photo.label} — Akri Bakes`}
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                      <p className="text-sm font-medium text-white">{photo.label}</p>
+                    </div>
+                  </div>
+                </Link>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
+
+          <FadeIn delay={0.2}>
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+              <Link
+                href="/gallery"
+                className="rounded-full bg-[#26110B] px-8 py-3 text-sm font-medium text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-[#3a1c12] hover:shadow-xl"
+              >
+                View Full Gallery
+              </Link>
+              <a
+                href="https://www.instagram.com/akri_bakes/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full border border-[#BC6153] px-8 py-3 text-sm font-medium text-[#BC6153] transition hover:-translate-y-0.5 hover:bg-[#BC6153] hover:text-white"
+              >
+                Follow @akri_bakes
+              </a>
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
       {/* ── INFO / CONTACT ───────────────────────────────────── */}
       <section className="bg-[#26110B] py-20 text-white">
         <div className="mx-auto max-w-6xl px-4">
