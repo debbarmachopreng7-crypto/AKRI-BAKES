@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { useRef } from "react";
 import { motion } from "framer-motion";
 import { FadeIn, SlideUp, StaggerContainer, StaggerItem } from "../components/animations";
 
@@ -25,29 +26,163 @@ const categories = [
   { title: "Pies & Tarts", desc: "Key Lime, Lemon Meringue, Banoffee & more", from: 70, href: "/menu" },
 ];
 
+const IG_URL = "https://www.instagram.com/akribakes/";
+const PHONE = "8259917757";
+
+const showcaseVideos = [
+  {
+    src: "/AKRI-BAKES/gallery/wedding/wedding-anung-joel.mp4",
+    poster: "/AKRI-BAKES/gallery/wedding/wedding-anung-joel-poster.jpg",
+    title: "Anung & Joel",
+    tag: "Wedding · 2,300+ likes",
+    autoplay: true,
+  },
+  {
+    src: "/AKRI-BAKES/gallery/wedding/wedding-reception.mp4",
+    poster: "/AKRI-BAKES/gallery/wedding/wedding-reception-poster.jpg",
+    title: "A Memorable Outdoor Wedding",
+    tag: "Reception film",
+  },
+  {
+    src: "/AKRI-BAKES/gallery/wedding/wedding-pink.mp4",
+    poster: "/AKRI-BAKES/gallery/wedding/wedding-pink-poster.jpg",
+    title: "A Pink Wedding, 10.01.2025",
+    tag: "Wedding film",
+  },
+  {
+    src: "/AKRI-BAKES/gallery/wedding/wedding-intimate-fairy.mp4",
+    poster: "/AKRI-BAKES/gallery/wedding/wedding-intimate-fairy-poster.jpg",
+    title: "An Intimate Fairy-Tale Wedding",
+    tag: "Wedding film",
+  },
+  {
+    src: "/AKRI-BAKES/gallery/wedding/wedding-200126.mp4",
+    poster: "/AKRI-BAKES/gallery/wedding/wedding-200126-poster.jpg",
+    title: "A Calm & Beautiful Wedding",
+    tag: "Wedding film",
+  },
+];
+
+const showcasePhotos = [
+  { src: "/AKRI-BAKES/gallery/wedding/wedding-dessert-table.jpg", label: "Yangthy & Lendi" },
+  { src: "/AKRI-BAKES/gallery/wedding/wedding-guest-desserts.jpg", label: "Dessert Counter" },
+  { src: "/AKRI-BAKES/gallery/wedding/wedding-dessert-spread.jpg", label: "Serving Sweetness" },
+  { src: "/AKRI-BAKES/gallery/wedding/wedding-dessert-lineup.jpg", label: "Wedding Desserts" },
+];
+
+const feedPhotos = [
+  { src: "/AKRI-BAKES/gallery/signature-chocolate-cake.jpg", label: "Signature Chocolate" },
+  { src: "/AKRI-BAKES/products/celebration-01.jpg", label: "Black Forest" },
+  { src: "/AKRI-BAKES/products/celebration-04.jpg", label: "Red Velvet" },
+  { src: "/AKRI-BAKES/products/celebration-10.jpg", label: "Dark Chocolate Truffle" },
+  { src: "/AKRI-BAKES/products/celebration-19.jpg", label: "Rainbow Cake" },
+  { src: "/AKRI-BAKES/products/celebration-16.jpg", label: "Coconut-Lotus Biscoff" },
+  { src: "/AKRI-BAKES/products/cake-04.jpg", label: "Lotus Biscoff Cheesecake" },
+  { src: "/AKRI-BAKES/gallery/signature-cheesecake.jpg", label: "Signature Cheesecake" },
+];
+
+const testimonials = [
+  {
+    quote: "Thank you for choosing your desserts and cake from us — every detail, every flavour, perfect.",
+    name: "Esther & Neeraj",
+    tag: "Wedding · December 2025",
+  },
+  {
+    quote: "Privileged to spread our desserts on their special day. The couple and every guest loved it.",
+    name: "Anung & Joel",
+    tag: "Wedding · November 2025",
+  },
+  {
+    quote: "Serving sweetness on moments that matter the most — beautifully captured and deeply loved.",
+    name: "A Wedding Weekend",
+    tag: "Celebration · 13.11.25",
+  },
+];
+
+function ShowcaseVideo({ src, poster, title, tag, autoplay = false }) {
+  const ref = useRef(null);
+  return (
+    <div className="group relative w-full overflow-hidden rounded-2xl border border-white/10 bg-black">
+      <video
+        ref={ref}
+        src={src}
+        poster={poster}
+        autoPlay={autoplay}
+        muted
+        loop
+        playsInline
+        preload={autoplay ? "auto" : "none"}
+        onMouseEnter={() => {
+          if (!autoplay) ref.current?.play().catch(() => {});
+        }}
+        onMouseLeave={() => {
+          if (!autoplay) ref.current?.pause();
+        }}
+        className="aspect-[9/16] w-full object-cover"
+      />
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+        <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-md transition duration-300 group-hover:scale-110 group-hover:bg-[#BC6153] group-hover:shadow-lg group-hover:shadow-[#BC6153]/40">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="ml-0.5">
+            <polygon points="6 3 20 12 6 21 6 3" />
+          </svg>
+        </span>
+      </div>
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent p-5 pt-16">
+        <p className="font-serif text-lg font-semibold text-white">{title}</p>
+        <p className="mt-0.5 text-xs font-medium uppercase tracking-[0.2em] text-white/70">{tag}</p>
+      </div>
+    </div>
+  );
+}
+
+function PhoneIcon({ className = "h-4 w-4" }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
+    </svg>
+  );
+}
+
+function InstagramIcon({ className = "h-4 w-4" }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+    </svg>
+  );
+}
+
 export default function HomePage() {
   return (
     <main>
-      {/* ── HERO ─────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-[#8B7E74] py-24 md:py-32">
-        <motion.div
-          className="absolute inset-0 opacity-10"
-          animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
-          transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-          style={{
-            backgroundImage: "radial-gradient(circle at 30% 50%, rgba(255,255,255,0.4) 0%, transparent 50%)",
-            backgroundSize: "200% 200%",
-          }}
+      {/* ── CINEMATIC VIDEO HERO ─────────────────────────────── */}
+      <section className="relative flex min-h-[90vh] items-center justify-center overflow-hidden bg-[#26110B]">
+        <video
+          src={showcaseVideos[0].src}
+          poster={showcaseVideos[0].poster}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          className="absolute inset-0 h-full w-full object-cover"
         />
-        <motion.div className="mx-auto max-w-4xl px-4 text-center" variants={containerVariants} initial="hidden" animate="visible">
-          <motion.h1 variants={heroItem} className="font-serif text-5xl font-bold leading-tight text-white md:text-7xl">
+        <div className="absolute inset-0 bg-gradient-to-t from-[#26110B] via-[#26110B]/50 to-[#26110B]/20" />
+        <motion.div
+          className="relative z-10 mx-auto max-w-4xl px-4 pb-24 pt-32 text-center"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.p variants={heroItem} className="text-xs font-semibold uppercase tracking-[0.35em] text-[#BC6153]">
+            Premium Cakes &amp; Patisserie &middot; Dimapur, Nagaland
+          </motion.p>
+          <motion.h1 variants={heroItem} className="mt-5 font-serif text-5xl font-bold leading-tight text-white md:text-7xl">
             Akri Bakes
           </motion.h1>
-          <motion.p variants={heroItem} className="mt-4 text-sm font-medium uppercase tracking-[0.3em] text-white/80">
-            Premium Cakes &amp; Patisserie for Every Celebration in Nagaland.
-          </motion.p>
-          <motion.p variants={heroItem} className="mt-6 text-sm text-white/60">
-            Tea House &middot; Coffee &middot; French Patisserie &middot; Pan-Asian Bakery Style
+          <motion.p variants={heroItem} className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-white/80 md:text-xl">
+            Cakes &amp; desserts for the moments that matter — from intimate treats to the biggest weddings.
           </motion.p>
           <motion.div variants={heroItem} className="mt-10 flex flex-wrap items-center justify-center gap-4">
             <Link
@@ -62,29 +197,121 @@ export default function HomePage() {
             >
               Build Your Cake
             </Link>
+            <a
+              href={`tel:${PHONE}`}
+              className="inline-flex items-center gap-2 rounded-full bg-white/10 px-6 py-3.5 text-sm font-medium text-white backdrop-blur transition hover:bg-white/20 hover:-translate-y-0.5"
+            >
+              <PhoneIcon className="h-4 w-4" />
+              {PHONE}
+            </a>
           </motion.div>
         </motion.div>
+      </section>
+
+      {/* ── SOCIAL PROOF BAND ────────────────────────────────── */}
+      <section className="border-y border-[#E8E0D8] bg-white py-10">
+        <StaggerContainer className="mx-auto grid max-w-6xl grid-cols-2 gap-6 px-4 text-center md:grid-cols-4">
+          {[
+            { stat: "10,000+", label: "Instagram Family" },
+            { stat: "30+", label: "Cake Flavours" },
+            { stat: "7–10", label: "Days Advance Order" },
+            { stat: "Dimapur", label: "Pickup &amp; Delivery" },
+          ].map((s) => (
+            <StaggerItem key={s.label}>
+              <p className="font-serif text-3xl font-bold text-[#26110B]">{s.stat}</p>
+              <p className="mt-1 text-xs font-medium uppercase tracking-[0.2em] text-[#8B7355]">{s.label}</p>
+            </StaggerItem>
+          ))}
+        </StaggerContainer>
+      </section>
+
+      {/* ── WEDDINGS SHOWCASE ────────────────────────────────── */}
+      <section className="bg-[#26110B] py-20 text-white md:py-24">
+        <div className="mx-auto max-w-7xl px-4">
+          <FadeIn>
+            <div className="text-center">
+              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#BC6153]">Real Weddings &middot; Real Sweetness</p>
+              <h2 className="mt-5 font-serif text-4xl font-bold text-white md:text-5xl">The weddings we&rsquo;ve been part of</h2>
+              <p className="mx-auto mt-4 max-w-2xl text-white/70">
+                Thirty seconds of real moments — dessert counters, guests and the sweetness that tied it all together. Hover a film to watch.
+              </p>
+            </div>
+          </FadeIn>
+
+          <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="sm:col-span-2 lg:row-span-2">
+              <ShowcaseVideo {...showcaseVideos[0]} />
+            </div>
+            {showcaseVideos.slice(1).map((v) => (
+              <ShowcaseVideo key={v.src} {...v} />
+            ))}
+          </div>
+
+          <div className="mt-5 grid grid-cols-2 gap-5 lg:grid-cols-4">
+            {showcasePhotos.map((photo) => (
+              <a
+                key={photo.src}
+                href="/gallery"
+                className="group relative block overflow-hidden rounded-2xl border border-white/10"
+              >
+                <div className="aspect-[4/5] overflow-hidden bg-[#3a1c12]">
+                  <img
+                    src={photo.src}
+                    alt={`${photo.label} — wedding desserts by Akri Bakes`}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-4 pt-12">
+                  <p className="text-sm font-medium text-white">{photo.label}</p>
+                </div>
+              </a>
+            ))}
+          </div>
+
+          <FadeIn delay={0.2}>
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+              <a
+                href="/gallery"
+                className="rounded-full bg-[#BC6153] px-8 py-3 text-sm font-medium text-white shadow-lg shadow-[#BC6153]/30 transition hover:-translate-y-0.5 hover:bg-[#A85547] hover:shadow-xl"
+              >
+                View the Full Gallery
+              </a>
+              <a
+                href={IG_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full border border-[#BC6153] px-8 py-3 text-sm font-medium text-[#BC6153] transition hover:-translate-y-0.5 hover:bg-[#BC6153] hover:text-white"
+              >
+                <InstagramIcon className="h-4 w-4" />
+                Follow @akribakes
+              </a>
+            </div>
+          </FadeIn>
+        </div>
       </section>
 
       {/* ── BUILD YOUR CAKE ──────────────────────────────────── */}
       <SlideUp>
         <section className="bg-[#F9F8F6] py-20">
           <div className="mx-auto max-w-6xl px-4">
-            <motion.div
-              className="rounded-[24px] bg-[#26110B] p-10 md:p-14"
-              whileHover={{ scale: 1.005 }}
-              transition={{ type: "spring", stiffness: 200, damping: 25 }}
-            >
-              <div className="grid items-center gap-10 md:grid-cols-2">
-                <div>
-                  <h2 className="font-serif text-3xl font-bold text-white md:text-4xl">
-                    Build Your Cake
-                  </h2>
-                  <p className="mt-5 max-w-lg leading-relaxed text-white/70">
-                    Design your own cake from scratch — choose the occasion, size, flavor, 
-                    frosting and decorations. Watch the price update instantly, upload an 
-                    inspiration photo, and reserve your pickup. The standout feature that 
-                    sets Akri Bakes apart.
+            <div className="overflow-hidden rounded-[24px] bg-white shadow-xl">
+              <div className="grid items-stretch md:grid-cols-2">
+                <div className="relative min-h-[320px]">
+                  <img
+                    src="/AKRI-BAKES/products/celebration-04.jpg"
+                    alt="Custom celebration cake by Akri Bakes"
+                    loading="lazy"
+                    className="absolute inset-0 h-full w-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#26110B]/40 to-transparent" />
+                </div>
+                <div className="p-10 md:p-14">
+                  <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#8B7355]">Made Your Way</p>
+                  <h2 className="mt-5 font-serif text-3xl font-bold text-[#26110B] md:text-4xl">Build Your Cake</h2>
+                  <p className="mt-5 max-w-lg leading-relaxed text-[#8B7355]">
+                    Design your own cake from scratch — choose the occasion, size, flavour, frosting and decorations.
+                    Watch the price update instantly, upload an inspiration photo, and reserve your pickup.
                   </p>
                   <Link
                     href="/build-your-cake"
@@ -93,21 +320,43 @@ export default function HomePage() {
                     Start Designing &rarr;
                   </Link>
                 </div>
-                <motion.div
-                  className="flex items-center justify-center"
-                  animate={{ rotate: [0, 5, -5, 0] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  <div className="text-8xl md:text-9xl">🎂</div>
-                </motion.div>
               </div>
-            </motion.div>
+            </div>
           </div>
         </section>
       </SlideUp>
 
+      {/* ── HOW IT WORKS ─────────────────────────────────────── */}
+      <section className="bg-white py-20">
+        <div className="mx-auto max-w-6xl px-4">
+          <FadeIn>
+            <div className="text-center">
+              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#8B7355]">Simple &amp; Personal</p>
+              <h2 className="mt-5 font-serif text-4xl font-bold text-[#26110B]">How ordering works</h2>
+            </div>
+          </FadeIn>
+          <StaggerContainer className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { step: "01", title: "Choose", desc: "Pick from our menu or design your own custom cake.", icon: "🎂" },
+              { step: "02", title: "Confirm", desc: "Place your order online or message us your vision.", icon: "📝" },
+              { step: "03", title: "We bake", desc: "Handcrafted fresh to order — 7 to 10 days advance.", icon: "🥄" },
+              { step: "04", title: "Enjoy", desc: "Pickup in Dimapur or delivery across the city.", icon: "🛵" },
+            ].map((item) => (
+              <StaggerItem key={item.step}>
+                <div className="rounded-[20px] border border-[#E8E0D8] bg-[#F9F8F6] p-7 text-center shadow-sm">
+                  <p className="font-serif text-4xl font-bold text-[#BC6153]/30">{item.step}</p>
+                  <div className="mx-auto mt-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#26110B] text-2xl">{item.icon}</div>
+                  <h3 className="mt-5 font-serif text-lg font-bold text-[#26110B]">{item.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-[#8B7355]">{item.desc}</p>
+                </div>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
+        </div>
+      </section>
+
       {/* ── OUR MENU ─────────────────────────────────────────── */}
-      <section className="bg-[#F9F8F6] pb-20">
+      <section className="bg-[#F9F8F6] py-20">
         <div className="mx-auto max-w-6xl px-4">
           <FadeIn>
             <div className="text-center">
@@ -160,26 +409,12 @@ export default function HomePage() {
             <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#8B7355]">Our Story</p>
             <h2 className="mt-5 font-serif text-4xl font-bold text-[#26110B]">Homemade, Heartmade</h2>
             <p className="mx-auto mt-6 max-w-3xl leading-relaxed text-[#26110B]">
-              Akri Bakes started in the kitchen of our home in Dimapur, driven by a love 
-              for baking and a desire to bring truly exceptional cakes to Nagaland. Every 
-              cake is made from scratch using real ingredients — no premixes, no shortcuts. 
-              From classic cheesecakes to custom celebration cakes, each order receives the 
+              Akri Bakes started in the kitchen of our home in Dimapur, driven by a love
+              for baking and a desire to bring truly exceptional cakes to Nagaland. Every
+              cake is made from scratch using real ingredients — no premixes, no shortcuts.
+              From classic cheesecakes to custom celebration cakes, each order receives the
               same care and attention we&rsquo;d give our own family table.
             </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-8 text-sm">
-              <div>
-                <p className="text-2xl font-bold text-[#BC6153]">30+</p>
-                <p className="mt-1 text-[#8B7355]">Cake Flavours</p>
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-[#BC6153]">7&ndash;10</p>
-                <p className="mt-1 text-[#8B7355]">Days Advance Order</p>
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-[#BC6153]">Dimapur</p>
-                <p className="mt-1 text-[#8B7355]">Pickup &amp; Delivery</p>
-              </div>
-            </div>
           </div>
         </section>
       </SlideUp>
@@ -216,7 +451,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── FROM THE GALLERY ─────────────────────────────────── */}
+      {/* ── FRESH FROM THE FEED ──────────────────────────────── */}
       <section className="border-y border-[#E8E0D8] bg-white py-20">
         <div className="mx-auto max-w-6xl px-4">
           <FadeIn>
@@ -230,16 +465,7 @@ export default function HomePage() {
           </FadeIn>
 
           <StaggerContainer className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              { src: "/AKRI-BAKES/gallery/signature-chocolate-cake.jpg", label: "Signature Chocolate" },
-              { src: "/AKRI-BAKES/products/celebration-04.jpg", label: "Red Velvet" },
-              { src: "/AKRI-BAKES/gallery/wedding-1.jpg", label: "Wedding Cake" },
-              { src: "/AKRI-BAKES/products/celebration-10.jpg", label: "Dark Chocolate Truffle" },
-              { src: "/AKRI-BAKES/gallery/birthday-1.jpg", label: "Birthday Cake" },
-              { src: "/AKRI-BAKES/products/celebration-19.jpg", label: "Rainbow Cake" },
-              { src: "/AKRI-BAKES/gallery/signature-cheesecake.jpg", label: "Signature Cheesecake" },
-              { src: "/AKRI-BAKES/products/celebration-01.jpg", label: "Black Forest" },
-            ].map((photo) => (
+            {feedPhotos.map((photo) => (
               <StaggerItem key={photo.src}>
                 <Link href="/gallery" className="group block overflow-hidden rounded-[20px] border border-[#E8E0D8] shadow-sm">
                   <div className="relative aspect-[4/5] overflow-hidden bg-[#E8E0D8]">
@@ -267,11 +493,12 @@ export default function HomePage() {
                 View Full Gallery
               </Link>
               <a
-                href="https://www.instagram.com/akribakes/"
+                href={IG_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-full border border-[#BC6153] px-8 py-3 text-sm font-medium text-[#BC6153] transition hover:-translate-y-0.5 hover:bg-[#BC6153] hover:text-white"
+                className="inline-flex items-center gap-2 rounded-full border border-[#BC6153] px-8 py-3 text-sm font-medium text-[#BC6153] transition hover:-translate-y-0.5 hover:bg-[#BC6153] hover:text-white"
               >
+                <InstagramIcon className="h-4 w-4" />
                 Follow @akribakes
               </a>
             </div>
@@ -279,112 +506,46 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── WEDDINGS SHOWCASE ────────────────────────────────── */}
+      {/* ── TESTIMONIALS ─────────────────────────────────────── */}
       <section className="bg-[#26110B] py-20 text-white">
         <div className="mx-auto max-w-6xl px-4">
           <FadeIn>
             <div className="text-center">
-              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#BC6153]">Weddings &amp; Celebrations</p>
-              <h2 className="mt-5 font-serif text-4xl font-bold text-white">Sweetness at the sweetest moments</h2>
-              <p className="mx-auto mt-4 max-w-2xl text-white/70">
-                Real weddings, real guests, real cake — a peek at our dessert counters and the people enjoying them.
-              </p>
+              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#BC6153]">From the People We Serve</p>
+              <h2 className="mt-5 font-serif text-4xl font-bold text-white">Loved by couples, cherished by guests</h2>
             </div>
           </FadeIn>
-
-          <div className="mt-12 flex flex-wrap justify-center gap-5">
-            {[
-              {
-                src: "/AKRI-BAKES/gallery/wedding/wedding-anung-joel.mp4",
-                title: "Anung &amp; Joel",
-                caption: "Privileged to spread our desserts on their special day — congratulations to the beautiful couple.",
-              },
-              {
-                src: "/AKRI-BAKES/gallery/wedding/wedding-reception.mp4",
-                title: "A Memorable Outdoor Wedding",
-                caption: "Love in the open air, sweetness in every bite — small, simple, and full of love.",
-              },
-              {
-                src: "/AKRI-BAKES/gallery/wedding/wedding-pink.mp4",
-                title: "A Pink Wedding, 10.01.2025",
-                caption: "Perfect weather and pleasant surroundings — desserts served to the happiest of guests.",
-              },
-              {
-                src: "/AKRI-BAKES/gallery/wedding/wedding-intimate-fairy.mp4",
-                title: "An Intimate Fairy-Tale Wedding",
-                caption: "From fairy-style details to heartfelt emotions — a very private, intimate wedding.",
-              },
-              {
-                src: "/AKRI-BAKES/gallery/wedding/wedding-200126.mp4",
-                title: "A Calm &amp; Beautiful Wedding, 20.01.2026",
-                caption: "No hustle, just perfect weather and a perfect day — sweet memories served all around.",
-              },
-            ].map((video) => (
-              <div key={video.src} className="w-full overflow-hidden rounded-[20px] border border-white/10 bg-black sm:w-[calc(50%-10px)] lg:w-[calc(33.333%-14px)]">
-                <video
-                  src={video.src}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  controls
-                  preload="metadata"
-                  className="aspect-[9/16] w-full object-cover"
-                />
-                <div className="p-5">
-                  <p className="font-serif text-lg text-white">{video.title}</p>
-                  <p className="mt-1 text-sm text-white/60">{video.caption}</p>
+          <StaggerContainer className="mt-12 grid gap-6 md:grid-cols-3">
+            {testimonials.map((t) => (
+              <StaggerItem key={t.name}>
+                <div className="flex h-full flex-col rounded-[20px] border border-white/10 bg-white/5 p-8 backdrop-blur">
+                  <div className="flex gap-1 text-[#BC6153]">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <svg key={i} width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                      </svg>
+                    ))}
+                  </div>
+                  <p className="mt-5 flex-1 leading-relaxed text-white/80">&ldquo;{t.quote}&rdquo;</p>
+                  <div className="mt-6 border-t border-white/10 pt-4">
+                    <p className="font-serif text-lg font-semibold text-white">{t.name}</p>
+                    <p className="mt-0.5 text-xs uppercase tracking-[0.2em] text-white/50">{t.tag}</p>
+                  </div>
                 </div>
-              </div>
+              </StaggerItem>
             ))}
-          </div>
-
-          <div className="mt-5 grid grid-cols-2 gap-5 lg:grid-cols-4">
-            {[
-              { src: "/AKRI-BAKES/gallery/wedding/wedding-dessert-table.jpg", label: "Yangthy &amp; Lendi" },
-              { src: "/AKRI-BAKES/gallery/wedding/wedding-guest-desserts.jpg", label: "Dessert Counter" },
-              { src: "/AKRI-BAKES/gallery/wedding/wedding-dessert-spread.jpg", label: "Serving Sweetness" },
-              { src: "/AKRI-BAKES/gallery/wedding/wedding-dessert-lineup.jpg", label: "Wedding Desserts" },
-            ].map((photo) => (
-              <div key={photo.src} className="group overflow-hidden rounded-[20px] border border-white/10">
-                <div className="aspect-[4/5] overflow-hidden bg-[#3a1c12]">
-                  <img
-                    src={photo.src}
-                    alt={`${photo.label} — wedding desserts by Akri Bakes`}
-                    loading="lazy"
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                </div>
-                <div className="p-4">
-                  <p className="text-sm font-medium text-white">{photo.label}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <FadeIn delay={0.2}>
-            <div className="mt-10 text-center">
-              <a
-                href="https://www.instagram.com/akribakes/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex rounded-full border border-[#BC6153] px-8 py-3 text-sm font-medium text-[#BC6153] transition hover:-translate-y-0.5 hover:bg-[#BC6153] hover:text-white"
-              >
-                See More Weddings on Instagram
-              </a>
-            </div>
-          </FadeIn>
+          </StaggerContainer>
         </div>
       </section>
 
       {/* ── INFO / CONTACT ───────────────────────────────────── */}
-      <section className="bg-[#26110B] py-20 text-white">
+      <section className="bg-[#1a0b06] py-20 text-white">
         <div className="mx-auto max-w-6xl px-4">
           <div className="grid gap-10 md:grid-cols-3">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/50">Visit Us</p>
               <p className="mt-4 text-lg font-medium">Dimapur, Nagaland</p>
-              <p className="mt-2 text-sm text-white/60">Pickup by appointment<br />Delivery available across Dimapur</p>
+              <p className="mt-2 text-sm text-white/60">Zion Hospital Road, Purana Bazar<br />Pickup by appointment · Delivery across Dimapur</p>
             </div>
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/50">Hours</p>
@@ -393,10 +554,11 @@ export default function HomePage() {
             </div>
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/50">Get in Touch</p>
-              <p className="mt-4 text-lg font-medium">8259917757</p>
+              <p className="mt-4 text-lg font-medium">{PHONE}</p>
               <p className="mt-2 text-sm text-white/60">Akribake2020@gmail.com</p>
               <div className="mt-4 flex gap-3">
-                <a href="tel:8259917757" className="rounded-full bg-white/10 px-4 py-2 text-xs font-medium text-white transition hover:bg-white/20">Call</a>
+                <a href={`tel:${PHONE}`} className="rounded-full bg-white/10 px-4 py-2 text-xs font-medium text-white transition hover:bg-white/20">Call</a>
+                <a href={`tel:${PHONE}`} className="rounded-full bg-white/10 px-4 py-2 text-xs font-medium text-white transition hover:bg-white/20">WhatsApp</a>
                 <a href="mailto:Akribake2020@gmail.com" className="rounded-full bg-white/10 px-4 py-2 text-xs font-medium text-white transition hover:bg-white/20">Email</a>
               </div>
             </div>
