@@ -5,66 +5,9 @@ import { motion } from "framer-motion";
 import { FadeIn, StaggerContainer, StaggerItem } from "../../components/animations";
 import { ASSET_PREFIX } from "../../lib/cakeImages";
 
-const celebrationItems = [
-  { title: "Birthday Cake with Candles", label: "Celebration", image: `${ASSET_PREFIX}/gallery/showcase-01.jpg` },
-  { title: "Birthday Candles", label: "Celebration", image: `${ASSET_PREFIX}/gallery/showcase-02.jpg` },
-  { title: "Birthday Balloons", label: "Celebration", image: `${ASSET_PREFIX}/gallery/showcase-03.jpg` },
-  { title: "Birthday Balloons", label: "Celebration", image: `${ASSET_PREFIX}/gallery/showcase-04.jpg` },
-  { title: "Birthday Celebration", label: "Celebration", image: `${ASSET_PREFIX}/gallery/showcase-05.jpg` },
-  { title: "Family Birthday Celebration", label: "Celebration", image: `${ASSET_PREFIX}/gallery/showcase-06.jpg` },
-  { title: "Wedding Cake Cutting", label: "Celebration", image: `${ASSET_PREFIX}/gallery/showcase-07.jpg` },
-  { title: "Wedding Cake Ceremony", label: "Celebration", image: `${ASSET_PREFIX}/gallery/showcase-08.jpg` },
-  { title: "Wedding Cake Cutting", label: "Celebration", image: `${ASSET_PREFIX}/gallery/showcase-09.jpg` },
-  { title: "Decorated Wedding Cake", label: "Celebration", image: `${ASSET_PREFIX}/gallery/showcase-10.jpg` },
-  { title: "Anniversary Table Setup", label: "Celebration", image: `${ASSET_PREFIX}/gallery/showcase-11.jpg` },
-  { title: "25th Anniversary Cake", label: "Celebration", image: `${ASSET_PREFIX}/gallery/showcase-12.jpg` },
-  { title: "Champagne Toast", label: "Celebration", image: `${ASSET_PREFIX}/gallery/showcase-13.jpg` },
-  { title: "Confetti Toast", label: "Celebration", image: `${ASSET_PREFIX}/gallery/showcase-14.jpg` },
-  { title: "Confetti Celebration", label: "Celebration", image: `${ASSET_PREFIX}/gallery/showcase-15.jpg` },
-  { title: "Festive Dinner Table", label: "Celebration", image: `${ASSET_PREFIX}/gallery/showcase-16.jpg` },
-  { title: "Couple's Cake Celebration", label: "Celebration", image: `${ASSET_PREFIX}/gallery/showcase-17.jpg` },
-  { title: "Party Confetti", label: "Celebration", image: `${ASSET_PREFIX}/gallery/showcase-18.jpg` },
-];
-
-const akriBakesItems = [
-  { title: "Chocolate Cake", label: "Akri Bakes", image: `${ASSET_PREFIX}/gallery/akri-bakes-13.jpg` },
-  { title: "Cheesecake", label: "Akri Bakes", image: `${ASSET_PREFIX}/gallery/akri-bakes-29.jpg` },
-  { title: "Chocolate Mousse", label: "Akri Bakes", image: `${ASSET_PREFIX}/gallery/akri-bakes-24.jpg` },
-  { title: "Waffles", label: "Akri Bakes", image: `${ASSET_PREFIX}/gallery/akri-bakes-11.jpg` },
-  { title: "Pancakes", label: "Akri Bakes", image: `${ASSET_PREFIX}/gallery/akri-bakes-20.jpg` },
-  { title: "Cafe Food", label: "Akri Bakes", image: `${ASSET_PREFIX}/gallery/akri-bakes-12.jpg` },
-  { title: "Bakery Dishes", label: "Akri Bakes", image: `${ASSET_PREFIX}/gallery/akri-bakes-01.jpg` },
-  { title: "Bakery Meals", label: "Akri Bakes", image: `${ASSET_PREFIX}/gallery/akri-bakes-09.jpg` },
-  { title: "Bakery Dishes", label: "Akri Bakes", image: `${ASSET_PREFIX}/gallery/akri-bakes-06.jpg` },
-  { title: "Bakery Food", label: "Akri Bakes", image: `${ASSET_PREFIX}/gallery/akri-bakes-07.jpg` },
-  { title: "Bakery Dishes", label: "Akri Bakes", image: `${ASSET_PREFIX}/gallery/akri-bakes-08.jpg` },
-  { title: "Bakery Food", label: "Akri Bakes", image: `${ASSET_PREFIX}/gallery/akri-bakes-10.jpg` },
-  { title: "Bakery Food", label: "Akri Bakes", image: `${ASSET_PREFIX}/gallery/akri-bakes-14.jpg` },
-  { title: "Bakery Meals", label: "Akri Bakes", image: `${ASSET_PREFIX}/gallery/akri-bakes-16.jpg` },
-  { title: "Bakery Meals", label: "Akri Bakes", image: `${ASSET_PREFIX}/gallery/akri-bakes-17.jpg` },
-  { title: "Bakery Meals", label: "Akri Bakes", image: `${ASSET_PREFIX}/gallery/akri-bakes-21.jpg` },
-  { title: "Bakery Dishes", label: "Akri Bakes", image: `${ASSET_PREFIX}/gallery/akri-bakes-22.jpg` },
-  { title: "Bakery Dishes", label: "Akri Bakes", image: `${ASSET_PREFIX}/gallery/akri-bakes-23.jpg` },
-  { title: "Bakery Food", label: "Akri Bakes", image: `${ASSET_PREFIX}/gallery/akri-bakes-25.jpg` },
-  { title: "Bakery Dishes", label: "Akri Bakes", image: `${ASSET_PREFIX}/gallery/akri-bakes-27.jpg` },
-  { title: "Bakery Food", label: "Akri Bakes", image: `${ASSET_PREFIX}/gallery/akri-bakes-28.jpg` },
-  { title: "Bakery Food", label: "Akri Bakes", image: `${ASSET_PREFIX}/gallery/akri-bakes-31.jpg` },
-  { title: "Bakery Meals", label: "Akri Bakes", image: `${ASSET_PREFIX}/gallery/akri-bakes-32.jpg` },
-  { title: "Bakery Design", label: "Akri Bakes", image: `${ASSET_PREFIX}/gallery/akri-bakes-04.jpg` },
-  { title: "Bakery Design", label: "Akri Bakes", image: `${ASSET_PREFIX}/gallery/akri-bakes-18.jpg` },
-  { title: "Bakery Design", label: "Akri Bakes", image: `${ASSET_PREFIX}/gallery/akri-bakes-26.jpg` },
-  { title: "Interior", label: "Akri Bakes", image: `${ASSET_PREFIX}/gallery/akri-bakes-02.jpg` },
-  { title: "Interior", label: "Akri Bakes", image: `${ASSET_PREFIX}/gallery/akri-bakes-05.jpg` },
-  { title: "Interior", label: "Akri Bakes", image: `${ASSET_PREFIX}/gallery/akri-bakes-30.jpg` },
-  { title: "Bakery Meals", label: "Akri Bakes", image: `${ASSET_PREFIX}/gallery/akri-bakes-03.jpg` },
-  { title: "Dumplings", label: "Akri Bakes", image: `${ASSET_PREFIX}/gallery/akri-bakes-19.jpg` },
-  { title: "Spaghetti Bolognese", label: "Akri Bakes", image: `${ASSET_PREFIX}/gallery/akri-bakes-15.jpg` },
-  { title: "Escargots", label: "Akri Bakes", image: `${ASSET_PREFIX}/gallery/akri-bakes-33.jpg` },
-];
-
 const allItems = [
-  ...celebrationItems,
-  ...akriBakesItems,
+  { title: "Signature Chocolate Cake", label: "Celebration", image: `${ASSET_PREFIX}/gallery/signature-chocolate-cake.jpg` },
+  { title: "Signature Cheesecake", label: "Celebration", image: `${ASSET_PREFIX}/gallery/signature-cheesecake.jpg` },
   { title: "Wedding 1", label: "Wedding", image: `${ASSET_PREFIX}/gallery/wedding-1.jpg` },
   { title: "Wedding 2", label: "Wedding", image: `${ASSET_PREFIX}/gallery/wedding-2.jpg` },
   { title: "Birthday 1", label: "Birthday", image: `${ASSET_PREFIX}/gallery/birthday-1.jpg` },
@@ -73,7 +16,7 @@ const allItems = [
   { title: "Seasonal Feature", label: "Gallery", image: `${ASSET_PREFIX}/gallery/seasonal-1.jpg` },
 ];
 
-const filterTabs = ["All", "Celebration", "Akri Bakes", "Wedding", "Birthday", "Church", "Gallery"];
+const filterTabs = ["All", "Celebration", "Wedding", "Birthday", "Church", "Gallery"];
 
 export default function GalleryPage() {
   const [active, setActive] = useState("All");
