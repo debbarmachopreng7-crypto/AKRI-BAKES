@@ -7,6 +7,7 @@ import { useCart } from "../../components/CartContext";
 import { motion } from "framer-motion";
 import { FadeIn, SlideUp, StaggerContainer, StaggerItem } from "../../components/animations";
 import Breadcrumbs from "../../components/Breadcrumbs";
+import { getCakeImage } from "../../lib/cakeImages";
 
 const timeSlots = [
   "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM",
@@ -219,7 +220,17 @@ function CakesContent() {
                   whileHover={{ y: -6, boxShadow: "0 16px 32px rgba(0,0,0,0.12)" }}
                   transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 >
-                  <div className="h-48 rounded-[1.5rem] bg-[linear-gradient(135deg,#f5f5f5_0%,#ffffff_50%,#ececec_100%)]" />
+                  <div className="h-48 overflow-hidden rounded-[1.5rem] bg-[linear-gradient(135deg,#f5f5f5_0%,#ffffff_50%,#ececec_100%)]">
+                    {getCakeImage(cake.name) && (
+                      <img
+                        src={getCakeImage(cake.name)}
+                        alt={cake.name}
+                        loading="lazy"
+                        className="h-full w-full object-cover"
+                        onError={(e) => { e.currentTarget.style.display = "none"; }}
+                      />
+                    )}
+                  </div>
                   <h3 className="mt-5 font-serif text-xl font-semibold text-[#26110B]">{cake.name}</h3>
                   <p className="mt-2 text-sm text-[#8B7355]">
                     {cake.price1

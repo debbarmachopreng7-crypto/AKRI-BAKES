@@ -7,6 +7,7 @@ import { useCart } from "../../components/CartContext";
 import { motion } from "framer-motion";
 import { FadeIn, SlideUp, StaggerContainer, StaggerItem } from "../../components/animations";
 import Breadcrumbs from "../../components/Breadcrumbs";
+import { getCakeImage } from "../../lib/cakeImages";
 
 const timeSlots = [
   "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM",
@@ -442,8 +443,17 @@ export default function MenuPage() {
 
                   <div className="mt-6 space-y-3">
                     {category.items.map((item) => (
-                      <div key={item.name} className="flex items-center justify-between border-b border-[#f0f0f0] pb-3 last:border-b-0 last:pb-0">
-                        <span className="text-sm text-[#26110B]">{item.name}</span>
+                      <div key={item.name} className="flex items-center gap-4 border-b border-[#f0f0f0] pb-3 last:border-b-0 last:pb-0">
+                        {getCakeImage(item.name) && (
+                          <img
+                            src={getCakeImage(item.name)}
+                            alt={item.name}
+                            loading="lazy"
+                            className="h-14 w-14 shrink-0 rounded-2xl object-cover"
+                            onError={(e) => { e.currentTarget.style.display = "none"; }}
+                          />
+                        )}
+                        <span className="flex-1 text-sm text-[#26110B]">{item.name}</span>
                         <div className="flex items-center gap-4">
                           <span className="text-sm font-medium text-[#26110B]">
                             <PriceDisplay item={item} pricing={category.pricing} />
