@@ -13,9 +13,6 @@ const c = (num) => `${ASSET_PREFIX}/products/celebration-${num}.jpg`;
 const w = (name) => `${ASSET_PREFIX}/gallery/wedding/${name}`;
 
 const allItems = [
-  // Signature
-  { title: "Signature Chocolate Cake", category: "Signature", image: g("signature-chocolate-cake") },
-  { title: "Signature Cheesecake", category: "Signature", image: g("signature-cheesecake") },
   // Weddings — real moments from @akribakes
   { title: "Anung & Joel", category: "Weddings", video: w("wedding-anung-joel.mp4"), image: w("wedding-anung-joel-poster.jpg"), note: "30 sec" },
   { title: "A Memorable Outdoor Wedding", category: "Weddings", video: w("wedding-reception.mp4"), image: w("wedding-reception-poster.jpg"), note: "30 sec" },
@@ -26,6 +23,9 @@ const allItems = [
   { title: "Wedding Dessert Counter", category: "Weddings", image: w("wedding-guest-desserts.jpg") },
   { title: "Serving Sweetness", category: "Weddings", image: w("wedding-dessert-spread.jpg") },
   { title: "Wedding Dessert Lineup", category: "Weddings", image: w("wedding-dessert-lineup.jpg") },
+  // Signature
+  { title: "Signature Chocolate Cake", category: "Signature", image: g("signature-chocolate-cake") },
+  { title: "Signature Cheesecake", category: "Signature", image: g("signature-cheesecake") },
   // Celebrations — real Akri Bakes cakes
   { title: "Church Celebration", category: "Celebrations", image: g("church-1") },
   { title: "Seasonal Feature", category: "Celebrations", image: g("seasonal-1") },
