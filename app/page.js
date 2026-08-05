@@ -211,7 +211,7 @@ export default function HomePage() {
       {/* ── CINEMATIC VIDEO HERO ─────────────────────────────── */}
       <section className="relative flex min-h-[90vh] items-center justify-center overflow-hidden bg-[#26110B]">
         <video
-          src={showcaseVideos[0].src}
+          src="/AKRI-BAKES/gallery/wedding/wedding-anung-joel-4k.mp4"
           poster={showcaseVideos[0].poster}
           autoPlay
           muted

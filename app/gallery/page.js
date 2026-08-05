@@ -138,7 +138,7 @@ export default function GalleryPage() {
       {/* ── VIDEO HERO ───────────────────────────────────────── */}
       <section className="relative flex min-h-[82vh] items-center justify-center overflow-hidden bg-[#26110B]">
         <video
-          src={featuredVideos[0].video}
+          src={w("wedding-anung-joel-4k.mp4")}
           poster={featuredVideos[0].image}
           autoPlay
           muted
