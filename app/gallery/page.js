@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { FadeIn } from "../../components/animations";
@@ -53,6 +53,46 @@ const allItems = [
 
 const filterTabs = ["All", "Signature", "Celebrations", "Weddings"];
 
+const featuredVideos = allItems.filter((i) => i.video);
+const featuredPhotos = allItems.filter((i) => i.category === "Weddings" && !i.video);
+
+function VideoCard({ item, onOpen, tall = false }) {
+  const ref = useRef(null);
+  return (
+    <button
+      type="button"
+      onClick={onOpen}
+      onMouseEnter={() => ref.current && ref.current.play().catch(() => {})}
+      onMouseLeave={() => ref.current && ref.current.pause()}
+      className={`group relative block w-full overflow-hidden rounded-2xl border border-[#E8E0D8] bg-black text-left shadow-sm transition-shadow hover:shadow-2xl ${
+        tall ? "h-full min-h-[420px] lg:min-h-full" : ""
+      }`}
+    >
+      <video
+        ref={ref}
+        src={item.video}
+        poster={item.image}
+        muted
+        loop
+        playsInline
+        preload="none"
+        className={`w-full object-cover ${tall ? "h-full min-h-[420px] lg:min-h-full" : "aspect-[9/16]"}`}
+      />
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+        <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-md transition duration-300 group-hover:scale-110 group-hover:bg-[#BC6153] group-hover:shadow-lg group-hover:shadow-[#BC6153]/40">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="ml-1">
+            <polygon points="6 3 20 12 6 21 6 3" />
+          </svg>
+        </span>
+      </div>
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent p-5 pt-16">
+        <p className="font-serif text-lg font-semibold text-white">{item.title}</p>
+        <p className="mt-0.5 text-xs font-medium uppercase tracking-[0.2em] text-white/70">{item.note || item.category}</p>
+      </div>
+    </button>
+  );
+}
+
 function InstagramIcon({ className = "h-4 w-4" }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -69,6 +109,11 @@ export default function GalleryPage() {
 
   const filtered = active === "All" ? allItems : allItems.filter((i) => i.category === active);
   const current = lightbox !== null ? filtered[lightbox] : null;
+
+  const openItem = (item) => {
+    setActive("All");
+    setLightbox(allItems.indexOf(item));
+  };
 
   const next = useCallback(() => setLightbox((i) => (i + 1) % filtered.length), [filtered.length]);
   const prev = useCallback(() => setLightbox((i) => (i - 1 + filtered.length) % filtered.length), [filtered.length]);
@@ -90,22 +135,27 @@ export default function GalleryPage() {
 
   return (
     <main>
-      {/* ── HERO ─────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-[#26110B] py-20 md:py-28">
-        <div
-          className="absolute inset-0 opacity-20"
-          style={{
-            backgroundImage: "radial-gradient(circle at 20% 30%, rgba(188,97,83,0.5) 0%, transparent 45%), radial-gradient(circle at 85% 75%, rgba(188,97,83,0.35) 0%, transparent 40%)",
-          }}
+      {/* ── VIDEO HERO ───────────────────────────────────────── */}
+      <section className="relative flex min-h-[82vh] items-center justify-center overflow-hidden bg-[#26110B]">
+        <video
+          src={featuredVideos[0].video}
+          poster={featuredVideos[0].image}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          className="absolute inset-0 h-full w-full object-cover"
         />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#26110B] via-[#26110B]/45 to-[#26110B]/15" />
         <FadeIn>
-          <div className="relative mx-auto max-w-4xl px-4 text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#BC6153]">The Gallery</p>
-            <h1 className="mt-5 font-serif text-5xl font-bold leading-tight text-white md:text-6xl">
+          <div className="relative z-10 mx-auto max-w-4xl px-4 pb-20 pt-32 text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#BC6153]">Real Weddings &middot; Real Sweetness</p>
+            <h1 className="mt-5 font-serif text-5xl font-bold leading-tight text-white md:text-7xl">
               Every celebration starts with a cake.
             </h1>
-            <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-white/70">
-              Real cakes from real moments across Dimapur — birthdays, weddings, church gatherings and everything in between. Baked by hand, styled with care.
+            <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-white/80">
+              Press play — a peek inside the weddings, receptions and dessert counters we&rsquo;ve had the joy to serve across Dimapur.
             </p>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
               <a
@@ -126,6 +176,53 @@ export default function GalleryPage() {
             </div>
           </div>
         </FadeIn>
+      </section>
+
+      {/* ── FEATURED WEDDING FILMS ───────────────────────────── */}
+      <section className="bg-[#F9F8F6] py-16 md:py-24">
+        <div className="mx-auto max-w-7xl px-4">
+          <FadeIn>
+            <div className="text-center">
+              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#8B7355]">Featured Weddings</p>
+              <h2 className="mt-5 font-serif text-4xl font-bold text-[#26110B]">Wedding films, straight from the counter</h2>
+              <p className="mx-auto mt-4 max-w-2xl text-[#8B7355]">
+                Thirty seconds of real moments — guests, dessert tables and the sweetness that tied it all together. Hover a film to watch.
+              </p>
+            </div>
+          </FadeIn>
+
+          <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="sm:col-span-2 lg:row-span-2">
+              <VideoCard item={featuredVideos[0]} onOpen={() => openItem(featuredVideos[0])} tall />
+            </div>
+            {featuredVideos.slice(1).map((v) => (
+              <VideoCard key={v.image} item={v} onOpen={() => openItem(v)} />
+            ))}
+          </div>
+
+          <div className="mt-5 grid grid-cols-2 gap-5 lg:grid-cols-4">
+            {featuredPhotos.map((photo) => (
+              <button
+                key={photo.image}
+                type="button"
+                onClick={() => openItem(photo)}
+                className="group relative overflow-hidden rounded-2xl border border-[#E8E0D8] bg-[#E8E0D8] text-left shadow-sm transition-shadow hover:shadow-xl"
+              >
+                <div className="aspect-[4/5] overflow-hidden">
+                  <img
+                    src={photo.image}
+                    alt={`${photo.title} — Akri Bakes`}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-4 pt-12">
+                  <p className="text-sm font-medium text-white">{photo.title}</p>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* ── PHOTO WALL ───────────────────────────────────────── */}
@@ -185,12 +282,6 @@ export default function GalleryPage() {
                       </span>
                     </div>
                   )}
-                  <div
-                    style={{ display: "none" }}
-                    className="absolute inset-0 items-center justify-center bg-[linear-gradient(135deg,#26110B_0%,#3a1c12_100%)]"
-                  >
-                    <p className="px-6 text-center font-serif text-lg text-white">{item.title}</p>
-                  </div>
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent p-5 pt-16 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                     <p className="text-sm font-medium text-white">{item.title}</p>
                     <p className="mt-0.5 text-xs uppercase tracking-[0.2em] text-white/70">{item.category}</p>
