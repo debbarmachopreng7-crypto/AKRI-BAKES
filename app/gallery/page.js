@@ -6,18 +6,23 @@ import Link from "next/link";
 import { FadeIn } from "../../components/animations";
 import { ASSET_PREFIX } from "../../lib/cakeImages";
 
-export const IG_URL = "https://www.instagram.com/akri_bakes/";
+export const IG_URL = "https://www.instagram.com/akribakes/";
 
 const g = (name) => `${ASSET_PREFIX}/gallery/${name}.jpg`;
 const c = (num) => `${ASSET_PREFIX}/products/celebration-${num}.jpg`;
+const w = (name) => `${ASSET_PREFIX}/gallery/wedding/${name}`;
 
 const allItems = [
   // Signature
   { title: "Signature Chocolate Cake", category: "Signature", image: g("signature-chocolate-cake") },
   { title: "Signature Cheesecake", category: "Signature", image: g("signature-cheesecake") },
-  // Weddings
-  { title: "Wedding Cake", category: "Weddings", image: g("wedding-1") },
-  { title: "Wedding Cake", category: "Weddings", image: g("wedding-2") },
+  // Weddings — real moments from @akribakes
+  { title: "A Memorable Outdoor Wedding", category: "Weddings", video: w("wedding-reception.mp4"), image: w("wedding-reception-poster.jpg"), note: "30 sec" },
+  { title: "A Pink Wedding, 10.01.2025", category: "Weddings", video: w("wedding-pink.mp4"), image: w("wedding-pink-poster.jpg"), note: "30 sec" },
+  { title: "Yangthy & Lendi Wedding", category: "Weddings", image: w("wedding-dessert-table.jpg") },
+  { title: "Wedding Dessert Counter", category: "Weddings", image: w("wedding-guest-desserts.jpg") },
+  { title: "Serving Sweetness", category: "Weddings", image: w("wedding-dessert-spread.jpg") },
+  { title: "Wedding Dessert Lineup", category: "Weddings", image: w("wedding-dessert-lineup.jpg") },
   // Birthdays
   { title: "Birthday Cake", category: "Birthdays", image: g("birthday-1") },
   { title: "Birthday Cake", category: "Birthdays", image: g("birthday-2") },
@@ -110,7 +115,7 @@ export default function GalleryPage() {
                 className="inline-flex items-center gap-2.5 rounded-full bg-[#BC6153] px-8 py-3.5 text-sm font-medium text-white shadow-lg shadow-[#BC6153]/30 transition hover:-translate-y-0.5 hover:bg-[#A85547] hover:shadow-xl"
               >
                 <InstagramIcon className="h-4 w-4" />
-                Follow @akri_bakes
+                Follow @akribakes
               </a>
               <Link
                 href="/menu"
@@ -171,6 +176,21 @@ export default function GalleryPage() {
                   >
                     <p className="px-6 text-center font-serif text-lg text-white">{item.title}</p>
                   </div>
+                  {item.video && (
+                    <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                      <span className="flex h-14 w-14 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm transition group-hover:bg-[#BC6153]">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                          <polygon points="6 3 20 12 6 21 6 3" />
+                        </svg>
+                      </span>
+                    </div>
+                  )}
+                  <div
+                    style={{ display: "none" }}
+                    className="absolute inset-0 items-center justify-center bg-[linear-gradient(135deg,#26110B_0%,#3a1c12_100%)]"
+                  >
+                    <p className="px-6 text-center font-serif text-lg text-white">{item.title}</p>
+                  </div>
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent p-5 pt-16 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                     <p className="text-sm font-medium text-white">{item.title}</p>
                     <p className="mt-0.5 text-xs uppercase tracking-[0.2em] text-white/70">{item.category}</p>
@@ -190,7 +210,7 @@ export default function GalleryPage() {
           </div>
           <h2 className="mt-6 font-serif text-4xl font-bold text-white">See the full feed on Instagram</h2>
           <p className="mx-auto mt-4 max-w-xl text-white/70">
-            Fresh bakes, behind-the-scenes, festive specials and customer cakes — posted daily at <span className="font-semibold text-white">@akri_bakes</span>.
+            Fresh bakes, behind-the-scenes, festive specials and customer cakes — posted daily at <span className="font-semibold text-white">@akribakes</span>.
           </p>
           <a
             href={IG_URL}
@@ -199,7 +219,7 @@ export default function GalleryPage() {
             className="mt-8 inline-flex items-center gap-2.5 rounded-full bg-white px-8 py-3.5 text-sm font-medium text-[#26110B] shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl"
           >
             <InstagramIcon className="h-4 w-4" />
-            Follow @akri_bakes
+            Follow @akribakes
           </a>
         </div>
       </section>
@@ -280,15 +300,27 @@ export default function GalleryPage() {
             </button>
 
             <figure className="flex max-h-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
-              <motion.img
-                key={current.image}
-                src={current.image}
-                alt={`${current.title} — Akri Bakes`}
-                className="max-h-[78vh] max-w-full rounded-2xl object-contain shadow-2xl"
-                initial={{ opacity: 0, scale: 0.96 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.25 }}
-              />
+              {current.video ? (
+                <video
+                  key={current.video}
+                  src={current.video}
+                  poster={current.image}
+                  controls
+                  autoPlay
+                  playsInline
+                  className="max-h-[78vh] max-w-full rounded-2xl object-contain shadow-2xl"
+                />
+              ) : (
+                <motion.img
+                  key={current.image}
+                  src={current.image}
+                  alt={`${current.title} — Akri Bakes`}
+                  className="max-h-[78vh] max-w-full rounded-2xl object-contain shadow-2xl"
+                  initial={{ opacity: 0, scale: 0.96 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.25 }}
+                />
+              )}
               <figcaption className="mt-4 text-center">
                 <p className="font-serif text-lg text-white">{current.title}</p>
                 <p className="mt-0.5 text-xs uppercase tracking-[0.25em] text-white/60">{current.category}</p>

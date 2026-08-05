@@ -224,7 +224,7 @@ export default function HomePage() {
               <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#8B7355]">Fresh From Our Kitchen</p>
               <h2 className="mt-5 font-serif text-4xl font-bold text-[#26110B]">Real Cakes, Real Moments</h2>
               <p className="mx-auto mt-3 max-w-xl text-[#8B7355]">
-                A glimpse of the cakes leaving our kitchen every week. Follow @akri_bakes on Instagram for the full feed.
+                A glimpse of the cakes leaving our kitchen every week. Follow @akribakes on Instagram for the full feed.
               </p>
             </div>
           </FadeIn>
@@ -267,12 +267,95 @@ export default function HomePage() {
                 View Full Gallery
               </Link>
               <a
-                href="https://www.instagram.com/akri_bakes/"
+                href="https://www.instagram.com/akribakes/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="rounded-full border border-[#BC6153] px-8 py-3 text-sm font-medium text-[#BC6153] transition hover:-translate-y-0.5 hover:bg-[#BC6153] hover:text-white"
               >
-                Follow @akri_bakes
+                Follow @akribakes
+              </a>
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* ── WEDDINGS SHOWCASE ────────────────────────────────── */}
+      <section className="bg-[#26110B] py-20 text-white">
+        <div className="mx-auto max-w-6xl px-4">
+          <FadeIn>
+            <div className="text-center">
+              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#BC6153]">Weddings &amp; Celebrations</p>
+              <h2 className="mt-5 font-serif text-4xl font-bold text-white">Sweetness at the sweetest moments</h2>
+              <p className="mx-auto mt-4 max-w-2xl text-white/70">
+                Real weddings, real guests, real cake — a peek at our dessert counters and the people enjoying them.
+              </p>
+            </div>
+          </FadeIn>
+
+          <div className="mt-12 grid gap-5 lg:grid-cols-2">
+            {[
+              {
+                src: "/AKRI-BAKES/gallery/wedding/wedding-reception.mp4",
+                title: "A Memorable Outdoor Wedding",
+                caption: "Love in the open air, sweetness in every bite — small, simple, and full of love.",
+              },
+              {
+                src: "/AKRI-BAKES/gallery/wedding/wedding-pink.mp4",
+                title: "A Pink Wedding, 10.01.2025",
+                caption: "Perfect weather and pleasant surroundings — desserts served to the happiest of guests.",
+              },
+            ].map((video) => (
+              <div key={video.src} className="overflow-hidden rounded-[20px] border border-white/10 bg-black">
+                <video
+                  src={video.src}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  controls
+                  preload="metadata"
+                  className="aspect-[9/16] w-full object-cover sm:max-h-[560px]"
+                />
+                <div className="p-5">
+                  <p className="font-serif text-lg text-white">{video.title}</p>
+                  <p className="mt-1 text-sm text-white/60">{video.caption}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-5 grid grid-cols-2 gap-5 lg:grid-cols-4">
+            {[
+              { src: "/AKRI-BAKES/gallery/wedding/wedding-dessert-table.jpg", label: "Yangthy &amp; Lendi" },
+              { src: "/AKRI-BAKES/gallery/wedding/wedding-guest-desserts.jpg", label: "Dessert Counter" },
+              { src: "/AKRI-BAKES/gallery/wedding/wedding-dessert-spread.jpg", label: "Serving Sweetness" },
+              { src: "/AKRI-BAKES/gallery/wedding/wedding-dessert-lineup.jpg", label: "Wedding Desserts" },
+            ].map((photo) => (
+              <div key={photo.src} className="group overflow-hidden rounded-[20px] border border-white/10">
+                <div className="aspect-[4/5] overflow-hidden bg-[#3a1c12]">
+                  <img
+                    src={photo.src}
+                    alt={`${photo.label} — wedding desserts by Akri Bakes`}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
+                <div className="p-4">
+                  <p className="text-sm font-medium text-white">{photo.label}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <FadeIn delay={0.2}>
+            <div className="mt-10 text-center">
+              <a
+                href="https://www.instagram.com/akribakes/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex rounded-full border border-[#BC6153] px-8 py-3 text-sm font-medium text-[#BC6153] transition hover:-translate-y-0.5 hover:bg-[#BC6153] hover:text-white"
+              >
+                See More Weddings on Instagram
               </a>
             </div>
           </FadeIn>
