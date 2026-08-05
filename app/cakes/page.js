@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense, useState, useEffect } from "react";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCart } from "../../components/CartContext";
 import { motion } from "framer-motion";
@@ -240,12 +241,12 @@ function CakesContent() {
             <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#8B7355]">Looking for More?</p>
             <p className="mt-3 text-[#26110B]">Plain Cakes, Fondant Cakes, Bento Cakes, Pies &amp; more</p>
             <div className="mt-6 flex flex-wrap justify-center gap-4">
-              <a href="/menu" className="rounded-full bg-[#26110B] px-8 py-3 font-medium text-white transition hover:bg-[#3D2219]">
+              <Link href="/menu" className="rounded-full bg-[#26110B] px-8 py-3 font-medium text-white transition hover:bg-[#3D2219]">
                 View Full Menu &amp; Prices
-              </a>
-              <a href="/build-your-cake" className="rounded-full border border-[#26110B] px-8 py-3 font-medium text-[#26110B] transition hover:bg-[#EDE8E0]">
+              </Link>
+              <Link href="/build-your-cake" className="rounded-full border border-[#26110B] px-8 py-3 font-medium text-[#26110B] transition hover:bg-[#EDE8E0]">
                 Build Your Cake
-              </a>
+              </Link>
             </div>
           </div>
           </SlideUp>

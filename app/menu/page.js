@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCart } from "../../components/CartContext";
 import { motion } from "framer-motion";
@@ -484,12 +485,12 @@ export default function MenuPage() {
 
           <SlideUp>
           <div className="mt-10 flex flex-wrap justify-center gap-4">
-            <a href="/cakes" className="rounded-full bg-[#26110B] px-8 py-3 font-medium text-white transition hover:bg-[#3D2219]">
+            <Link href="/cakes" className="rounded-full bg-[#26110B] px-8 py-3 font-medium text-white transition hover:bg-[#3D2219]">
               Order a Cake
-            </a>
-            <a href="/build-your-cake" className="rounded-full border border-[#26110B] px-8 py-3 font-medium text-[#26110B] transition hover:bg-[#EDE8E0]">
+            </Link>
+            <Link href="/build-your-cake" className="rounded-full border border-[#26110B] px-8 py-3 font-medium text-[#26110B] transition hover:bg-[#EDE8E0]">
               Build Your Cake
-            </a>
+            </Link>
           </div>
           </SlideUp>
         </div>
