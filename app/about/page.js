@@ -2,6 +2,8 @@ export const metadata = {
   title: "About Us | Akri Bakes",
 };
 
+import { ASSET_PREFIX } from "../../lib/cakeImages";
+
 export default function AboutPage() {
   return (
     <main>
@@ -30,7 +32,7 @@ export default function AboutPage() {
 
           <div>
             <img
-              src="/about/about-bakery.jpg"
+              src={`${ASSET_PREFIX}/about/about-bakery.jpg`}
               alt="Akri Bakes"
               className="rounded-[2rem] border border-[#e5e5e5] shadow-[0_20px_50px_rgba(0,0,0,0.10)]"
             />

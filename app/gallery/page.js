@@ -3,14 +3,15 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { FadeIn, StaggerContainer, StaggerItem } from "../../components/animations";
+import { ASSET_PREFIX } from "../../lib/cakeImages";
 
 const allItems = [
-  { title: "Wedding 1", label: "Wedding", image: "/gallery/wedding-1.jpg" },
-  { title: "Wedding 2", label: "Wedding", image: "/gallery/wedding-2.jpg" },
-  { title: "Birthday 1", label: "Birthday", image: "/gallery/birthday-1.jpg" },
-  { title: "Birthday 2", label: "Birthday", image: "/gallery/birthday-2.jpg" },
-  { title: "Church 1", label: "Church", image: "/gallery/church-1.jpg" },
-  { title: "Seasonal Feature", label: "Gallery", image: "/gallery/seasonal-1.jpg" },
+  { title: "Wedding 1", label: "Wedding", image: `${ASSET_PREFIX}/gallery/wedding-1.jpg` },
+  { title: "Wedding 2", label: "Wedding", image: `${ASSET_PREFIX}/gallery/wedding-2.jpg` },
+  { title: "Birthday 1", label: "Birthday", image: `${ASSET_PREFIX}/gallery/birthday-1.jpg` },
+  { title: "Birthday 2", label: "Birthday", image: `${ASSET_PREFIX}/gallery/birthday-2.jpg` },
+  { title: "Church 1", label: "Church", image: `${ASSET_PREFIX}/gallery/church-1.jpg` },
+  { title: "Seasonal Feature", label: "Gallery", image: `${ASSET_PREFIX}/gallery/seasonal-1.jpg` },
 ];
 
 const filterTabs = ["All", "Wedding", "Birthday", "Church", "Gallery"];
