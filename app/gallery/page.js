@@ -26,9 +26,6 @@ const allItems = [
   { title: "Wedding Dessert Counter", category: "Weddings", image: w("wedding-guest-desserts.jpg") },
   { title: "Serving Sweetness", category: "Weddings", image: w("wedding-dessert-spread.jpg") },
   { title: "Wedding Dessert Lineup", category: "Weddings", image: w("wedding-dessert-lineup.jpg") },
-  // Birthdays
-  { title: "Birthday Cake", category: "Birthdays", image: g("birthday-1") },
-  { title: "Birthday Cake", category: "Birthdays", image: g("birthday-2") },
   // Celebrations — real Akri Bakes cakes
   { title: "Church Celebration", category: "Celebrations", image: g("church-1") },
   { title: "Seasonal Feature", category: "Celebrations", image: g("seasonal-1") },
@@ -54,7 +51,7 @@ const allItems = [
   { title: "Salted Nutty Caramel Fudge", category: "Celebrations", image: c("20") },
 ];
 
-const filterTabs = ["All", "Signature", "Celebrations", "Birthdays", "Weddings"];
+const filterTabs = ["All", "Signature", "Celebrations", "Weddings"];
 
 function InstagramIcon({ className = "h-4 w-4" }) {
   return (

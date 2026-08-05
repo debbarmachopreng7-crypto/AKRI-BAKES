@@ -231,14 +231,14 @@ export default function HomePage() {
 
           <StaggerContainer className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {[
-              { src: "/AKRI-BAKES/gallery/wedding/wedding-dessert-table.jpg", label: "Wedding Desserts" },
-              { src: "/AKRI-BAKES/gallery/wedding/wedding-dessert-spread.jpg", label: "Serving Sweetness" },
               { src: "/AKRI-BAKES/gallery/signature-chocolate-cake.jpg", label: "Signature Chocolate" },
               { src: "/AKRI-BAKES/products/celebration-04.jpg", label: "Red Velvet" },
-              { src: "/AKRI-BAKES/gallery/wedding/wedding-guest-desserts.jpg", label: "Wedding Counter" },
+              { src: "/AKRI-BAKES/gallery/wedding-1.jpg", label: "Wedding Cake" },
               { src: "/AKRI-BAKES/products/celebration-10.jpg", label: "Dark Chocolate Truffle" },
-              { src: "/AKRI-BAKES/gallery/signature-cheesecake.jpg", label: "Signature Cheesecake" },
+              { src: "/AKRI-BAKES/gallery/birthday-1.jpg", label: "Birthday Cake" },
               { src: "/AKRI-BAKES/products/celebration-19.jpg", label: "Rainbow Cake" },
+              { src: "/AKRI-BAKES/gallery/signature-cheesecake.jpg", label: "Signature Cheesecake" },
+              { src: "/AKRI-BAKES/products/celebration-01.jpg", label: "Black Forest" },
             ].map((photo) => (
               <StaggerItem key={photo.src}>
                 <Link href="/gallery" className="group block overflow-hidden rounded-[20px] border border-[#E8E0D8] shadow-sm">
