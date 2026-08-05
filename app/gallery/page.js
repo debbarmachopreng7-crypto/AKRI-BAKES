@@ -17,8 +17,11 @@ const allItems = [
   { title: "Signature Chocolate Cake", category: "Signature", image: g("signature-chocolate-cake") },
   { title: "Signature Cheesecake", category: "Signature", image: g("signature-cheesecake") },
   // Weddings — real moments from @akribakes
+  { title: "Anung & Joel", category: "Weddings", video: w("wedding-anung-joel.mp4"), image: w("wedding-anung-joel-poster.jpg"), note: "30 sec" },
   { title: "A Memorable Outdoor Wedding", category: "Weddings", video: w("wedding-reception.mp4"), image: w("wedding-reception-poster.jpg"), note: "30 sec" },
   { title: "A Pink Wedding, 10.01.2025", category: "Weddings", video: w("wedding-pink.mp4"), image: w("wedding-pink-poster.jpg"), note: "30 sec" },
+  { title: "An Intimate Fairy-Tale Wedding", category: "Weddings", video: w("wedding-intimate-fairy.mp4"), image: w("wedding-intimate-fairy-poster.jpg"), note: "30 sec" },
+  { title: "A Calm & Beautiful Wedding, 20.01.2026", category: "Weddings", video: w("wedding-200126.mp4"), image: w("wedding-200126-poster.jpg"), note: "30 sec" },
   { title: "Yangthy & Lendi Wedding", category: "Weddings", image: w("wedding-dessert-table.jpg") },
   { title: "Wedding Dessert Counter", category: "Weddings", image: w("wedding-guest-desserts.jpg") },
   { title: "Serving Sweetness", category: "Weddings", image: w("wedding-dessert-spread.jpg") },

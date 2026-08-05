@@ -292,8 +292,13 @@ export default function HomePage() {
             </div>
           </FadeIn>
 
-          <div className="mt-12 grid gap-5 lg:grid-cols-2">
+          <div className="mt-12 flex flex-wrap justify-center gap-5">
             {[
+              {
+                src: "/AKRI-BAKES/gallery/wedding/wedding-anung-joel.mp4",
+                title: "Anung &amp; Joel",
+                caption: "Privileged to spread our desserts on their special day — congratulations to the beautiful couple.",
+              },
               {
                 src: "/AKRI-BAKES/gallery/wedding/wedding-reception.mp4",
                 title: "A Memorable Outdoor Wedding",
@@ -304,8 +309,18 @@ export default function HomePage() {
                 title: "A Pink Wedding, 10.01.2025",
                 caption: "Perfect weather and pleasant surroundings — desserts served to the happiest of guests.",
               },
+              {
+                src: "/AKRI-BAKES/gallery/wedding/wedding-intimate-fairy.mp4",
+                title: "An Intimate Fairy-Tale Wedding",
+                caption: "From fairy-style details to heartfelt emotions — a very private, intimate wedding.",
+              },
+              {
+                src: "/AKRI-BAKES/gallery/wedding/wedding-200126.mp4",
+                title: "A Calm &amp; Beautiful Wedding, 20.01.2026",
+                caption: "No hustle, just perfect weather and a perfect day — sweet memories served all around.",
+              },
             ].map((video) => (
-              <div key={video.src} className="overflow-hidden rounded-[20px] border border-white/10 bg-black">
+              <div key={video.src} className="w-full overflow-hidden rounded-[20px] border border-white/10 bg-black sm:w-[calc(50%-10px)] lg:w-[calc(33.333%-14px)]">
                 <video
                   src={video.src}
                   autoPlay
@@ -314,7 +329,7 @@ export default function HomePage() {
                   playsInline
                   controls
                   preload="metadata"
-                  className="aspect-[9/16] w-full object-cover sm:max-h-[560px]"
+                  className="aspect-[9/16] w-full object-cover"
                 />
                 <div className="p-5">
                   <p className="font-serif text-lg text-white">{video.title}</p>
