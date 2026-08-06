@@ -220,11 +220,11 @@ export default function HomePage() {
           className="absolute inset-0 h-full w-full object-cover"
         >
           <source
-            src="/AKRI-BAKES/gallery/wedding/wedding-anung-joel-4k.mp4"
+            src="/AKRI-BAKES/gallery/wedding/wedding-anung-joel-4k.mp4?v=2"
             type='video/mp4; codecs="hvc1.1.6.L150.90"'
           />
           <source
-            src="/AKRI-BAKES/gallery/wedding/wedding-anung-joel-1080p.mp4"
+            src="/AKRI-BAKES/gallery/wedding/wedding-anung-joel-1080p.mp4?v=2"
             type="video/mp4"
           />
         </video>
