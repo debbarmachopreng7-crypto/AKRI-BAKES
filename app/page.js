@@ -210,7 +210,7 @@ export default function HomePage() {
     <main>
       {/* ── CINEMATIC VIDEO HERO ─────────────────────────────── */}
       <section className="relative flex min-h-[90vh] items-center justify-center overflow-hidden bg-[#26110B]">
-        <video
+        <motion.video
           poster={showcaseVideos[0].poster}
           autoPlay
           muted
@@ -218,6 +218,8 @@ export default function HomePage() {
           playsInline
           preload="auto"
           className="absolute inset-0 h-full w-full object-cover"
+          animate={{ scale: [1, 1.12] }}
+          transition={{ duration: 18, ease: "easeInOut", repeat: Infinity, repeatType: "reverse" }}
         >
           <source
             src="/AKRI-BAKES/gallery/wedding/wedding-anung-joel-4k.mp4?v=2"
@@ -227,21 +229,21 @@ export default function HomePage() {
             src="/AKRI-BAKES/gallery/wedding/wedding-anung-joel-1080p.mp4?v=2"
             type="video/mp4"
           />
-        </video>
-        <div className="absolute inset-0 bg-gradient-to-t from-[#26110B] via-[#26110B]/50 to-[#26110B]/20" />
+        </motion.video>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#26110B]/85 via-[#26110B]/25 to-[#26110B]/5" />
         <motion.div
           className="relative z-10 mx-auto max-w-4xl px-4 pb-24 pt-32 text-center"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
-          <motion.p variants={heroItem} className="text-xs font-semibold uppercase tracking-[0.35em] text-[#BC6153]">
+          <motion.p variants={heroItem} className="text-xs font-semibold uppercase tracking-[0.35em] text-[#F2A48F] drop-shadow-lg">
             Premium Cakes &amp; Patisserie &middot; Dimapur, Nagaland
           </motion.p>
-          <motion.h1 variants={heroItem} className="mt-5 font-serif text-5xl font-bold leading-tight text-white md:text-7xl">
+          <motion.h1 variants={heroItem} className="mt-5 font-serif text-5xl font-bold leading-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.6)] md:text-7xl">
             Akri Bakes
           </motion.h1>
-          <motion.p variants={heroItem} className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-white/80 md:text-xl">
+          <motion.p variants={heroItem} className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-white/90 drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)] md:text-xl">
             Cakes &amp; desserts for the moments that matter — from intimate treats to the biggest weddings.
           </motion.p>
           <motion.div variants={heroItem} className="mt-10 flex flex-wrap items-center justify-center gap-4">

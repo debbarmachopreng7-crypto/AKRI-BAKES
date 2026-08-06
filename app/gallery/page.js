@@ -137,7 +137,7 @@ export default function GalleryPage() {
     <main>
       {/* ── VIDEO HERO ───────────────────────────────────────── */}
       <section className="relative flex min-h-[82vh] items-center justify-center overflow-hidden bg-[#26110B]">
-        <video
+        <motion.video
           poster={featuredVideos[0].image}
           autoPlay
           muted
@@ -145,6 +145,8 @@ export default function GalleryPage() {
           playsInline
           preload="auto"
           className="absolute inset-0 h-full w-full object-cover"
+          animate={{ scale: [1, 1.12] }}
+          transition={{ duration: 18, ease: "easeInOut", repeat: Infinity, repeatType: "reverse" }}
         >
           <source
             src={w("wedding-anung-joel-4k.mp4") + "?v=2"}
@@ -154,15 +156,15 @@ export default function GalleryPage() {
             src={w("wedding-anung-joel-1080p.mp4") + "?v=2"}
             type="video/mp4"
           />
-        </video>
-        <div className="absolute inset-0 bg-gradient-to-t from-[#26110B] via-[#26110B]/45 to-[#26110B]/15" />
+        </motion.video>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#26110B]/85 via-[#26110B]/25 to-[#26110B]/5" />
         <FadeIn>
           <div className="relative z-10 mx-auto max-w-4xl px-4 pb-20 pt-32 text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#BC6153]">Real Weddings &middot; Real Sweetness</p>
-            <h1 className="mt-5 font-serif text-5xl font-bold leading-tight text-white md:text-7xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#F2A48F] drop-shadow-lg">Real Weddings &middot; Real Sweetness</p>
+            <h1 className="mt-5 font-serif text-5xl font-bold leading-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.6)] md:text-7xl">
               Every celebration starts with a cake.
             </h1>
-            <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-white/80">
+            <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-white/90 drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
               Press play — a peek inside the weddings, receptions and dessert counters we&rsquo;ve had the joy to serve across Dimapur.
             </p>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
