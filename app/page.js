@@ -211,7 +211,6 @@ export default function HomePage() {
       {/* ── CINEMATIC VIDEO HERO ─────────────────────────────── */}
       <section className="relative flex min-h-[90vh] items-center justify-center overflow-hidden bg-[#26110B]">
         <video
-          src="/AKRI-BAKES/gallery/wedding/wedding-anung-joel-4k.mp4"
           poster={showcaseVideos[0].poster}
           autoPlay
           muted
@@ -219,7 +218,16 @@ export default function HomePage() {
           playsInline
           preload="auto"
           className="absolute inset-0 h-full w-full object-cover"
-        />
+        >
+          <source
+            src="/AKRI-BAKES/gallery/wedding/wedding-anung-joel-4k.mp4"
+            type='video/mp4; codecs="hvc1.1.6.L150.90"'
+          />
+          <source
+            src="/AKRI-BAKES/gallery/wedding/wedding-anung-joel-1080p.mp4"
+            type="video/mp4"
+          />
+        </video>
         <div className="absolute inset-0 bg-gradient-to-t from-[#26110B] via-[#26110B]/50 to-[#26110B]/20" />
         <motion.div
           className="relative z-10 mx-auto max-w-4xl px-4 pb-24 pt-32 text-center"

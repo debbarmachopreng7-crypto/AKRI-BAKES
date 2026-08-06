@@ -138,7 +138,6 @@ export default function GalleryPage() {
       {/* ── VIDEO HERO ───────────────────────────────────────── */}
       <section className="relative flex min-h-[82vh] items-center justify-center overflow-hidden bg-[#26110B]">
         <video
-          src={w("wedding-anung-joel-4k.mp4")}
           poster={featuredVideos[0].image}
           autoPlay
           muted
@@ -146,7 +145,16 @@ export default function GalleryPage() {
           playsInline
           preload="auto"
           className="absolute inset-0 h-full w-full object-cover"
-        />
+        >
+          <source
+            src={w("wedding-anung-joel-4k.mp4")}
+            type='video/mp4; codecs="hvc1.1.6.L150.90"'
+          />
+          <source
+            src={w("wedding-anung-joel-1080p.mp4")}
+            type="video/mp4"
+          />
+        </video>
         <div className="absolute inset-0 bg-gradient-to-t from-[#26110B] via-[#26110B]/45 to-[#26110B]/15" />
         <FadeIn>
           <div className="relative z-10 mx-auto max-w-4xl px-4 pb-20 pt-32 text-center">
