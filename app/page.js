@@ -216,7 +216,8 @@ export default function HomePage() {
           muted
           loop
           playsInline
-          preload="auto"
+          preload="metadata"
+          fetchPriority="high"
           className="absolute inset-0 h-full w-full object-cover"
           animate={{ scale: [1, 1.12] }}
           transition={{ duration: 18, ease: "easeInOut", repeat: Infinity, repeatType: "reverse" }}
@@ -466,23 +467,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── OUR STORY ────────────────────────────────────────── */}
-      <SlideUp>
-        <section className="border-y border-[#E8E0D8] bg-white py-20">
-          <div className="mx-auto max-w-4xl px-4 text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#8B7355]">Our Story</p>
-            <h2 className="mt-5 font-serif text-4xl font-bold text-[#26110B]">Homemade, Heartmade</h2>
-            <p className="mx-auto mt-6 max-w-3xl leading-relaxed text-[#26110B]">
-              Akri Bakes started in the kitchen of our home in Dimapur, driven by a love
-              for baking and a desire to bring truly exceptional cakes to Nagaland. Every
-              cake is made from scratch using real ingredients — no premixes, no shortcuts.
-              From classic cheesecakes to custom celebration cakes, each order receives the
-              same care and attention we&rsquo;d give our own family table.
-            </p>
-          </div>
-        </section>
-      </SlideUp>
-
       {/* ── WHY CHOOSE US ────────────────────────────────────── */}
       <section className="bg-[#F9F8F6] py-20">
         <div className="mx-auto max-w-6xl px-4">
@@ -490,6 +474,11 @@ export default function HomePage() {
             <div className="text-center">
               <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#8B7355]">Why Akri Bakes</p>
               <h2 className="mt-5 font-serif text-4xl font-bold text-[#26110B]">Crafted With Care</h2>
+              <p className="mx-auto mt-6 max-w-2xl leading-relaxed text-[#8B7355]">
+                Akri Bakes started in a home kitchen in Dimapur with one rule: real
+                ingredients, no shortcuts. From classic cheesecakes to custom celebration
+                cakes, every order still gets the same care we&rsquo;d give our own family table.
+              </p>
             </div>
           </FadeIn>
           <StaggerContainer className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">

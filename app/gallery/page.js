@@ -143,7 +143,8 @@ export default function GalleryPage() {
           muted
           loop
           playsInline
-          preload="auto"
+          preload="metadata"
+          fetchPriority="high"
           className="absolute inset-0 h-full w-full object-cover"
           animate={{ scale: [1, 1.12] }}
           transition={{ duration: 18, ease: "easeInOut", repeat: Infinity, repeatType: "reverse" }}
