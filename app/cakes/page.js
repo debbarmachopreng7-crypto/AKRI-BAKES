@@ -1,8 +1,8 @@
 "use client";
 
-import { Suspense, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useCart } from "../../components/CartContext";
 import { motion } from "framer-motion";
 import { FadeIn, SlideUp, StaggerContainer, StaggerItem } from "../../components/animations";
@@ -167,16 +167,17 @@ function OrderModal({ cake, onClose }) {
 function formatPrice(p) { return `₹${p}`; }
 
 function CakesContent() {
-  const searchParams = useSearchParams();
+  const pathname = usePathname();
   const [activeTab, setActiveTab] = useState("celebration");
   const [ordering, setOrdering] = useState(null);
 
   useEffect(() => { document.title = "Our Cakes — Akri Bakes"; }, []);
 
   useEffect(() => {
-    const tab = searchParams.get("tab");
+    const params = new URLSearchParams(window.location.search);
+    const tab = params.get("tab");
     if (tab && tabs.some((t) => t.id === tab)) setActiveTab(tab);
-  }, [searchParams]);
+  }, [pathname]);
 
   const currentCategory = cakeData[activeTab];
 
@@ -270,17 +271,5 @@ function CakesContent() {
 }
 
 export default function CakesPage() {
-  return (
-    <Suspense fallback={
-      <main>
-        <section className="border-b border-[#E8E0D8] bg-[#F9F8F6] py-20">
-          <div className="mx-auto max-w-5xl px-4 text-center">
-            <h1 className="mt-5 font-serif text-5xl font-semibold text-[#26110B]">Our Cakes</h1>
-          </div>
-        </section>
-      </main>
-    }>
-      <CakesContent />
-    </Suspense>
-  );
+  return <CakesContent />;
 }

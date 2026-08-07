@@ -49,7 +49,7 @@ export default function ContactPage() {
                   </p>
 
                   <p>
-                    ✉️ info@akribakes.com
+                    ✉️ Akribake2020@gmail.com
                   </p>
 
                 </div>

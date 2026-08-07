@@ -29,7 +29,7 @@ export default function FAQPage() {
             </h3>
 
             <p className="mt-3 leading-7 text-[#333333]">
-              We recommend at least 2–3 days in advance.
+              We recommend 7–10 days in advance for custom cakes.
             </p>
           </div>
 
