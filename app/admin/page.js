@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useCart } from "../../components/CartContext";
 import { usePageTitle } from "../../components/usePageTitle";
 import AdminGate from "../../components/AdminGate";
@@ -143,9 +143,13 @@ function SettingsPanel() {
 
 export default function AdminPage() {
   usePageTitle("Admin | Akri Bakes");
-  const { orders, ready, updateOrderStatus } = useCart();
+  const { orders, ready, updateOrderStatus, refreshOrders } = useCart();
   const [activeFilter, setActiveFilter] = useState("all");
   const [photoModal, setPhotoModal] = useState(null);
+
+  useEffect(() => {
+    if (ready) refreshOrders();
+  }, [ready, refreshOrders]);
 
   const filteredOrders = useMemo(() => {
     if (activeFilter === "all") return orders;

@@ -24,3 +24,14 @@ Premium bakery website (Akri Bakes, Dimapur, Nagaland) — Next.js static export
 - Source is Instagram 720×1280 (source-limited); AI-upscaled
 - Upscale toolchain in `/var/folders/vr/xdjytrrj12d_c2p114d64_kc0000gn/T/opencode/upscale/` (venv python, `upscale.py`, `run_upscale.py`, `hero/frames_out/` = 900 valid frames)
 - Hero uses `preload="metadata"` + `fetchPriority="high"` for poster-first progressive load
+
+## Supabase backend (optional, real-time orders)
+
+Orders are stored in Supabase (Postgres) when configured; otherwise the site falls back to `localStorage` + WhatsApp handoff. Code auto-activates when env keys are present — the build stays green with empty keys.
+
+- Client: `lib/supabase.js` (guarded singleton; `isSupabaseConfigured()`), used by `components/CartContext.js` (insert/select/update + realtime `postgres_changes` subscription on table `orders`) and `components/AdminGate.js` (Supabase Auth: `signInWithPassword` login, `signInWithOtp`/`verifyOtp` email-OTP password reset, `updateUser`).
+- Schema: `supabase/schema.sql` — create `orders` table, enable RLS (anon may insert `AKRI-%`; authenticated staff may select/update), add table to `supabase_realtime` publication.
+- Setup: create a free Supabase project → run `supabase/schema.sql` in SQL Editor → Auth→Providers→Email: enable **Email OTP** (numeric codes, required for the 6-digit reset flow) → Auth→Users: create the staff admin user (email + password) → set repo secrets `SUPABASE_URL` + `SUPABASE_ANON_KEY` (Settings→Secrets→Actions) → deploy.
+- Env vars (empty = feature off): `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (`.env.local` locally, secrets in `.github/workflows/deploy.yml` build step).
+- Legacy generic REST backend: `NEXT_PUBLIC_API_URL` (`/orders`, `/api/otp/send`, `/api/otp/verify`), still honored after Supabase.
+- Admin login on live site: `/admin` — staff email + password (Supabase) or localStorage password `akribakes2026` when not configured.

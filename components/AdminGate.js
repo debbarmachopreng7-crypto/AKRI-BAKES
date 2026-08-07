@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { supabase, isSupabaseConfigured } from "../lib/supabase";
 
 const DEFAULT_PASSWORD = "akribakes2026";
 const PASSWORD_KEY = "akri_admin_password";
 const AUTH_KEY = "akri_admin_auth";
 const API_BASE = (process.env.NEXT_PUBLIC_API_URL || "").replace(/\/+$/, "");
 const useBackend = Boolean(API_BASE);
+const useSupabase = isSupabaseConfigured();
 
 function getStoredPassword() {
   if (typeof window === "undefined") return DEFAULT_PASSWORD;
@@ -38,18 +40,44 @@ export default function AdminGate({ children }) {
   const [resetDone, setResetDone] = useState(false);
 
   useEffect(() => {
-    try {
-      if (sessionStorage.getItem(AUTH_KEY) === "1") {
-        setAuthed(true);
-        setStep("authed");
-      }
-    } catch { /* ignore */ }
-    setReady(true);
+    (async () => {
+      try {
+        if (sessionStorage.getItem(AUTH_KEY) === "1") {
+          setAuthed(true);
+          setStep("authed");
+        } else if (useSupabase) {
+          const { data } = await supabase.auth.getSession();
+          if (data.session) {
+            setAuthed(true);
+            setStep("authed");
+          }
+        }
+      } catch { /* ignore */ }
+      setReady(true);
+    })();
   }, []);
 
   // ── Password login ─────────────────────────────────────────
-  const handlePasswordLogin = (event) => {
+  const handlePasswordLogin = async (event) => {
     event.preventDefault();
+    if (useSupabase) {
+      setPasswordError("");
+      try {
+        const { error } = await supabase.auth.signInWithPassword({
+          email: email.trim(),
+          password,
+        });
+        if (error) {
+          setPasswordError(error.message);
+          return;
+        }
+        setAuthed(true);
+        setStep("authed");
+      } catch {
+        setPasswordError("Could not reach the server. Please try again.");
+      }
+      return;
+    }
     const stored = getStoredPassword();
     if (password === stored) {
       try { sessionStorage.setItem(AUTH_KEY, "1"); } catch { /* ignore */ }
@@ -68,7 +96,20 @@ export default function AdminGate({ children }) {
     setOtpError("");
     setOtpDev("");
 
-    if (useBackend) {
+    if (useSupabase) {
+      try {
+        const { error } = await supabase.auth.signInWithOtp({
+          email: email.trim(),
+          options: { shouldCreateUser: false },
+        });
+        if (error) { setOtpError(error.message); setOtpLoading(false); return; }
+        setOtpSent(true);
+      } catch {
+        setOtpError("Could not reach the server.");
+        setOtpLoading(false);
+        return;
+      }
+    } else if (useBackend) {
       try {
         const res = await fetch(`${API_BASE}/api/otp/send`, {
           method: "POST",
@@ -96,7 +137,20 @@ export default function AdminGate({ children }) {
     setOtpLoading(true);
     setOtpError("");
 
-    if (useBackend) {
+    if (useSupabase) {
+      try {
+        const { error } = await supabase.auth.verifyOtp({
+          email: email.trim(),
+          token: otp.trim(),
+          type: "email",
+        });
+        if (error) { setOtpError(error.message); setOtpLoading(false); return; }
+      } catch {
+        setOtpError("Could not verify OTP with server.");
+        setOtpLoading(false);
+        return;
+      }
+    } else if (useBackend) {
       try {
         const res = await fetch(`${API_BASE}/api/otp/verify`, {
           method: "POST",
@@ -124,11 +178,27 @@ export default function AdminGate({ children }) {
   };
 
   // ── Set new password ───────────────────────────────────────
-  const handleResetPassword = (event) => {
+  const handleResetPassword = async (event) => {
     event.preventDefault();
     if (!newPassword.trim()) { setOtpError("Enter a new password."); return; }
     if (newPassword !== newPasswordConfirm) { setOtpError("Passwords do not match."); return; }
     if (newPassword.length < 6) { setOtpError("Password must be at least 6 characters."); return; }
+
+    if (useSupabase) {
+      try {
+        const { error } = await supabase.auth.updateUser({ password: newPassword });
+        if (error) { setOtpError(error.message); return; }
+      } catch {
+        setOtpError("Could not update password. Try again.");
+        return;
+      }
+      setNewPassword("");
+      setNewPasswordConfirm("");
+      setOtpError("");
+      setStep("login");
+      setResetDone(false);
+      return;
+    }
 
     try {
       localStorage.setItem(PASSWORD_KEY, newPassword);
@@ -169,7 +239,13 @@ export default function AdminGate({ children }) {
             <form onSubmit={handlePasswordLogin}>
               <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#8B7355]">Staff Area</p>
               <h1 className="mt-4 font-serif text-3xl font-semibold text-[#26110B]">Admin Login</h1>
-              <p className="mt-3 text-sm text-[#8B7355]">Enter the admin password to continue.</p>
+              <p className="mt-3 text-sm text-[#8B7355]">Enter the admin email and password to continue.</p>
+              {useSupabase ? (
+                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Staff email" autoComplete="email" autoFocus
+                  className="mt-6 w-full rounded-full border border-[#E8E0D8] px-5 py-3 text-center text-[#26110B] outline-none focus:border-[#26110B]"
+                />
+              ) : null}
               <input type="password" value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Staff password" autoFocus

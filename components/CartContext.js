@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { supabase, isSupabaseConfigured } from "../lib/supabase";
 
 const CartContext = createContext(null);
 
@@ -9,6 +10,7 @@ const ORDERS_KEY = "akri_orders";
 
 const API_BASE = (process.env.NEXT_PUBLIC_API_URL || "").replace(/\/$/, "");
 const useBackend = Boolean(API_BASE);
+const useSupabase = isSupabaseConfigured();
 
 function readJSON(key, fallback) {
   if (typeof window === "undefined") return fallback;
@@ -20,12 +22,67 @@ function readJSON(key, fallback) {
   }
 }
 
+function toRow(order) {
+  return {
+    order_id: order.orderId,
+    name: order.name,
+    phone: order.phone,
+    method: order.method,
+    payment: order.payment,
+    pickup_date: order.pickupDate,
+    pickup_time: order.pickupTime,
+    delivery_area: order.deliveryArea,
+    delivery_charge: order.deliveryCharge ?? 0,
+    address: order.address,
+    notes: order.notes,
+    items: order.items,
+    total: order.total,
+    has_custom_cake: Boolean(order.hasCustomCake),
+    status: order.status,
+    created_at: order.createdAt,
+  };
+}
+
+function toOrder(row) {
+  return {
+    orderId: row.order_id,
+    name: row.name,
+    phone: row.phone,
+    method: row.method,
+    payment: row.payment,
+    pickupDate: row.pickup_date,
+    pickupTime: row.pickup_time,
+    deliveryArea: row.delivery_area,
+    deliveryCharge: Number(row.delivery_charge) || 0,
+    address: row.address,
+    notes: row.notes,
+    items: row.items ?? [],
+    total: Number(row.total) || 0,
+    hasCustomCake: Boolean(row.has_custom_cake),
+    status: row.status,
+    createdAt: row.created_at,
+  };
+}
+
 export function CartProvider({ children }) {
   const [items, setItems] = useState([]);
   const [orders, setOrders] = useState([]);
   const [ready, setReady] = useState(false);
 
   const refreshOrders = useCallback(async () => {
+    if (useSupabase) {
+      try {
+        const { data, error } = await supabase
+          .from("orders")
+          .select("*")
+          .order("created_at", { ascending: false })
+          .limit(500);
+        if (!error && data) setOrders(data.map(toOrder));
+      } catch {
+        /* network error: keep current orders */
+      }
+      return;
+    }
     if (useBackend) {
       try {
         const res = await fetch(`${API_BASE}/orders`, { cache: "no-store" });
@@ -48,10 +105,23 @@ export function CartProvider({ children }) {
   }, [items, ready]);
 
   useEffect(() => {
-    if (!useBackend && ready) {
+    if (!useSupabase && !useBackend && ready) {
       window.localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
     }
   }, [orders, ready]);
+
+  useEffect(() => {
+    if (!useSupabase) return;
+    const channel = supabase
+      .channel("akri-orders")
+      .on("postgres_changes", { event: "*", schema: "public", table: "orders" }, () => {
+        refreshOrders();
+      })
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [refreshOrders]);
 
   const addItem = (item) => {
     setItems((current) => {
@@ -105,6 +175,25 @@ export function CartProvider({ children }) {
   );
 
   const placeOrder = async (details) => {
+    if (useSupabase) {
+      const orderId = `AKRI-${String(Date.now()).slice(-6)}${String(
+        Math.floor(Math.random() * 90) + 10,
+      )}`;
+      const order = {
+        orderId,
+        items,
+        status: "Pending",
+        hasCustomCake: items.some((item) => item.type === "custom"),
+        createdAt: new Date().toISOString(),
+        ...details,
+        total: details.total ?? subtotal,
+      };
+      const { error } = await supabase.from("orders").insert(toRow(order));
+      if (error) throw new Error("Could not place order. Please try again.");
+      setOrders((current) => [order, ...current]);
+      clearCart();
+      return order;
+    }
     if (useBackend) {
       const res = await fetch(`${API_BASE}/orders`, {
         method: "POST",
@@ -134,6 +223,17 @@ export function CartProvider({ children }) {
   };
 
   const updateOrderStatus = async (orderId, status) => {
+    if (useSupabase) {
+      try {
+        await supabase.from("orders").update({ status }).eq("order_id", orderId);
+      } catch {
+        /* network error: realtime will sync when it reconnects */
+      }
+      setOrders((current) =>
+        current.map((order) => (order.orderId === orderId ? { ...order, status } : order)),
+      );
+      return;
+    }
     if (useBackend) {
       try {
         const res = await fetch(`${API_BASE}/orders/${orderId}`, {
