@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRef, useState, useEffect } from "react";
 import { motion, animate, useInView } from "framer-motion";
 import { FadeIn, SlideUp, StaggerContainer, StaggerItem } from "../components/animations";
+import { ASSET_PREFIX } from "../lib/cakeImages";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -18,12 +19,12 @@ const heroItem = {
 };
 
 const categories = [
-  { title: "Celebration Cakes", desc: "Black Forest, Red Velvet, Tiramisu & more", from: 800, href: "/cakes?tab=celebration", img: "/AKRI-BAKES/products/celebration-01.jpg" },
-  { title: "Cheesecakes", desc: "New York, Lotus Biscoff, Basque Burnt & more", from: 600, href: "/cakes?tab=cheesecake", img: "/AKRI-BAKES/products/cake-10.jpg" },
-  { title: "Plain Cakes", desc: "Butter, Lemon, Carrot, Walnut & more", from: 380, href: "/menu", img: "/AKRI-BAKES/products/stock-69.jpg" },
-  { title: "Bento Cakes", desc: "Petite individual cakes in many flavours", from: 350, href: "/menu", img: "/AKRI-BAKES/products/stock-27.jpg" },
-  { title: "Mousse Cakes", desc: "Mango, Hazelnut, Banoffee & more", from: 1000, href: "/cakes?tab=mousse", img: "/AKRI-BAKES/products/stock-16.jpg" },
-  { title: "Pies & Tarts", desc: "Key Lime, Lemon Meringue, Banoffee & more", from: 70, href: "/menu", img: "/AKRI-BAKES/products/stock-25.jpg" },
+  { title: "Celebration Cakes", desc: "Black Forest, Red Velvet, Tiramisu & more", from: 800, href: "/cakes?tab=celebration", img: `${ASSET_PREFIX}/products/celebration-01.jpg` },
+  { title: "Cheesecakes", desc: "New York, Lotus Biscoff, Basque Burnt & more", from: 600, href: "/cakes?tab=cheesecake", img: `${ASSET_PREFIX}/products/cake-10.jpg` },
+  { title: "Plain Cakes", desc: "Butter, Lemon, Carrot, Walnut & more", from: 380, href: "/menu", img: `${ASSET_PREFIX}/products/stock-69.jpg` },
+  { title: "Bento Cakes", desc: "Petite individual cakes in many flavours", from: 350, href: "/menu", img: `${ASSET_PREFIX}/products/stock-27.jpg` },
+  { title: "Mousse Cakes", desc: "Mango, Hazelnut, Banoffee & more", from: 1000, href: "/cakes?tab=mousse", img: `${ASSET_PREFIX}/products/stock-16.jpg` },
+  { title: "Pies & Tarts", desc: "Key Lime, Lemon Meringue, Banoffee & more", from: 70, href: "/menu", img: `${ASSET_PREFIX}/products/stock-25.jpg` },
 ];
 
 const IG_URL = "https://www.instagram.com/akribakes/";
@@ -31,54 +32,54 @@ const PHONE = "8259917757";
 
 const showcaseVideos = [
   {
-    src: "/AKRI-BAKES/gallery/wedding/wedding-anung-joel.mp4",
-    poster: "/AKRI-BAKES/gallery/wedding/wedding-anung-joel-poster.jpg",
+    src: `${ASSET_PREFIX}/gallery/wedding/wedding-anung-joel.mp4`,
+    poster: `${ASSET_PREFIX}/gallery/wedding/wedding-anung-joel-poster.jpg`,
     title: "Anung & Joel",
     tag: "Wedding · 2,300+ likes",
     autoplay: true,
   },
   {
-    src: "/AKRI-BAKES/gallery/wedding/wedding-reception.mp4",
-    poster: "/AKRI-BAKES/gallery/wedding/wedding-reception-poster.jpg",
+    src: `${ASSET_PREFIX}/gallery/wedding/wedding-reception.mp4`,
+    poster: `${ASSET_PREFIX}/gallery/wedding/wedding-reception-poster.jpg`,
     title: "A Memorable Outdoor Wedding",
     tag: "Reception film",
   },
   {
-    src: "/AKRI-BAKES/gallery/wedding/wedding-pink.mp4",
-    poster: "/AKRI-BAKES/gallery/wedding/wedding-pink-poster.jpg",
+    src: `${ASSET_PREFIX}/gallery/wedding/wedding-pink.mp4`,
+    poster: `${ASSET_PREFIX}/gallery/wedding/wedding-pink-poster.jpg`,
     title: "A Pink Wedding, 10.01.2025",
     tag: "Wedding film",
   },
   {
-    src: "/AKRI-BAKES/gallery/wedding/wedding-intimate-fairy.mp4",
-    poster: "/AKRI-BAKES/gallery/wedding/wedding-intimate-fairy-poster.jpg",
+    src: `${ASSET_PREFIX}/gallery/wedding/wedding-intimate-fairy.mp4`,
+    poster: `${ASSET_PREFIX}/gallery/wedding/wedding-intimate-fairy-poster.jpg`,
     title: "An Intimate Fairy-Tale Wedding",
     tag: "Wedding film",
   },
   {
-    src: "/AKRI-BAKES/gallery/wedding/wedding-200126.mp4",
-    poster: "/AKRI-BAKES/gallery/wedding/wedding-200126-poster.jpg",
+    src: `${ASSET_PREFIX}/gallery/wedding/wedding-200126.mp4`,
+    poster: `${ASSET_PREFIX}/gallery/wedding/wedding-200126-poster.jpg`,
     title: "A Calm & Beautiful Wedding",
     tag: "Wedding film",
   },
 ];
 
 const showcasePhotos = [
-  { src: "/AKRI-BAKES/gallery/wedding/wedding-dessert-table.jpg", label: "Yangthy & Lendi" },
-  { src: "/AKRI-BAKES/gallery/wedding/wedding-guest-desserts.jpg", label: "Dessert Counter" },
-  { src: "/AKRI-BAKES/gallery/wedding/wedding-dessert-spread.jpg", label: "Serving Sweetness" },
-  { src: "/AKRI-BAKES/gallery/wedding/wedding-dessert-lineup.jpg", label: "Wedding Desserts" },
+  { src: `${ASSET_PREFIX}/gallery/wedding/wedding-dessert-table.jpg`, label: "Yangthy & Lendi" },
+  { src: `${ASSET_PREFIX}/gallery/wedding/wedding-guest-desserts.jpg`, label: "Dessert Counter" },
+  { src: `${ASSET_PREFIX}/gallery/wedding/wedding-dessert-spread.jpg`, label: "Serving Sweetness" },
+  { src: `${ASSET_PREFIX}/gallery/wedding/wedding-dessert-lineup.jpg`, label: "Wedding Desserts" },
 ];
 
 const feedPhotos = [
-  { src: "/AKRI-BAKES/gallery/signature-chocolate-cake.jpg", label: "Signature Chocolate" },
-  { src: "/AKRI-BAKES/products/celebration-01.jpg", label: "Black Forest" },
-  { src: "/AKRI-BAKES/products/celebration-04.jpg", label: "Red Velvet" },
-  { src: "/AKRI-BAKES/products/celebration-10.jpg", label: "Dark Chocolate Truffle" },
-  { src: "/AKRI-BAKES/products/celebration-19.jpg", label: "Rainbow Cake" },
-  { src: "/AKRI-BAKES/products/celebration-16.jpg", label: "Coconut-Lotus Biscoff" },
-  { src: "/AKRI-BAKES/products/cake-04.jpg", label: "Lotus Biscoff Cheesecake" },
-  { src: "/AKRI-BAKES/gallery/signature-cheesecake.jpg", label: "Signature Cheesecake" },
+  { src: `${ASSET_PREFIX}/gallery/signature-chocolate-cake.jpg`, label: "Signature Chocolate" },
+  { src: `${ASSET_PREFIX}/products/celebration-01.jpg`, label: "Black Forest" },
+  { src: `${ASSET_PREFIX}/products/celebration-04.jpg`, label: "Red Velvet" },
+  { src: `${ASSET_PREFIX}/products/celebration-10.jpg`, label: "Dark Chocolate Truffle" },
+  { src: `${ASSET_PREFIX}/products/celebration-19.jpg`, label: "Rainbow Cake" },
+  { src: `${ASSET_PREFIX}/products/celebration-16.jpg`, label: "Coconut-Lotus Biscoff" },
+  { src: `${ASSET_PREFIX}/products/cake-04.jpg`, label: "Lotus Biscoff Cheesecake" },
+  { src: `${ASSET_PREFIX}/gallery/signature-cheesecake.jpg`, label: "Signature Cheesecake" },
 ];
 
 const testimonials = [
@@ -124,28 +125,28 @@ const bestsellers = [
     name: "Dark Chocolate Truffle",
     price: "₹800 – ₹1,600",
     tag: "Best Seller",
-    img: "/AKRI-BAKES/products/celebration-10.jpg",
+    img: `${ASSET_PREFIX}/products/celebration-10.jpg`,
     href: "/product/dark-chocolate-truffle",
   },
   {
     name: "New York Cheesecake",
     price: "₹600 – ₹1,400",
     tag: "Classic",
-    img: "/AKRI-BAKES/products/cake-10.jpg",
+    img: `${ASSET_PREFIX}/products/cake-10.jpg`,
     href: "/product/classic-new-york-cheesecake",
   },
   {
     name: "Mango Mousse",
     price: "₹1,000 – ₹2,000",
     tag: "Premium",
-    img: "/AKRI-BAKES/products/stock-16.jpg",
+    img: `${ASSET_PREFIX}/products/stock-16.jpg`,
     href: "/product/mango-mousse-cake",
   },
   {
     name: "Lotus Biscoff Cheesecake",
     price: "₹600 – ₹1,400",
     tag: "Most Loved",
-    img: "/AKRI-BAKES/products/cake-04.jpg",
+    img: `${ASSET_PREFIX}/products/cake-04.jpg`,
     href: "/product/lotus-biscoff-cheesecake",
   },
 ];
@@ -297,11 +298,11 @@ export default function HomePage() {
           transition={{ duration: 18, ease: "easeInOut", repeat: Infinity, repeatType: "reverse" }}
         >
           <source
-            src="/AKRI-BAKES/gallery/wedding/wedding-anung-joel-4k.mp4?v=2"
+            src={`${ASSET_PREFIX}/gallery/wedding/wedding-anung-joel-4k.mp4?v=2`}
             type='video/mp4; codecs="hvc1.1.6.L150.90"'
           />
           <source
-            src="/AKRI-BAKES/gallery/wedding/wedding-anung-joel-1080p.mp4?v=2"
+            src={`${ASSET_PREFIX}/gallery/wedding/wedding-anung-joel-1080p.mp4?v=2`}
             type="video/mp4"
           />
         </motion.video>
@@ -456,7 +457,7 @@ export default function HomePage() {
               <div className="grid items-stretch md:grid-cols-2">
                 <div className="relative min-h-[320px]">
                   <img
-                    src="/AKRI-BAKES/products/celebration-04.jpg"
+                    src={`${ASSET_PREFIX}/products/celebration-04.jpg`}
                     alt="Custom celebration cake by Akri Bakes"
                     loading="lazy"
                     className="absolute inset-0 h-full w-full object-cover"

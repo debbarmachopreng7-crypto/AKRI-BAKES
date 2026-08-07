@@ -4,10 +4,10 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePageTitle } from "../../components/usePageTitle";
 import { useCart } from "../../components/CartContext";
-import { getCakeImage } from "../../lib/cakeImages";
+import { getCakeImage, ASSET_PREFIX } from "../../lib/cakeImages";
 import Breadcrumbs from "../../components/Breadcrumbs";
 
-const DEFAULT_IMG = "/AKRI-BAKES/products/celebration-04.jpg";
+const DEFAULT_IMG = `${ASSET_PREFIX}/products/celebration-04.jpg`;
 
 function itemImage(item) {
   if (item.inspirationPhoto) return item.inspirationPhoto;

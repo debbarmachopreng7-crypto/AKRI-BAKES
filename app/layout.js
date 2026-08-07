@@ -4,6 +4,7 @@ import WhatsAppFloat from "../components/WhatsAppFloat";
 import { CartProvider } from "../components/CartContext";
 import "./globals.css";
 import { Inter, Playfair_Display } from "next/font/google";
+import { SITE_URL } from "../lib/siteConfig";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -25,7 +26,7 @@ export const metadata = {
   openGraph: {
     title: "Akri Bakes — Premium Cakes & Patisserie",
     description: "Freshly baked celebration cakes, cheesecakes, mousse & more in Dimapur, Nagaland.",
-              url: "https://debbarmachopreng7-crypto.github.io/AKRI-BAKES/",
+              url: `${SITE_URL}/`,
     siteName: "Akri Bakes",
     locale: "en_IN",
     type: "website",
@@ -48,7 +49,7 @@ export const metadata = {
     index: true,
     follow: true,
   },
-  metadataBase: new URL("https://debbarmachopreng7-crypto.github.io/AKRI-BAKES"),
+  metadataBase: new URL(SITE_URL),
   icons: {
     icon: [
       { url: "/icon.svg", type: "image/svg+xml" },
@@ -90,7 +91,7 @@ export default function RootLayout({ children }) {
               "@type": "Bakery",
               name: "Akri Bakes",
               description: "Premium cakes & patisserie in Dimapur, Nagaland. Celebration cakes, cheesecakes, mousse cakes, bento cakes, pies & tarts.",
-    url: "https://debbarmachopreng7-crypto.github.io/AKRI-BAKES/",
+              url: `${SITE_URL}/`,
               telephone: "+91 82599 17757",
               email: "Akribake2020@gmail.com",
               address: {

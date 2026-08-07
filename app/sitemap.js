@@ -1,4 +1,6 @@
-const BASE = "https://debbarmachopreng7-crypto.github.io/AKRI-BAKES";
+import { SITE_URL } from "../lib/siteConfig";
+
+const BASE = SITE_URL;
 
 const productSlugs = [
   "black-forest",

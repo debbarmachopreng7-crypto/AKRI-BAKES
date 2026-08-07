@@ -1,5 +1,7 @@
 export const dynamic = "force-static";
 
+import { SITE_URL } from "../lib/siteConfig";
+
 export default function robots() {
   return {
     rules: [
@@ -9,6 +11,6 @@ export default function robots() {
         disallow: ["/admin", "/cart", "/checkout", "/order-confirmation", "/custom-cakes"],
       },
     ],
-    sitemap: "https://debbarmachopreng7-crypto.github.io/AKRI-BAKES/sitemap.xml",
+    sitemap: `${SITE_URL}/sitemap.xml`,
   };
 }
