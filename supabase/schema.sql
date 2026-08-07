@@ -23,6 +23,12 @@ create table if not exists public.orders (
 
 alter table public.orders enable row level security;
 
+-- Grants for the API roles (created via direct connection, so set explicitly).
+grant insert on table public.orders to anon;
+grant select, update on table public.orders to authenticated;
+grant all on table public.orders to service_role;
+grant select on table public.orders to supabase_realtime_admin;
+
 -- Customers (anon): can place an order, but not read or modify others.
 drop policy if exists "anon can insert orders" on public.orders;
 create policy "anon can insert orders" on public.orders
@@ -39,4 +45,12 @@ create policy "staff can update orders" on public.orders
   for update to authenticated using (true);
 
 -- Push new / changed orders to the admin dashboard instantly.
-alter publication supabase_realtime add table public.orders;
+do $$
+begin
+  if not exists (
+    select 1 from pg_publication_tables
+    where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'orders'
+  ) then
+    alter publication supabase_realtime add table public.orders;
+  end if;
+end $$;
