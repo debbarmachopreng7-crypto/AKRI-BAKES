@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
-import { useRef } from "react";
-import { motion } from "framer-motion";
+import { useRef, useState, useEffect } from "react";
+import { motion, animate, useInView } from "framer-motion";
 import { FadeIn, SlideUp, StaggerContainer, StaggerItem } from "../components/animations";
 
 const containerVariants = {
@@ -18,12 +18,12 @@ const heroItem = {
 };
 
 const categories = [
-  { title: "Celebration Cakes", desc: "Black Forest, Red Velvet, Tiramisu & more", from: 800, href: "/cakes?tab=celebration" },
-  { title: "Cheesecakes", desc: "New York, Lotus Biscoff, Basque Burnt & more", from: 600, href: "/cakes?tab=cheesecake" },
-  { title: "Plain Cakes", desc: "Butter, Lemon, Carrot, Walnut & more", from: 380, href: "/menu" },
-  { title: "Bento Cakes", desc: "Petite individual cakes in many flavours", from: 350, href: "/menu" },
-  { title: "Mousse Cakes", desc: "Mango, Hazelnut, Banoffee & more", from: 1000, href: "/cakes?tab=mousse" },
-  { title: "Pies & Tarts", desc: "Key Lime, Lemon Meringue, Banoffee & more", from: 70, href: "/menu" },
+  { title: "Celebration Cakes", desc: "Black Forest, Red Velvet, Tiramisu & more", from: 800, href: "/cakes?tab=celebration", img: "/AKRI-BAKES/products/celebration-01.jpg" },
+  { title: "Cheesecakes", desc: "New York, Lotus Biscoff, Basque Burnt & more", from: 600, href: "/cakes?tab=cheesecake", img: "/AKRI-BAKES/products/cake-10.jpg" },
+  { title: "Plain Cakes", desc: "Butter, Lemon, Carrot, Walnut & more", from: 380, href: "/menu", img: "/AKRI-BAKES/products/stock-69.jpg" },
+  { title: "Bento Cakes", desc: "Petite individual cakes in many flavours", from: 350, href: "/menu", img: "/AKRI-BAKES/products/stock-27.jpg" },
+  { title: "Mousse Cakes", desc: "Mango, Hazelnut, Banoffee & more", from: 1000, href: "/cakes?tab=mousse", img: "/AKRI-BAKES/products/stock-16.jpg" },
+  { title: "Pies & Tarts", desc: "Key Lime, Lemon Meringue, Banoffee & more", from: 70, href: "/menu", img: "/AKRI-BAKES/products/stock-25.jpg" },
 ];
 
 const IG_URL = "https://www.instagram.com/akribakes/";
@@ -99,6 +99,54 @@ const testimonials = [
       "Our dessert table was stunning — people took photos before they even touched a thing. Beautiful flavours and a team that clearly cares. Highly recommended.",
     name: "Yangthy & Lendi",
     tag: "Wedding · October 2025",
+  },
+];
+
+const marqueeItems = [
+  "Black Forest",
+  "Red Velvet",
+  "New York Cheesecake",
+  "Lotus Biscoff",
+  "Mango Mousse",
+  "Tiramisu",
+  "Basque Burnt Cheesecake",
+  "Dark Chocolate Truffle",
+  "Hazelnut Pralin Mousse",
+  "Key Lime Pie",
+  "Rainbow Cake",
+  "Tres Leches",
+  "Bento Cakes",
+  "Fondant Cakes",
+];
+
+const bestsellers = [
+  {
+    name: "Dark Chocolate Truffle",
+    price: "₹800 – ₹1,600",
+    tag: "Best Seller",
+    img: "/AKRI-BAKES/products/celebration-10.jpg",
+    href: "/product/dark-chocolate-truffle",
+  },
+  {
+    name: "New York Cheesecake",
+    price: "₹600 – ₹1,400",
+    tag: "Classic",
+    img: "/AKRI-BAKES/products/cake-10.jpg",
+    href: "/product/classic-new-york-cheesecake",
+  },
+  {
+    name: "Mango Mousse",
+    price: "₹1,000 – ₹2,000",
+    tag: "Premium",
+    img: "/AKRI-BAKES/products/stock-16.jpg",
+    href: "/product/mango-mousse-cake",
+  },
+  {
+    name: "Lotus Biscoff Cheesecake",
+    price: "₹600 – ₹1,400",
+    tag: "Most Loved",
+    img: "/AKRI-BAKES/products/cake-04.jpg",
+    href: "/product/lotus-biscoff-cheesecake",
   },
 ];
 
@@ -205,6 +253,30 @@ function Icon({ name, className = "h-6 w-6" }) {
   );
 }
 
+function Counter({ to, prefix = "", suffix = "", duration = 1.6 }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-40px" });
+  const [val, setVal] = useState(0);
+
+  useEffect(() => {
+    if (!inView) return;
+    const controls = animate(0, to, {
+      duration,
+      ease: "easeOut",
+      onUpdate: (v) => setVal(Math.round(v)),
+    });
+    return () => controls.stop();
+  }, [inView, to, duration]);
+
+  return (
+    <span ref={ref}>
+      {prefix}
+      {val.toLocaleString("en-IN")}
+      {suffix}
+    </span>
+  );
+}
+
 export default function HomePage() {
   return (
     <main>
@@ -218,6 +290,8 @@ export default function HomePage() {
           playsInline
           preload="metadata"
           fetchPriority="high"
+          aria-hidden="true"
+          tabIndex={-1}
           className="absolute inset-0 h-full w-full object-cover"
           animate={{ scale: [1, 1.12] }}
           transition={{ duration: 18, ease: "easeInOut", repeat: Infinity, repeatType: "reverse" }}
@@ -269,15 +343,41 @@ export default function HomePage() {
             </a>
           </motion.div>
         </motion.div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.4, duration: 1 }}
+          className="pointer-events-none absolute bottom-6 left-1/2 z-10 -translate-x-1/2 text-white/70"
+          aria-hidden="true"
+        >
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="animate-[scroll-cue_1.8s_ease-in-out_infinite]">
+            <path d="M12 5v14" />
+            <path d="m19 12-7 7-7-7" />
+          </svg>
+        </motion.div>
+      </section>
+
+      {/* ── FLAVOUR MARQUEE ─────────────────────────────────── */}
+      <section className="overflow-hidden border-y border-[#26110B]/30 bg-[#1a0b06] py-4" aria-hidden="true">
+        <div className="marquee-track">
+          {[...marqueeItems, ...marqueeItems].map((item, i) => (
+            <span key={i} className="flex shrink-0 items-center gap-5 px-3 text-xs font-medium uppercase tracking-[0.3em] text-white/60">
+              {item}
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="#BC6153">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+            </span>
+          ))}
+        </div>
       </section>
 
       {/* ── SOCIAL PROOF BAND ────────────────────────────────── */}
-      <section className="border-y border-[#E8E0D8] bg-white py-10">
+      <section className="border-b border-[#E8E0D8] bg-white py-10">
         <StaggerContainer className="mx-auto grid max-w-6xl grid-cols-2 gap-6 px-4 text-center md:grid-cols-4">
           {[
-            { stat: "10,000+", label: "Instagram Family" },
-            { stat: "30+", label: "Cake Flavours" },
-            { stat: "7–10", label: "Days Advance Order" },
+            { stat: <Counter to={10000} suffix="+" />, label: "Instagram Family" },
+            { stat: <Counter to={30} suffix="+" />, label: "Cake Flavours" },
+            { stat: <Counter to={10} prefix="7–" />, label: "Days Advance Order" },
             { stat: "Dimapur", label: "Pickup &amp; Delivery" },
           ].map((s) => (
             <StaggerItem key={s.label}>
@@ -334,12 +434,6 @@ export default function HomePage() {
 
           <FadeIn delay={0.2}>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-              <a
-                href="/gallery"
-                className="rounded-full bg-[#BC6153] px-8 py-3 text-sm font-medium text-white shadow-lg shadow-[#BC6153]/30 transition hover:-translate-y-0.5 hover:bg-[#A85547] hover:shadow-xl"
-              >
-                View the Full Gallery
-              </a>
               <a
                 href={IG_URL}
                 target="_blank"
@@ -420,6 +514,55 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── SIGNATURE & BESTSELLERS ─────────────────────────── */}
+      <section className="bg-[#26110B] py-20 text-white md:py-24">
+        <div className="mx-auto max-w-6xl px-4">
+          <FadeIn>
+            <div className="text-center">
+              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#BC6153]">Bakers&rsquo; Favourites</p>
+              <h2 className="mt-5 font-serif text-4xl font-bold text-white md:text-5xl">Signature &amp; bestsellers</h2>
+              <p className="mx-auto mt-4 max-w-2xl text-white/70">
+                The cakes our regulars come back for. Order any of these directly — or build your own from scratch.
+              </p>
+            </div>
+          </FadeIn>
+
+          <StaggerContainer className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {bestsellers.map((item) => (
+              <StaggerItem key={item.name}>
+                <motion.div
+                  className="group flex h-full flex-col overflow-hidden rounded-[20px] border border-white/10 bg-white text-[#26110B] shadow-lg"
+                  whileHover={{ y: -6, boxShadow: "0 24px 48px rgba(0,0,0,0.35)" }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                >
+                  <div className="relative aspect-[4/5] overflow-hidden bg-[#3a1c12]">
+                    <img
+                      src={item.img}
+                      alt={item.name}
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <span className="absolute left-3 top-3 rounded-full bg-[#BC6153] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-white shadow">
+                      {item.tag}
+                    </span>
+                  </div>
+                  <div className="flex flex-1 flex-col p-5">
+                    <h3 className="font-serif text-lg font-bold text-[#26110B]">{item.name}</h3>
+                    <p className="mt-1 text-sm font-semibold text-[#BC6153]">{item.price}</p>
+                    <Link
+                      href={item.href}
+                      className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-[#26110B] px-4 py-2.5 text-sm font-medium text-white transition hover:bg-[#3D2219]"
+                    >
+                      Order This Cake
+                    </Link>
+                  </div>
+                </motion.div>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
+        </div>
+      </section>
+
       {/* ── OUR MENU ─────────────────────────────────────────── */}
       <section className="bg-[#F9F8F6] py-20">
         <div className="mx-auto max-w-6xl px-4">
@@ -441,13 +584,25 @@ export default function HomePage() {
                 >
                   <Link
                     href={cat.href}
-                    className="group block rounded-[20px] border border-[#E8E0D8] bg-white p-7 shadow-sm"
+                    className="group block overflow-hidden rounded-[20px] border border-[#E8E0D8] bg-white shadow-sm"
                   >
-                    <h3 className="font-serif text-xl font-bold text-[#26110B] group-hover:underline">{cat.title}</h3>
-                    <p className="mt-2 text-sm leading-6 text-[#8B7355]">{cat.desc}</p>
-                    <p className="mt-4 text-xs font-semibold uppercase tracking-[0.15em] text-[#BC6153]">
-                      FROM &rsquo;{cat.from}
-                    </p>
+                    <div className="relative aspect-[4/3] overflow-hidden bg-[#E8E0D8]">
+                      <img
+                        src={cat.img}
+                        alt={cat.title}
+                        loading="lazy"
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                      <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-4 pt-12">
+                        <p className="text-xs font-semibold uppercase tracking-[0.15em] text-white/80">
+                          FROM &#8377;{cat.from}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="p-7">
+                      <h3 className="font-serif text-xl font-bold text-[#26110B] group-hover:underline">{cat.title}</h3>
+                      <p className="mt-2 text-sm leading-6 text-[#8B7355]">{cat.desc}</p>
+                    </div>
                   </Link>
                 </motion.div>
               </StaggerItem>
@@ -547,15 +702,6 @@ export default function HomePage() {
               >
                 View Full Gallery
               </Link>
-              <a
-                href={IG_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-[#BC6153] px-8 py-3 text-sm font-medium text-[#BC6153] transition hover:-translate-y-0.5 hover:bg-[#BC6153] hover:text-white"
-              >
-                <InstagramIcon className="h-4 w-4" />
-                Follow @akribakes
-              </a>
             </div>
           </FadeIn>
         </div>
@@ -593,6 +739,44 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── FINAL CTA ────────────────────────────────────────── */}
+      <section className="relative overflow-hidden bg-[#BC6153] py-20 text-white md:py-24">
+        <div className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-white/10 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-[#26110B]/20 blur-3xl" />
+        <div className="relative mx-auto max-w-4xl px-4 text-center">
+          <FadeIn>
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-white/80">Your Table Awaits</p>
+            <h2 className="mt-5 font-serif text-4xl font-bold md:text-5xl">
+              Ready to order your dream cake?
+            </h2>
+            <p className="mx-auto mt-5 max-w-xl text-white/90">
+              Custom cakes need 7&ndash;10 days advance notice. The sooner you tell us your vision, the sweeter the result.
+            </p>
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+              <Link
+                href="/menu"
+                className="rounded-full bg-white px-8 py-3.5 text-sm font-medium text-[#BC6153] shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl"
+              >
+                Order Online
+              </Link>
+              <Link
+                href="/build-your-cake"
+                className="inline-flex items-center gap-2 rounded-full border border-white/70 px-8 py-3.5 text-sm font-medium text-white transition hover:bg-white/10 hover:-translate-y-0.5"
+              >
+                Build Your Cake
+              </Link>
+              <a
+                href={`tel:${PHONE}`}
+                className="inline-flex items-center gap-2 rounded-full border border-white/70 px-6 py-3.5 text-sm font-medium text-white transition hover:bg-white/10 hover:-translate-y-0.5"
+              >
+                <PhoneIcon className="h-4 w-4" />
+                {PHONE}
+              </a>
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
       {/* ── INFO / CONTACT ───────────────────────────────────── */}
       <section className="bg-[#1a0b06] py-20 text-white">
         <div className="mx-auto max-w-6xl px-4">
@@ -613,7 +797,7 @@ export default function HomePage() {
               <p className="mt-2 text-sm text-white/60">Akribake2020@gmail.com</p>
               <div className="mt-4 flex gap-3">
                 <a href={`tel:${PHONE}`} className="rounded-full bg-white/10 px-4 py-2 text-xs font-medium text-white transition hover:bg-white/20">Call</a>
-                <a href={`tel:${PHONE}`} className="rounded-full bg-white/10 px-4 py-2 text-xs font-medium text-white transition hover:bg-white/20">WhatsApp</a>
+                <a href={`https://wa.me/91${PHONE}`} target="_blank" rel="noopener noreferrer" className="rounded-full bg-white/10 px-4 py-2 text-xs font-medium text-white transition hover:bg-white/20">WhatsApp</a>
                 <a href="mailto:Akribake2020@gmail.com" className="rounded-full bg-white/10 px-4 py-2 text-xs font-medium text-white transition hover:bg-white/20">Email</a>
               </div>
             </div>

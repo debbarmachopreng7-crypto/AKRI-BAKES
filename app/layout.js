@@ -49,6 +49,30 @@ export default function RootLayout({ children }) {
           {children}
           <Footer />
         </CartProvider>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Bakery",
+              name: "Akri Bakes",
+              description: "Premium cakes & patisserie in Dimapur, Nagaland. Celebration cakes, cheesecakes, mousse cakes, bento cakes, pies & tarts.",
+              url: "https://akribakes.com",
+              telephone: "+91 82599 17757",
+              email: "Akribake2020@gmail.com",
+              address: {
+                "@type": "PostalAddress",
+                streetAddress: "Zion Hospital Road, Purana Bazar",
+                addressLocality: "Dimapur",
+                addressRegion: "Nagaland",
+                addressCountry: "IN",
+              },
+              priceRange: "₹₹",
+              acceptsReservations: "True",
+              sameAs: ["https://www.instagram.com/akribakes/"],
+            }),
+          }}
+        />
       </body>
     </html>
   );

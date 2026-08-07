@@ -6,17 +6,9 @@ Premium bakery website (Akri Bakes, Dimapur, Nagaland) — Next.js static export
 
 - Live: https://debbarmachopreng7-crypto.github.io/AKRI-BAKES/
 - Remote: https://github.com/debbarmachopreng7-crypto/AKRI-BAKES.git (branch `complete-ordering-system`)
-- Workflow: `.github/workflows/deploy.yml` — build + `actions/deploy-pages@v4`, runs on push, workflow_dispatch, and every 20 min via `schedule`
+- Workflow: `.github/workflows/deploy.yml` — build + `actions/deploy-pages@v4`, runs on push and workflow_dispatch
 - Deploy takes ~5-10 min (large video assets). Verify: `curl -s "https://api.github.com/repos/debbarmachopreng7-crypto/AKRI-BAKES/actions/runs?per_page=1"`
 - API access (repo owner): token available via keychain — `git credential-osxkeychain get` for host github.com; scopes include `repo` + `workflow`. Store in `/tmp/ghtok.txt` for the session.
-
-## 2026-08-06: GitHub Pages backend degradation
-
-Deployments created but never processed; `deploy-pages` times out after ~10 min ("deployment_queued" forever), then the deployment ends in `failure`. Started ~11:40 UTC 2026-08-06, matches widespread reports (actions/deploy-pages#406, same-day comments). Not caused by repo content — the identical artifact deployed fine at 09:05 UTC.
-
-Handled by auto-heal: workflow retries once per run + re-runs every 20 min via schedule. New homepage commits (`bba33d3` → `48a9c97`) are built and will deploy automatically when the backend recovers. Site stays live on the previous deploy meanwhile.
-
-Once deploy succeeds: remove the `schedule` block from `deploy.yml`.
 
 ## Build / verify
 

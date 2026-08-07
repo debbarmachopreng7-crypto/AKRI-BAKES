@@ -4,8 +4,6 @@ on:
   push:
     branches: [complete-ordering-system]
   workflow_dispatch:
-  schedule:
-    - cron: "*/20 * * * *"
 
 permissions:
   contents: read
