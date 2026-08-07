@@ -85,8 +85,7 @@ export default function AdminGate({ children }) {
         return;
       }
     } else {
-      setOtpDev("Dev mode — OTP is: 123456");
-      setOtpSent(true);
+      setOtpError("Password resets are managed by the store. Please contact us at 8259917757.");
     }
     setOtpLoading(false);
   };
@@ -112,11 +111,9 @@ export default function AdminGate({ children }) {
         return;
       }
     } else {
-      if (otp.trim() !== "123456") {
-        setOtpError("Incorrect OTP. Try 123456 in dev mode.");
-        setOtpLoading(false);
-        return;
-      }
+      setOtpError("Password resets are managed by the store. Please contact us at 8259917757.");
+      setOtpLoading(false);
+      return;
     }
 
     // OTP verified — show new password form

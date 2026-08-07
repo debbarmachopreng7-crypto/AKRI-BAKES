@@ -24,7 +24,7 @@ export const metadata = {
   openGraph: {
     title: "Akri Bakes — Premium Cakes & Patisserie",
     description: "Freshly baked celebration cakes, cheesecakes, mousse & more in Dimapur, Nagaland.",
-    url: "https://akribakes.com",
+              url: "https://debbarmachopreng7-crypto.github.io/AKRI-BAKES/",
     siteName: "Akri Bakes",
     locale: "en_IN",
     type: "website",
@@ -88,7 +88,7 @@ export default function RootLayout({ children }) {
               "@type": "Bakery",
               name: "Akri Bakes",
               description: "Premium cakes & patisserie in Dimapur, Nagaland. Celebration cakes, cheesecakes, mousse cakes, bento cakes, pies & tarts.",
-              url: "https://akribakes.com",
+    url: "https://debbarmachopreng7-crypto.github.io/AKRI-BAKES/",
               telephone: "+91 82599 17757",
               email: "Akribake2020@gmail.com",
               address: {

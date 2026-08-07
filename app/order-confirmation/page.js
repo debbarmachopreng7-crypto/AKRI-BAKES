@@ -7,6 +7,30 @@ import { useSearchParams } from "next/navigation";
 import { useCart } from "../../components/CartContext";
 import { UPI_CONFIG, UPI_APPS, generateUPILink } from "../../components/upiConfig";
 
+const STORE_WHATSAPP = "918259917757";
+
+function buildOrderMessage(order) {
+  const lines = [`🍰 New Order — ${order.orderId}`, ""];
+  lines.push("Items:");
+  for (const item of order.items || []) {
+    const size = item.size ? ` (${item.size})` : "";
+    const qty = item.quantity ?? 1;
+    lines.push(`• ${item.name}${size} × ${qty} = ₹${item.price * qty}`);
+    if (item.type === "custom" && item.message) lines.push(`   Note: ${item.message}`);
+  }
+  lines.push("", `Total: ₹${order.total}`, `Payment: ${order.payment}`, "");
+  lines.push(`Name: ${order.name}`);
+  lines.push(`Phone: ${order.phone}`);
+  lines.push(`Method: ${order.method || "Pickup"}`);
+  lines.push(`${order.method === "Delivery" ? "Delivery" : "Pickup"} date: ${order.pickupDate}`);
+  if (order.pickupTime) lines.push(`Time: ${order.pickupTime}`);
+  if (order.method === "Delivery") {
+    if (order.deliveryArea) lines.push(`Area: ${order.deliveryArea}`);
+    if (order.address) lines.push(`Address: ${order.address}`);
+  }
+  return lines.join("\n");
+}
+
 function Confirmation() {
   const searchParams = useSearchParams();
   const orderId = searchParams.get("id");
@@ -60,9 +84,6 @@ function Confirmation() {
           >
             Pay ₹{order.total} via UPI
           </a>
-          <p className="mt-3 text-xs text-amber-700">
-            Once payment is received, the store will confirm your order. You will not need to do anything else.
-          </p>
         </div>
       ) : (
         <p className="mt-6 text-lg leading-8 text-[#26110B]/70">
@@ -71,6 +92,27 @@ function Confirmation() {
             : "Order placed. Your cake has been reserved for pickup at Akri Bakes."}
         </p>
       )}
+
+      <div className="mx-auto mt-6 max-w-md rounded-[20px] border border-[#BC6153] bg-[#FDF1EE] p-6 text-left">
+        <p className="text-sm font-semibold text-[#A85547]">
+          One last step — send us your order
+        </p>
+        <p className="mt-2 text-sm leading-6 text-[#8B7355]">
+          Tap the button below to send this order to Akri Bakes on WhatsApp. We only receive
+          your order once you send it — the store doesn&rsquo;t see it automatically.
+        </p>
+        <a
+          href={`https://wa.me/${STORE_WHATSAPP}?text=${encodeURIComponent(buildOrderMessage(order))}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg"
+        >
+          Send order via WhatsApp
+        </a>
+        <p className="mt-3 text-xs text-[#8B7355]">
+          WhatsApp automatically opens with your full order details pre-filled — just press send.
+        </p>
+      </div>
 
       <div className="mx-auto mt-8 max-w-md space-y-2 rounded-[20px] border border-[#E8E0D8] bg-white p-8 text-left text-[#26110B]/80 shadow-sm">
         <p><span className="font-medium text-[#26110B]">Name:</span> {order.name}</p>
@@ -107,19 +149,19 @@ function Confirmation() {
           <ol className="mt-4 space-y-3 text-sm text-[#26110B]/70">
             <li className="flex gap-3">
               <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#BC6153] text-xs font-bold text-white">1</span>
-              <span>Pay via UPI using the button above. Mention your Order ID in the note.</span>
+              <span>Send your order to the store on WhatsApp using the button above.</span>
             </li>
             <li className="flex gap-3">
               <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#BC6153] text-xs font-bold text-white">2</span>
-              <span>The store will receive your payment notification on their UPI app.</span>
+              <span>Pay via UPI using the Pay button. Mention your Order ID in the note.</span>
             </li>
             <li className="flex gap-3">
               <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#BC6153] text-xs font-bold text-white">3</span>
-              <span>Store staff will confirm your order from the admin dashboard once payment is verified.</span>
+              <span>The store verifies your payment and confirms your order on WhatsApp or by phone.</span>
             </li>
             <li className="flex gap-3">
               <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#BC6153] text-xs font-bold text-white">4</span>
-              <span>Your cake will be prepared for pickup or delivery on your selected date.</span>
+              <span>Your cake is prepared for pickup or delivery on your selected date.</span>
             </li>
           </ol>
           <p className="mt-4 text-xs text-[#8B7355]">
