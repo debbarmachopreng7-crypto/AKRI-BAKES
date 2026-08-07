@@ -20,19 +20,25 @@ const reviews = [
     text: "Our dessert table was stunning — people took photos before they even touched a thing. Beautiful flavours and a team that clearly cares. Highly recommended.",
   },
   {
-    name: "Achila",
-    tag: "Birthday Cake",
-    text: "Best birthday cake in Nagaland, hands down. Moist layers, perfectly balanced sweetness, and the design came out exactly like the reference.",
+    name: "Luke Luket Achumi",
+    tag: "Google Review",
+    text: "Thank you so much, it was really awesome — I loved it. The cake was just amazing, and the package of sweet cookies looks perfectly great and delightful. I would love to make an order again in the coming time.",
+    source: "Google",
+    href: "https://restaurant-guru.in/Akri-bakes-Dimapur",
   },
   {
-    name: "Imnatoshi",
-    tag: "Cheesecake Lover",
-    text: "The Lotus Biscoff cheesecake is dangerous — one slice and you're ordering another. My go-to for every family gathering now.",
+    name: "Mikatoli",
+    tag: "Google Review",
+    text: "Thank you @akri_bakes — making a cake in 11 hours is not that easy, but you made it. For my dad and my birthday, it was spent so well (8th Feb 2022). Loved to order more in the coming days.",
+    source: "Google",
+    href: "https://restaurant-guru.in/Akri-bakes-Dimapur",
   },
   {
-    name: "Rhonda",
-    tag: "Custom Order",
-    text: "Built my cake through the website and the price updated live as I chose. It arrived exactly as designed and tasted even better. Seamless experience.",
+    name: "@the_naga_maiki",
+    tag: "Instagram Feature · 825+ likes",
+    text: "Akri Bakes is one of the few bakery cafés in Dimapur that offers good quality food and pastry at the most affordable rates. My heart and tummy are full!",
+    source: "Instagram",
+    href: "https://www.instagram.com/reel/DJ8734JPIeM/",
   },
 ];
 
@@ -72,7 +78,19 @@ export default function ReviewsPage() {
                 <p className="mt-5 flex-1 leading-relaxed text-[#26110B]">&ldquo;{review.text}&rdquo;</p>
                 <div className="mt-6 border-t border-[#E8E0D8] pt-4">
                   <p className="font-serif text-lg font-semibold text-[#26110B]">{review.name}</p>
-                  <p className="mt-0.5 text-xs uppercase tracking-[0.2em] text-[#8B7355]">{review.tag}</p>
+                  <div className="mt-0.5 flex items-center gap-2">
+                    <p className="text-xs uppercase tracking-[0.2em] text-[#8B7355]">{review.tag}</p>
+                    {review.source ? (
+                      <a
+                        href={review.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="rounded-full bg-[#F9F8F6] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#BC6153] transition hover:bg-[#BC6153] hover:text-white"
+                      >
+                        {review.source} &#8599;
+                      </a>
+                    ) : null}
+                  </div>
                 </div>
               </div>
             ))}

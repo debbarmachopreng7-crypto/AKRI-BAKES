@@ -77,7 +77,7 @@ const favourites = [
 const stats = [
   { value: "10,000+", label: "Instagram Family" },
   { value: "30+", label: "Cake Flavours" },
-  { value: "100s", label: "Weddings Served" },
+  { value: "Many", label: "Weddings Served" },
   { value: "7–10", label: "Days Advance Order" },
 ];
 
