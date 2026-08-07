@@ -44,6 +44,8 @@ const staticPages = [
   { path: "reviews", priority: 0.7 },
   { path: "contact", priority: 0.7 },
   { path: "faq", priority: 0.6 },
+  { path: "terms", priority: 0.3 },
+  { path: "privacy", priority: 0.3 },
 ];
 
 export const dynamic = "force-static";
