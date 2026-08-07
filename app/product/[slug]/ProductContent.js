@@ -18,10 +18,10 @@ export default function ProductContent({ product }) {
         { label: product.name },
       ]} />
       <SlideUp>
-        <section className="border-b border-[#e5e5e5] bg-[#fafafa] py-20">
+        <section className="border-b border-[#E8E0D8] bg-[#F9F8F6] py-20">
           <div className="mx-auto max-w-5xl px-4 text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#666666]">Product Page</p>
-            <h1 className="mt-5 font-serif text-5xl font-semibold text-[#111111]">{product.name}</h1>
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#8B7355]">Product Page</p>
+            <h1 className="mt-5 font-serif text-5xl font-semibold text-[#26110B]">{product.name}</h1>
           </div>
         </section>
       </SlideUp>
@@ -30,7 +30,7 @@ export default function ProductContent({ product }) {
         <section className="py-20">
           <div className="mx-auto grid max-w-6xl gap-12 px-4 lg:grid-cols-2">
             <motion.div
-              className="relative overflow-hidden rounded-[2rem] border border-[#e5e5e5] bg-[linear-gradient(135deg,#f5f5f5_0%,#ffffff_50%,#ececec_100%)] shadow-sm min-h-[300px]"
+              className="relative overflow-hidden rounded-[2rem] border border-[#E8E0D8] bg-[linear-gradient(135deg,#f5f5f5_0%,#ffffff_50%,#ececec_100%)] shadow-sm min-h-[300px]"
               whileHover={{ scale: 1.02 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
             >
@@ -46,13 +46,13 @@ export default function ProductContent({ product }) {
             </motion.div>
             <StaggerContainer>
               <StaggerItem>
-                <p className="text-sm font-semibold uppercase tracking-[0.35em] text-[#666666]">Premium Cake</p>
+                <p className="text-sm font-semibold uppercase tracking-[0.35em] text-[#8B7355]">Premium Cake</p>
               </StaggerItem>
               <StaggerItem>
-                <p className="mt-4 text-2xl font-semibold text-[#111111]">{priceLabel}</p>
+                <p className="mt-4 text-2xl font-semibold text-[#26110B]">{priceLabel}</p>
               </StaggerItem>
               <StaggerItem>
-                <p className="mt-6 max-w-xl leading-8 text-[#333333]">{product.description}</p>
+                <p className="mt-6 max-w-xl leading-8 text-[#8B7355]">{product.description}</p>
               </StaggerItem>
               <StaggerItem>
                 <ProductOrder product={product} />

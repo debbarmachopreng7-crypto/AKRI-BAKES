@@ -5,7 +5,8 @@ import { useMemo, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "../../components/CartContext";
 import { deliveryAreas, getDeliveryCharge } from "../../components/deliveryAreas";
-import { UPI_APPS, generateUPILink } from "../../components/upiConfig";
+import { UPI_CONFIG, UPI_APPS, generateUPILink, copyUPIId } from "../../components/upiConfig";
+import { QRCodeSVG } from "qrcode.react";
 import Breadcrumbs from "../../components/Breadcrumbs";
 
 const timeSlots = [
@@ -31,6 +32,8 @@ export default function CheckoutPage() {
   const [payment, setPayment] = useState(null);
   const [selectedApp, setSelectedApp] = useState(null);
   const [upiPaid, setUpiPaid] = useState(false);
+  const [upiRef, setUpiRef] = useState("");
+  const [copied, setCopied] = useState(false);
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
@@ -61,6 +64,8 @@ export default function CheckoutPage() {
     setPayment(null);
     setSelectedApp(null);
     setUpiPaid(false);
+    setUpiRef("");
+    setCopied(false);
     setFieldErrors({});
     setError("");
   };
@@ -81,6 +86,7 @@ export default function CheckoutPage() {
     setPayment(app.id);
     setUpiPaid(true);
     const ref = `AKRI-${Date.now().toString(36).toUpperCase()}`;
+    setUpiRef(ref);
     window.open(generateUPILink(total, ref, app.id), "_blank");
   };
 
@@ -90,7 +96,26 @@ export default function CheckoutPage() {
     setSelectedApp(null);
     setUpiPaid(true);
     const ref = `AKRI-${Date.now().toString(36).toUpperCase()}`;
+    setUpiRef(ref);
     window.open(generateUPILink(total, ref), "_blank");
+  };
+
+  const handleQRTap = () => {
+    if (!validate()) return;
+    setPayment("qr");
+    setSelectedApp(null);
+    setUpiPaid(true);
+    setUpiRef(`AKRI-${Date.now().toString(36).toUpperCase()}`);
+  };
+
+  const handleCopyUPI = async () => {
+    try {
+      await copyUPIId();
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setError("Could not copy UPI ID automatically — please note it down.");
+    }
   };
 
   const handleConfirmUPI = async () => {
@@ -308,6 +333,19 @@ export default function CheckoutPage() {
                   <span>Pay via UPI</span>
                 </button>
 
+                {/* Scan QR (desktop fallback) */}
+                <button type="button" onClick={handleQRTap}
+                  className="flex w-full items-center gap-3 rounded-2xl border border-dashed border-[#BC6153]/60 px-4 py-3.5 text-left text-sm font-medium text-[#BC6153] transition hover:bg-[#BC6153]/5">
+                  <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <rect x="3" y="3" width="7" height="7" rx="1" />
+                    <rect x="14" y="3" width="7" height="7" rx="1" />
+                    <rect x="3" y="14" width="7" height="7" rx="1" />
+                    <path d="M14 14h3v3h-3z" />
+                    <path d="M20 14v3M14 20h3M17 20h3v-3" />
+                  </svg>
+                  <span>Pay by scanning a QR code</span>
+                </button>
+
                 {/* GPay / Paytm / PhonePe */}
                 <div className="grid grid-cols-3 gap-2 sm:gap-3">
                   {UPI_APPS.map((app) => (
@@ -320,8 +358,35 @@ export default function CheckoutPage() {
                 </div>
               </div>
 
+              {/* QR card */}
+              {payment === "qr" ? (
+                <div className="mt-5 rounded-2xl border border-[#E8E0D8] bg-[#F9F8F6] p-6 text-center">
+                  <p className="text-sm font-semibold text-[#26110B]">Scan with any UPI app</p>
+                  <p className="mt-1 text-xs text-[#8B7355]">Open GPay, PhonePe or Paytm &amp; scan to pay <strong>₹{total}</strong></p>
+                  <div className="mx-auto mt-4 inline-block rounded-2xl bg-white p-4 shadow-sm">
+                    <QRCodeSVG value={generateUPILink(total, upiRef)} size={180} marginSize={2} />
+                  </div>
+                  <p className="mt-4 text-xs text-[#8B7355]">Prefer to type it in? Pay to</p>
+                  <div className="mt-2 flex items-center justify-center gap-2">
+                    <span className="rounded-full border border-[#E8E0D8] bg-white px-4 py-1.5 text-sm font-semibold text-[#26110B]">
+                      {UPI_CONFIG.UPI_ID}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={handleCopyUPI}
+                      className="rounded-full bg-[#26110B] px-4 py-1.5 text-xs font-medium text-white transition hover:bg-[#3D2219]"
+                    >
+                      {copied ? "Copied!" : "Copy"}
+                    </button>
+                  </div>
+                  <p className="mt-4 text-xs text-[#8B7355]">
+                    After paying, tap <strong>Place Order</strong> below to confirm.
+                  </p>
+                </div>
+              ) : null}
+
               {/* Message shown after any UPI payment tap */}
-              {(payment === "upi" || (selectedApp && payment === selectedApp.id)) ? (
+              {(payment === "upi" || payment === "qr" || (selectedApp && payment === selectedApp.id)) ? (
                 <p className="mt-3 text-xs text-[#8B7355] text-center">
                   Pay ₹{total} in the app, then tap <strong>Place Order</strong> below.
                 </p>
@@ -353,7 +418,7 @@ export default function CheckoutPage() {
 
               {error ? <p className="mt-4 text-sm font-medium text-red-600">{error}</p> : null}
 
-              {payment === "upi" || (selectedApp && payment === selectedApp.id) ? (
+              {payment === "upi" || payment === "qr" || (selectedApp && payment === selectedApp.id) ? (
                 <button type="button" onClick={handleConfirmUPI} disabled={!upiPaid || submitting}
                   className="mt-5 inline-flex w-full justify-center rounded-full bg-[#BC6153] px-6 py-3 font-medium text-white transition hover:bg-[#A85547] disabled:opacity-50 disabled:cursor-not-allowed">
                   {submitting ? "Placing Order…" : "Place Order"}

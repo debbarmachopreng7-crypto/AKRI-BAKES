@@ -66,8 +66,10 @@ export function generateUPILink(amount, orderRef, appId) {
   return `upi://pay?${params.toString()}`;
 }
 
-export function copyUPIId() {
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(UPI_CONFIG.UPI_ID);
+export async function copyUPIId() {
+  if (navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(UPI_CONFIG.UPI_ID);
+    return;
   }
+  throw new Error("Clipboard not available");
 }

@@ -91,29 +91,29 @@ function SettingsPanel() {
   return (
     <div className="mt-12">
       <button type="button" onClick={() => setShow(!show)}
-        className="inline-flex items-center gap-2 rounded-full border border-[#e5e5e5] px-5 py-2.5 text-sm font-medium text-[#333333] transition hover:bg-[#f5f5f5]">
+        className="inline-flex items-center gap-2 rounded-full border border-[#E8E0D8] px-5 py-2.5 text-sm font-medium text-[#26110B] transition hover:bg-[#f5f5f5]">
         {show ? "Hide Settings" : "Settings"}
       </button>
 
       {show ? (
-        <div className="mt-6 rounded-[2rem] border border-[#e5e5e5] bg-white p-8 shadow-sm">
-          <h3 className="font-serif text-2xl font-semibold text-[#111111]">Change Password</h3>
-          <p className="mt-2 text-sm text-[#666666]">
+        <div className="mt-6 rounded-[2rem] border border-[#E8E0D8] bg-white p-8 shadow-sm">
+          <h3 className="font-serif text-2xl font-semibold text-[#26110B]">Change Password</h3>
+          <p className="mt-2 text-sm text-[#8B7355]">
             Default password: <code className="rounded bg-[#f5f5f5] px-2 py-0.5 text-xs">akribakes2026</code>
           </p>
 
           <div className="mt-6 grid gap-4 max-w-md">
             <input type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)}
               placeholder="Current password" autoComplete="current-password"
-              className="w-full rounded-2xl border border-[#e5e5e5] bg-[#fafafa] px-4 py-3 text-sm text-[#111111] outline-none focus:border-[#111111]" />
+              className="w-full rounded-2xl border border-[#E8E0D8] bg-[#F9F8F6] px-4 py-3 text-sm text-[#26110B] outline-none focus:border-[#26110B]" />
             <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)}
               placeholder="New password (min 6 chars)" autoComplete="new-password"
-              className="w-full rounded-2xl border border-[#e5e5e5] bg-[#fafafa] px-4 py-3 text-sm text-[#111111] outline-none focus:border-[#111111]" />
+              className="w-full rounded-2xl border border-[#E8E0D8] bg-[#F9F8F6] px-4 py-3 text-sm text-[#26110B] outline-none focus:border-[#26110B]" />
             <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Confirm new password" autoComplete="new-password"
-              className="w-full rounded-2xl border border-[#e5e5e5] bg-[#fafafa] px-4 py-3 text-sm text-[#111111] outline-none focus:border-[#111111]" />
+              className="w-full rounded-2xl border border-[#E8E0D8] bg-[#F9F8F6] px-4 py-3 text-sm text-[#26110B] outline-none focus:border-[#26110B]" />
             <button type="button" onClick={handleChangePassword}
-              className="rounded-full bg-[#111111] px-6 py-3 text-sm font-medium text-white transition hover:bg-[#333333]">
+              className="rounded-full bg-[#26110B] px-6 py-3 text-sm font-medium text-white transition hover:bg-[#3D2219]">
               Change Password
             </button>
           </div>
@@ -124,9 +124,9 @@ function SettingsPanel() {
             </p>
           ) : null}
 
-          <div className="mt-8 border-t border-[#e5e5e5] pt-6">
-            <h4 className="text-sm font-semibold text-[#666666]">Forgot Password?</h4>
-            <p className="mt-2 text-sm text-[#333333]">
+          <div className="mt-8 border-t border-[#E8E0D8] pt-6">
+            <h4 className="text-sm font-semibold text-[#8B7355]">Forgot Password?</h4>
+            <p className="mt-2 text-sm text-[#26110B]">
               Contact the store at <strong>8259917757</strong> to have the password reset, or click below to reset to default.
             </p>
             <button type="button" onClick={handleResetToDefault}
@@ -168,11 +168,11 @@ export default function AdminPage() {
     <AdminGate>
       <main>
         <Breadcrumbs items={[{ label: "Admin" }]} />
-        <section className="border-b border-[#e5e5e5] bg-[#fafafa] py-20">
+        <section className="border-b border-[#E8E0D8] bg-[#F9F8F6] py-20">
           <div className="mx-auto max-w-5xl px-4 text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#666666]">Staff Area</p>
-            <h1 className="mt-5 font-serif text-5xl font-semibold text-[#111111]">Admin Dashboard</h1>
-            <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-[#333333]">Track today&apos;s orders, custom cake requests, and what is ready for pickup.</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#8B7355]">Staff Area</p>
+            <h1 className="mt-5 font-serif text-5xl font-semibold text-[#26110B]">Admin Dashboard</h1>
+            <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-[#26110B]">Track today&apos;s orders, custom cake requests, and what is ready for pickup.</p>
           </div>
         </section>
 
@@ -183,11 +183,11 @@ export default function AdminPage() {
                 <button key={title} type="button" onClick={() => setActiveFilter(title === "Today's Orders" ? "today" : title === "Awaiting Payment" ? "awaiting-payment" : title)}
                   className={`rounded-[2rem] border p-7 text-center shadow-sm transition ${
                     activeFilter === (title === "Today's Orders" ? "today" : title === "Custom Cakes" ? "custom" : title === "Awaiting Payment" ? "awaiting-payment" : title)
-                      ? "border-[#111111] bg-[#111111] text-white"
-                      : "border-[#e5e5e5] bg-white text-[#333333] hover:bg-[#f5f5f5]"
+                      ? "border-[#26110B] bg-[#26110B] text-white"
+                      : "border-[#E8E0D8] bg-white text-[#26110B] hover:bg-[#f5f5f5]"
                   }`}>
                   <p className="text-xs font-semibold uppercase tracking-[0.3em]">{title}</p>
-                  <p className={`mt-4 font-serif text-5xl font-semibold ${activeFilter === (title === "Today's Orders" ? "today" : title === "Custom Cakes" ? "custom" : title) ? "text-white" : "text-[#111111]"}`}>
+                  <p className={`mt-4 font-serif text-5xl font-semibold ${activeFilter === (title === "Today's Orders" ? "today" : title === "Custom Cakes" ? "custom" : title) ? "text-white" : "text-[#26110B]"}`}>
                     {value}
                   </p>
                 </button>
@@ -199,8 +199,8 @@ export default function AdminPage() {
                 <button key={f.id} type="button" onClick={() => setActiveFilter(f.id)}
                   className={`rounded-full px-5 py-2 text-sm font-medium transition ${
                     activeFilter === f.id
-                      ? "bg-[#111111] text-white"
-                      : "border border-[#e5e5e5] bg-white text-[#333333] hover:bg-[#f5f5f5]"
+                      ? "bg-[#26110B] text-white"
+                      : "border border-[#E8E0D8] bg-white text-[#26110B] hover:bg-[#f5f5f5]"
                   }`}>
                   {f.label}
                 </button>
@@ -208,12 +208,12 @@ export default function AdminPage() {
             </div>
 
             <div>
-              <h2 className="font-serif text-3xl font-semibold text-[#111111]">Orders</h2>
+              <h2 className="font-serif text-3xl font-semibold text-[#26110B]">Orders</h2>
 
               {!ready ? (
-                <div className="mt-6 text-[#333333]">Loading orders…</div>
+                <div className="mt-6 text-[#26110B]">Loading orders…</div>
               ) : filteredOrders.length === 0 ? (
-                <div className="mt-6 rounded-[2rem] border border-[#e5e5e5] bg-white p-10 text-center text-[#333333] shadow-sm">
+                <div className="mt-6 rounded-[2rem] border border-[#E8E0D8] bg-white p-10 text-center text-[#26110B] shadow-sm">
                   No orders found for this filter.
                 </div>
               ) : (
@@ -222,33 +222,33 @@ export default function AdminPage() {
                     const hasPhoto = order.items?.some((item) => item.inspirationPhoto);
                     return (
                       <div key={order.orderId} className={`rounded-[2rem] border bg-white p-6 shadow-sm ${
-                        hasPhoto ? "border-amber-300" : "border-[#e5e5e5]"
+                        hasPhoto ? "border-amber-300" : "border-[#E8E0D8]"
                       }`}>
                         <div className="flex flex-wrap items-start justify-between gap-4">
                           <div>
                             <div className="flex items-center gap-3">
-                              <p className="font-serif text-xl font-semibold text-[#111111]">{order.orderId}</p>
-                              <span className={`rounded-full px-3 py-1 text-xs font-medium ${order.method === "Delivery" ? "bg-[#111111] text-white" : "border border-[#e5e5e5] text-[#333333]"}`}>
+                              <p className="font-serif text-xl font-semibold text-[#26110B]">{order.orderId}</p>
+                              <span className={`rounded-full px-3 py-1 text-xs font-medium ${order.method === "Delivery" ? "bg-[#26110B] text-white" : "border border-[#E8E0D8] text-[#26110B]"}`}>
                                 {order.method || "Pickup"}
                               </span>
                               {order.hasCustomCake ? (
-                                <span className="rounded-full bg-[#111111] px-3 py-1 text-xs font-medium text-white">Custom Cake</span>
+                                <span className="rounded-full bg-[#26110B] px-3 py-1 text-xs font-medium text-white">Custom Cake</span>
                               ) : null}
                               {hasPhoto ? (
                                 <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-800">Inspo Photo</span>
                               ) : null}
                             </div>
-                            <p className="mt-2 text-sm text-[#333333]">{order.name} • {order.phone}</p>
-                            <p className="mt-1 text-sm text-[#666666]">
+                            <p className="mt-2 text-sm text-[#26110B]">{order.name} • {order.phone}</p>
+                            <p className="mt-1 text-sm text-[#8B7355]">
                               {order.method === "Delivery" ? "Delivery" : "Pickup"}: {order.pickupDate} {order.pickupTime} • {order.payment}
                               {order.createdAt ? ` • ${new Date(order.createdAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}` : ""}
                             </p>
                             {order.method === "Delivery" ? (
-                              <p className="mt-1 text-sm text-[#666666]">
+                              <p className="mt-1 text-sm text-[#8B7355]">
                                 To: {order.deliveryArea} (₹{order.deliveryCharge}) — {order.address}
                               </p>
                             ) : null}
-                            <ul className="mt-3 space-y-2 text-sm text-[#333333]">
+                            <ul className="mt-3 space-y-2 text-sm text-[#26110B]">
                               {order.items.map((item) => {
                                 const quantity = item.quantity ?? 1;
                                 const isCustom = item.type === "custom";
@@ -258,11 +258,11 @@ export default function AdminPage() {
                                       <div>
                                         <span className="font-medium">{item.name}</span>
                                         {isCustom ? (
-                                          <div className="mt-1 text-xs text-[#666666]">
+                                          <div className="mt-1 text-xs text-[#8B7355]">
                                             {item.occasion} • {item.flavor} • {item.frosting} • {item.decoration}
                                           </div>
                                         ) : null}
-                                        <div className="mt-1 text-xs text-[#666666]">
+                                        <div className="mt-1 text-xs text-[#8B7355]">
                                           ({item.size}){quantity > 1 ? ` × ${quantity}` : ""}
                                           {item.message ? <span className="italic"> — &ldquo;{item.message}&rdquo;</span> : ""}
                                         </div>
@@ -282,7 +282,7 @@ export default function AdminPage() {
                           </div>
 
                           <div className="text-right">
-                            <p className="text-lg font-semibold text-[#111111]">₹{order.total}</p>
+                            <p className="text-lg font-semibold text-[#26110B]">₹{order.total}</p>
                             <div className="mt-3 flex flex-wrap justify-end gap-2">
                               {statuses.map((status) => (
                                 <button
@@ -291,8 +291,8 @@ export default function AdminPage() {
                                   onClick={() => updateOrderStatus(order.orderId, status)}
                                   className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${
                                     order.status === status
-                                      ? "border-[#111111] bg-[#111111] text-white"
-                                      : "border-[#e5e5e5] bg-white text-[#333333] hover:bg-[#f5f5f5]"
+                                      ? "border-[#26110B] bg-[#26110B] text-white"
+                                      : "border-[#E8E0D8] bg-white text-[#26110B] hover:bg-[#f5f5f5]"
                                   }`}
                                 >
                                   {status}
@@ -310,7 +310,7 @@ export default function AdminPage() {
           </div>
         </section>
 
-        <section className="border-t border-[#e5e5e5] py-16">
+        <section className="border-t border-[#E8E0D8] py-16">
           <div className="mx-auto max-w-6xl px-4">
             <SettingsPanel />
           </div>

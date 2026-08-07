@@ -165,26 +165,26 @@ export default function AdminGate({ children }) {
   if (!authed) {
     return (
       <main className="flex min-h-[70vh] items-center justify-center px-4 py-20">
-        <div className="w-full max-w-sm rounded-[2rem] border border-[#e5e5e5] bg-white p-8 text-center shadow-sm">
+        <div className="w-full max-w-sm rounded-[2rem] border border-[#E8E0D8] bg-white p-8 text-center shadow-sm">
 
           {/* ── Password Login ─────────────────────────────────── */}
           {step === "login" ? (
             <form onSubmit={handlePasswordLogin}>
-              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#666666]">Staff Area</p>
-              <h1 className="mt-4 font-serif text-3xl font-semibold text-[#111111]">Admin Login</h1>
-              <p className="mt-3 text-sm text-[#666666]">Enter the admin password to continue.</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#8B7355]">Staff Area</p>
+              <h1 className="mt-4 font-serif text-3xl font-semibold text-[#26110B]">Admin Login</h1>
+              <p className="mt-3 text-sm text-[#8B7355]">Enter the admin password to continue.</p>
               <input type="password" value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Staff password" autoFocus
-                className="mt-6 w-full rounded-full border border-[#e5e5e5] px-5 py-3 text-center text-[#111111] outline-none focus:border-[#111111]"
+                className="mt-6 w-full rounded-full border border-[#E8E0D8] px-5 py-3 text-center text-[#26110B] outline-none focus:border-[#26110B]"
               />
               {passwordError ? <p className="mt-3 text-sm text-red-600">{passwordError}</p> : null}
               <button type="submit"
-                className="mt-6 w-full rounded-full bg-[#111111] px-6 py-3 font-medium text-white transition hover:bg-[#333333]">
+                className="mt-6 w-full rounded-full bg-[#26110B] px-6 py-3 font-medium text-white transition hover:bg-[#3D2219]">
                 Unlock Dashboard
               </button>
               <button type="button" onClick={() => { setStep("forgot"); setOtpError(""); }}
-                className="mt-6 text-xs text-[#666666] underline hover:text-[#111111]">
+                className="mt-6 text-xs text-[#8B7355] underline hover:text-[#26110B]">
                 Forgot password?
               </button>
             </form>
@@ -193,11 +193,11 @@ export default function AdminGate({ children }) {
           {/* ── Forgot Password (OTP → new password) ──────────── */}
           {step === "forgot" ? (
             <>
-              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#666666]">Reset Password</p>
-              <h1 className="mt-4 font-serif text-3xl font-semibold text-[#111111]">
+              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#8B7355]">Reset Password</p>
+              <h1 className="mt-4 font-serif text-3xl font-semibold text-[#26110B]">
                 {resetDone ? "Set New Password" : "Verify Your Identity"}
               </h1>
-              <p className="mt-3 text-sm text-[#666666]">
+              <p className="mt-3 text-sm text-[#8B7355]">
                 {resetDone
                   ? "Choose a new admin password."
                   : "Enter your email to receive a one-time password."}
@@ -207,7 +207,7 @@ export default function AdminGate({ children }) {
                 <div className="mt-6 space-y-4">
                   <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter email" autoFocus
-                    className="w-full rounded-2xl border border-[#e5e5e5] bg-[#fafafa] px-5 py-3 text-center text-[#111111] outline-none focus:border-[#111111]"
+                    className="w-full rounded-2xl border border-[#E8E0D8] bg-[#F9F8F6] px-5 py-3 text-center text-[#26110B] outline-none focus:border-[#26110B]"
                     disabled={otpSent}
                   />
 
@@ -217,20 +217,20 @@ export default function AdminGate({ children }) {
                       {otpDev ? <p className="text-xs text-amber-600">{otpDev}</p> : null}
                       <input type="text" value={otp} onChange={(e) => setOtp(e.target.value)}
                         placeholder="Enter 6-digit OTP" autoFocus maxLength={6}
-                        className="w-full rounded-2xl border border-[#e5e5e5] bg-[#fafafa] px-5 py-3 text-center text-xl font-bold tracking-[0.3em] text-[#111111] outline-none focus:border-[#111111]"
+                        className="w-full rounded-2xl border border-[#E8E0D8] bg-[#F9F8F6] px-5 py-3 text-center text-xl font-bold tracking-[0.3em] text-[#26110B] outline-none focus:border-[#26110B]"
                       />
                       <button type="button" onClick={handleVerifyOTP} disabled={otpLoading}
-                        className="w-full rounded-full bg-[#111111] px-6 py-3 font-medium text-white transition hover:bg-[#333333] disabled:opacity-60">
+                        className="w-full rounded-full bg-[#26110B] px-6 py-3 font-medium text-white transition hover:bg-[#3D2219] disabled:opacity-60">
                         {otpLoading ? "Verifying…" : "Verify OTP"}
                       </button>
                       <button type="button" onClick={() => { setOtpSent(false); setOtp(""); setOtpError(""); }}
-                        className="text-xs text-[#666666] underline hover:text-[#111111]">
+                        className="text-xs text-[#8B7355] underline hover:text-[#26110B]">
                         Change email / Resend
                       </button>
                     </>
                   ) : (
                     <button type="button" onClick={handleSendOTP} disabled={otpLoading}
-                      className="w-full rounded-full bg-[#111111] px-6 py-3 font-medium text-white transition hover:bg-[#333333] disabled:opacity-60">
+                      className="w-full rounded-full bg-[#26110B] px-6 py-3 font-medium text-white transition hover:bg-[#3D2219] disabled:opacity-60">
                       {otpLoading ? "Sending…" : "Send OTP"}
                     </button>
                   )}
@@ -242,24 +242,24 @@ export default function AdminGate({ children }) {
                   <input type="password" value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     placeholder="New password" autoFocus
-                    className="w-full rounded-full border border-[#e5e5e5] px-5 py-3 text-center text-[#111111] outline-none focus:border-[#111111]"
+                    className="w-full rounded-full border border-[#E8E0D8] px-5 py-3 text-center text-[#26110B] outline-none focus:border-[#26110B]"
                   />
                   <input type="password" value={newPasswordConfirm}
                     onChange={(e) => setNewPasswordConfirm(e.target.value)}
                     placeholder="Confirm new password"
-                    className="w-full rounded-full border border-[#e5e5e5] px-5 py-3 text-center text-[#111111] outline-none focus:border-[#111111]"
+                    className="w-full rounded-full border border-[#E8E0D8] px-5 py-3 text-center text-[#26110B] outline-none focus:border-[#26110B]"
                   />
                   {otpError ? <p className="text-sm text-red-600">{otpError}</p> : null}
                   <button type="submit"
-                    className="w-full rounded-full bg-[#111111] px-6 py-3 font-medium text-white transition hover:bg-[#333333]">
+                    className="w-full rounded-full bg-[#26110B] px-6 py-3 font-medium text-white transition hover:bg-[#3D2219]">
                     Update Password
                   </button>
                 </form>
               )}
 
-              <div className="mt-8 border-t border-[#e5e5e5] pt-6">
+              <div className="mt-8 border-t border-[#E8E0D8] pt-6">
                 <button type="button" onClick={() => { setStep("login"); setOtpError(""); setOtpSent(false); setOtp(""); setResetDone(false); }}
-                  className="text-xs text-[#666666] underline hover:text-[#111111]">
+                  className="text-xs text-[#8B7355] underline hover:text-[#26110B]">
                   Back to login
                 </button>
               </div>
@@ -276,7 +276,7 @@ export default function AdminGate({ children }) {
       <div className="mx-auto flex max-w-6xl items-center justify-end gap-4 px-4 pt-6">
         <span className="text-xs text-[#999999]">Akribake2020@gmail.com</span>
         <button type="button" onClick={handleLogout}
-          className="rounded-full border border-[#e5e5e5] px-4 py-2 text-xs font-medium text-[#333333] transition hover:bg-[#f5f5f5]">
+          className="rounded-full border border-[#E8E0D8] px-4 py-2 text-xs font-medium text-[#26110B] transition hover:bg-[#f5f5f5]">
           Log out
         </button>
       </div>
