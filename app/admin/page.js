@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useCart } from "../../components/CartContext";
+import { usePageTitle } from "../../components/usePageTitle";
 import AdminGate from "../../components/AdminGate";
 import Breadcrumbs from "../../components/Breadcrumbs";
 
@@ -141,6 +142,7 @@ function SettingsPanel() {
 }
 
 export default function AdminPage() {
+  usePageTitle("Admin | Akri Bakes");
   const { orders, ready, updateOrderStatus } = useCart();
   const [activeFilter, setActiveFilter] = useState("all");
   const [photoModal, setPhotoModal] = useState(null);

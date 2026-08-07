@@ -68,9 +68,17 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <body className="min-h-screen overflow-x-hidden bg-[#F9F8F6] text-[#26110B] antialiased">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-[#26110B] focus:px-5 focus:py-2.5 focus:text-sm focus:font-medium focus:text-white"
+        >
+          Skip to content
+        </a>
         <CartProvider>
           <Navbar />
-          {children}
+          <div id="main-content" tabIndex={-1} className="outline-none">
+            {children}
+          </div>
           <Footer />
         </CartProvider>
         <script

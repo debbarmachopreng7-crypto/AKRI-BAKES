@@ -2,6 +2,7 @@
 
 import { Suspense } from "react";
 import Link from "next/link";
+import { usePageTitle } from "../../components/usePageTitle";
 import { useSearchParams } from "next/navigation";
 import { useCart } from "../../components/CartContext";
 import { UPI_CONFIG, UPI_APPS, generateUPILink } from "../../components/upiConfig";
@@ -135,6 +136,7 @@ function Confirmation() {
 }
 
 export default function OrderConfirmationPage() {
+  usePageTitle("Order Confirmation | Akri Bakes");
   return (
     <main>
       <section className="flex min-h-[70vh] items-center border-b border-[#E8E0D8] bg-[#F9F8F6] py-20">

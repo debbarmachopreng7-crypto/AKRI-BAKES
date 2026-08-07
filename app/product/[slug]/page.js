@@ -43,6 +43,14 @@ export function generateStaticParams() {
   return Object.keys(products).map((slug) => ({ slug }));
 }
 
+export async function generateMetadata({ params }) {
+  const product = products[params.slug] ?? products["dark-chocolate-truffle"];
+  return {
+    title: product.name,
+    description: `${product.description} Order ${product.name} from Akri Bakes, Dimapur, Nagaland. Prices from ₹${product.price1}.`,
+  };
+}
+
 export default function ProductPage({ params }) {
   const product = products[params.slug] ?? products["dark-chocolate-truffle"];
   return <ProductContent product={product} />;

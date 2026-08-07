@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePageTitle } from "../../components/usePageTitle";
 import { useCart } from "../../components/CartContext";
 import { getCakeImage } from "../../lib/cakeImages";
 import Breadcrumbs from "../../components/Breadcrumbs";
@@ -99,6 +100,7 @@ function ItemDetails({ item }) {
 }
 
 export default function CartPage() {
+  usePageTitle("Your Cart | Akri Bakes");
   const { items, removeItem, updateQuantity, subtotal, count, ready } = useCart();
   const [selected, setSelected] = useState(new Set());
   const [confirmOpen, setConfirmOpen] = useState(false);

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { usePageTitle } from "../../components/usePageTitle";
 import Link from "next/link";
 import { FadeIn } from "../../components/animations";
 import { ASSET_PREFIX } from "../../lib/cakeImages";
@@ -104,6 +105,7 @@ function InstagramIcon({ className = "h-4 w-4" }) {
 }
 
 export default function GalleryPage() {
+  usePageTitle("Gallery | Akri Bakes");
   const [active, setActive] = useState("All");
   const [lightbox, setLightbox] = useState(null);
 

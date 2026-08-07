@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePageTitle } from "../../components/usePageTitle";
 import { useRouter, usePathname } from "next/navigation";
 import { useCart } from "../../components/CartContext";
 import { motion } from "framer-motion";
@@ -271,5 +272,6 @@ function CakesContent() {
 }
 
 export default function CakesPage() {
+  usePageTitle("Cakes & Pastries | Akri Bakes");
   return <CakesContent />;
 }

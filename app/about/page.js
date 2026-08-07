@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { usePageTitle } from "../../components/usePageTitle";
 import { FadeIn, SlideUp, StaggerContainer, StaggerItem } from "../../components/animations";
 import { ASSET_PREFIX } from "../../lib/cakeImages";
 
@@ -81,6 +82,7 @@ const stats = [
 ];
 
 export default function AboutPage() {
+  usePageTitle("About Us | Akri Bakes");
   return (
     <main>
       {/* ── HERO ─────────────────────────────────────────────── */}

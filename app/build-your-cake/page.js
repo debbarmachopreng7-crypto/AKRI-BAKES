@@ -2,6 +2,7 @@
 
 import { useMemo, useRef, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { usePageTitle } from "../../components/usePageTitle";
 import { useCart } from "../../components/CartContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { FadeIn, SlideUp, ScaleOnHover } from "../../components/animations";
@@ -95,6 +96,7 @@ function toBase64(file) {
 }
 
 export default function BuildYourCakePage() {
+  usePageTitle("Build Your Cake | Akri Bakes");
   const router = useRouter();
   const { addItem } = useCart();
 

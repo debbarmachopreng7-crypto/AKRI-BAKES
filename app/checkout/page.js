@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState, useEffect } from "react";
+import { usePageTitle } from "../../components/usePageTitle";
 import { useRouter } from "next/navigation";
 import { useCart } from "../../components/CartContext";
 import { deliveryAreas, getDeliveryCharge } from "../../components/deliveryAreas";
@@ -15,6 +16,7 @@ const timeSlots = [
 ];
 
 export default function CheckoutPage() {
+  usePageTitle("Checkout | Akri Bakes");
   const router = useRouter();
   const { items, subtotal, placeOrder, ready } = useCart();
 

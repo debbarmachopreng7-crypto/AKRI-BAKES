@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
+import { usePageTitle } from "../../components/usePageTitle";
 import { useRouter } from "next/navigation";
 import { useCart } from "../../components/CartContext";
 import { motion } from "framer-motion";
@@ -307,6 +308,7 @@ const tabIds = [
 ];
 
 export default function MenuPage() {
+  usePageTitle("Menu | Akri Bakes");
   const [ordering, setOrdering] = useState(null);
   const [activeTab, setActiveTab] = useState("plain");
   const [searchQuery, setSearchQuery] = useState("");
