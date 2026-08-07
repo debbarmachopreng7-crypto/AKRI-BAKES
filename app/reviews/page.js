@@ -3,6 +3,9 @@ export const metadata = {
   description: "What our customers say about Akri Bakes — real reviews from weddings, birthdays and celebrations across Dimapur.",
 };
 
+const GOOGLE_REVIEWS_URL =
+  "https://www.google.com/maps/search/?api=1&query=Akri+Bakes+Zion+Hospital+Road+Purana+Bazar+Dimapur";
+
 const reviews = [
   {
     name: "Esther & Neeraj",
@@ -24,14 +27,14 @@ const reviews = [
     tag: "Google Review",
     text: "Thank you so much, it was really awesome — I loved it. The cake was just amazing, and the package of sweet cookies looks perfectly great and delightful. I would love to make an order again in the coming time.",
     source: "Google",
-    href: "https://restaurant-guru.in/Akri-bakes-Dimapur",
+    href: GOOGLE_REVIEWS_URL,
   },
   {
     name: "Mikatoli",
     tag: "Google Review",
     text: "Thank you @akri_bakes — making a cake in 11 hours is not that easy, but you made it. For my dad and my birthday, it was spent so well (8th Feb 2022). Loved to order more in the coming days.",
     source: "Google",
-    href: "https://restaurant-guru.in/Akri-bakes-Dimapur",
+    href: GOOGLE_REVIEWS_URL,
   },
   {
     name: "@the_naga_maiki",
@@ -42,11 +45,11 @@ const reviews = [
   },
 ];
 
-function Stars() {
+function Stars({ count = 5 }) {
   return (
-    <div className="flex gap-1 text-[#BC6153]" aria-label="5 out of 5 stars">
+    <div className="flex gap-1 text-[#BC6153]" aria-label={`${count} out of 5 stars`}>
       {Array.from({ length: 5 }).map((_, i) => (
-        <svg key={i} width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <svg key={i} width="16" height="16" viewBox="0 0 24 24" fill={i < count ? "currentColor" : "#E8E0D8"} aria-hidden="true">
           <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
         </svg>
       ))}
@@ -61,11 +64,24 @@ export default function ReviewsPage() {
         <div className="mx-auto max-w-4xl px-4 text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#8B7355]">Customer Feedback</p>
           <h1 className="mt-5 font-serif text-5xl font-semibold text-[#26110B]">Customer Reviews</h1>
-          <div className="mt-8 inline-flex flex-col items-center gap-3 rounded-[2rem] border border-[#E8E0D8] bg-white px-10 py-6 shadow-sm">
-            <Stars />
-            <p className="font-serif text-2xl font-bold text-[#26110B]">5.0</p>
-            <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#8B7355]">From our customers</p>
-          </div>
+          <a
+            href={GOOGLE_REVIEWS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group mt-8 inline-flex flex-col items-center gap-3 rounded-[2rem] border border-[#E8E0D8] bg-white px-10 py-6 shadow-sm transition hover:-translate-y-0.5 hover:border-[#BC6153] hover:shadow-md"
+          >
+            <Stars count={4} />
+            <p className="font-serif text-2xl font-bold text-[#26110B]">3.9</p>
+            <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#8B7355]">
+              Google rating · 25 reviews
+            </p>
+            <p className="flex items-center gap-1.5 text-xs font-semibold text-[#BC6153]">
+              Read all reviews on Google
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" aria-hidden="true">
+                <path d="M7 17L17 7M17 7H8M17 7v9" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </p>
+          </a>
         </div>
       </section>
 
@@ -103,10 +119,18 @@ export default function ReviewsPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#8B7355]">Tried Us Lately?</p>
           <h2 className="mt-5 font-serif text-4xl font-bold text-[#26110B]">We&rsquo;d love to hear from you</h2>
           <p className="mt-4 leading-7 text-[#8B7355]">
-            Tag us in your cake photos on Instagram, or leave us a review — it means the world to a small
-            local bakery.
+            Tag us in your cake photos on Instagram, or leave a review on Google — it means the world to a
+            small local bakery.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
+            <a
+              href={GOOGLE_REVIEWS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-full bg-[#26110B] px-8 py-3 text-sm font-medium text-white transition hover:-translate-y-0.5 hover:bg-[#3D2219]"
+            >
+              Leave a Google Review
+            </a>
             <a
               href="https://www.instagram.com/akribakes/"
               target="_blank"
