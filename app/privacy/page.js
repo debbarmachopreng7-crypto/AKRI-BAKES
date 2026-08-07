@@ -14,7 +14,7 @@ const sections = [
   },
   {
     title: "Where it's stored",
-    body: "Your order is saved in your own browser's local storage on your device — it is not uploaded to any Akri Bakes server. Order details reach us only when you send them to us on WhatsApp or share them over a call.",
+    body: "Your order details are sent securely to Akri Bakes' order system (hosted on Supabase, a GDPR-compliant cloud database) so the store can prepare and fulfil your order. Order details also reach us on WhatsApp or over a call when you share them there. Your data is only ever used to fulfil your order.",
   },
   {
     title: "Payments",
@@ -22,7 +22,7 @@ const sections = [
   },
   {
     title: "Local storage & cookies",
-    body: "We use your browser's local storage to remember your shopping cart between visits and to keep you signed in to the staff area. We do not use advertising trackers or third-party analytics cookies.",
+    body: "We use your browser's local storage to remember your shopping cart between visits and to keep you signed in to the staff area. We do not use advertising trackers or third-party analytics cookies. For data retention, order records are kept as long as needed to fulfil and service your order.",
   },
   {
     title: "Contact details",
