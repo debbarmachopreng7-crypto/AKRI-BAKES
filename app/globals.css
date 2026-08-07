@@ -100,6 +100,22 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+@keyframes wa-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 14px rgba(37, 211, 102, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+  }
+}
+
+.wa-pulse {
+  animation: wa-pulse 2.4s ease-out infinite;
+}
+
 :focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 2px;

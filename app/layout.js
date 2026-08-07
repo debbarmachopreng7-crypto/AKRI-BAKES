@@ -1,5 +1,6 @@
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import WhatsAppFloat from "../components/WhatsAppFloat";
 import { CartProvider } from "../components/CartContext";
 import "./globals.css";
 import { Inter, Playfair_Display } from "next/font/google";
@@ -80,6 +81,7 @@ export default function RootLayout({ children }) {
           </div>
           <Footer />
         </CartProvider>
+        <WhatsAppFloat />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

@@ -41,6 +41,10 @@ export default function Footer() {
           We accept all major UPI applications for local deliveries across Dimapur.
         </p>
 
+        <p className="mt-3 text-center text-xs text-[#8B7355]">
+          Open Monday – Saturday, 9:00 AM – 7:00 PM &middot; Sunday, 10:00 AM – 4:00 PM
+        </p>
+
         <div className="mt-8 flex flex-col items-center justify-between gap-4 sm:flex-row">
           <p className="text-sm text-[#8B7355]">
             &copy; {new Date().getFullYear()} Akri Bakes &middot; Zion Hospital Road, Purana Bazar, Dimapur, Nagaland &middot; 8259917757
