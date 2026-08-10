@@ -497,7 +497,7 @@ export default function HomePage() {
             {[
               { step: "01", title: "Choose", desc: "Pick from our menu or design your own custom cake.", icon: "layers" },
               { step: "02", title: "Confirm", desc: "Place your order online or message us your vision.", icon: "confirm" },
-              { step: "03", title: "We bake", desc: "Handcrafted fresh to order — 7 to 10 days advance.", icon: "bake" },
+              { step: "03", title: "We bake", desc: "Handcrafted fresh to order — 2 to 3 days advance.", icon: "bake" },
               { step: "04", title: "Enjoy", desc: "Pickup in Dimapur or delivery across the city.", icon: "delivery" },
             ].map((item) => (
               <StaggerItem key={item.step}>
@@ -751,7 +751,7 @@ export default function HomePage() {
               Ready to order your dream cake?
             </h2>
             <p className="mx-auto mt-5 max-w-xl text-white/90">
-              Custom cakes need 7&ndash;10 days advance notice. The sooner you tell us your vision, the sweeter the result.
+              Cakes need 2&ndash;3 days advance notice. For bulk orders &amp; events, give us 7&ndash;10 days. The sooner you tell us your vision, the sweeter the result.
             </p>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
               <Link
@@ -790,7 +790,7 @@ export default function HomePage() {
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/50">Hours</p>
               <p className="mt-4 text-lg font-medium">Order in Advance</p>
-              <p className="mt-2 text-sm text-white/60">We require 7&ndash;10 days notice<br />for all custom cake orders</p>
+              <p className="mt-2 text-sm text-white/60">2&ndash;3 days notice for cakes<br />7&ndash;10 days for bulk orders &amp; events</p>
             </div>
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/50">Get in Touch</p>

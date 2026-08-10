@@ -78,7 +78,7 @@ const stats = [
   { value: "10,000+", label: "Instagram Family" },
   { value: "30+", label: "Cake Flavours" },
   { value: "Many", label: "Weddings Served" },
-  { value: "7–10", label: "Days Advance Order" },
+  { value: "2–3", label: "Days Advance Order" },
 ];
 
 export default function AboutPage() {
@@ -313,8 +313,8 @@ export default function AboutPage() {
             <p className="text-xs font-semibold uppercase tracking-[0.35em] text-white/80">Let&rsquo;s Bake Together</p>
             <h2 className="mt-5 font-serif text-4xl font-bold md:text-5xl">Ready to celebrate?</h2>
             <p className="mx-auto mt-5 max-w-xl text-white/90">
-              Pick a cake from our menu, or tell us your vision and we&rsquo;ll bring it to life. Custom cakes
-              need 7&ndash;10 days advance notice.
+              Pick a cake from our menu, or tell us your vision and we&rsquo;ll bring it to life. Cakes
+              need 2&ndash;3 days advance notice; bulk orders &amp; events need 7&ndash;10 days.
             </p>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
               <Link

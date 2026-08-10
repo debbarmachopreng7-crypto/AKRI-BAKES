@@ -5,7 +5,7 @@ import { useState } from "react";
 const faqs = [
   {
     q: "How early should I place an order?",
-    a: "We recommend ordering 7–10 days in advance for custom cakes, so our bakers can plan, source ingredients and perfect your design. For simpler menu cakes, 2–3 days usually works — message us on WhatsApp to check availability.",
+    a: "For most cakes we ask for 2–3 days advance, so our bakers can plan, source ingredients and perfect your order. For bulk orders and events (weddings, functions, dessert counters), please give us 7–10 days. Message us on WhatsApp and we'll confirm availability.",
   },
   {
     q: "Do you make custom cakes?",

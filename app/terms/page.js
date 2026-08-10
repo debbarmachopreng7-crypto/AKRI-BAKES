@@ -10,7 +10,7 @@ const sections = [
   },
   {
     title: "Advance notice",
-    body: "Custom cakes and personalised orders require 7–10 days advance notice. Urgent orders may be possible depending on our schedule — please message us on WhatsApp first to check.",
+    body: "Cakes and personalised orders require 2–3 days advance notice. Bulk orders and events (weddings, functions, dessert counters) require 7–10 days advance notice. Urgent orders may be possible depending on our schedule — please message us on WhatsApp first to check.",
   },
   {
     title: "Payments",

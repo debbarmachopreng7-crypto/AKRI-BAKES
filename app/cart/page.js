@@ -295,7 +295,7 @@ export default function CartPage() {
                     {[
                       "Free pickup in Dimapur",
                       "UPI accepted — GPay, Paytm, PhonePe",
-                      "Custom cakes need 7–10 days notice",
+                      "Cakes need 2–3 days notice; bulk orders & events 7–10 days",
                     ].map((line) => (
                       <p key={line} className="flex items-start gap-2.5 text-xs text-[#8B7355]">
                         <CheckIcon className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#BC6153]" />

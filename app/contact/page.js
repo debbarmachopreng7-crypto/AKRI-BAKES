@@ -121,7 +121,7 @@ export default function ContactPage() {
                   <span className="text-sm font-semibold text-[#26110B]">10:00 AM – 4:00 PM</span>
                 </div>
                 <p className="rounded-2xl border border-dashed border-[#BC6153]/50 bg-[#BC6153]/5 px-5 py-3 text-xs leading-6 text-[#8B7355]">
-                  Custom cakes need <strong>7–10 days advance notice</strong>. For urgent orders, message us on WhatsApp.
+                  Cakes need <strong>2–3 days advance notice</strong>. For bulk orders &amp; events, we need 7–10 days. For urgent orders, message us on WhatsApp.
                 </p>
               </div>
 
