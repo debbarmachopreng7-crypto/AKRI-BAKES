@@ -45,4 +45,4 @@ Live ordering/staff backend was **broken**: `orders` grants were missing in Supa
 - Existing orders confirmed present: `AKRI-47993747` (Khereng Debbarma), `AKRI-RT-952681`.
 - Also pending: fix misleading Admin "Settings → Change Password" panel (`app/admin/page.js`) — it edits localStorage fallback, not the real Supabase password; should be removed/hidden when Supabase is configured.
 - Advance-notice policy already updated site-wide (2–3 days cakes, 7–10 days bulk/events) — commit `599d06e`, deployed.
-- Custom domain `akribakes.com` REGISTERED Aug 12 2026 (Hostinger). Code switched to root domain (SITE_URL, no basePath, CNAME committed). PENDING: add GitHub Pages A records + www CNAME in Hostinger DNS, set custom domain in GitHub Pages settings, enable HTTPS.
+- Custom domain `akribakes.com` REGISTERED Aug 12 2026 (Hostinger). Code switched to root domain (SITE_URL, no basePath, CNAME committed). DNS configured: 4× A `@` → GitHub Pages IPs, `www` CNAME → `debbarmachopreng7-crypto.github.io` (done via Hostinger zone import). Custom domain set in GitHub Pages; site live at https://akribakes.com (HTTPS cert auto-provisioned by GitHub).
