@@ -35,3 +35,14 @@ Orders are stored in Supabase (Postgres) when configured; otherwise the site fal
 - Env vars (empty = feature off): `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (`.env.local` locally, secrets in `.github/workflows/deploy.yml` build step).
 - Legacy generic REST backend: `NEXT_PUBLIC_API_URL` (`/orders`, `/api/otp/send`, `/api/otp/verify`), still honored after Supabase.
 - Admin login on live site: `/admin` — staff email + password (Supabase) or localStorage password `akribakes2026` when not configured.
+
+## Session status (Aug 10) — PENDING ACTION
+
+Live ordering/staff backend was **broken**: `orders` grants were missing in Supabase project `abvkxofzzrmgvpasqcsr` (anon/staff got `permission denied`). Owner ran `supabase/fix-grants.sql` in the SQL Editor (Success), but PostgREST still cached old permissions.
+
+**Next step (1 line):** run `NOTIFY pgrst, 'reload schema';` in the Supabase SQL Editor, then verify anon can insert an order via REST (insert test snippet in chat history; test order id `AKRI-TEST0001`).
+- Verify: anon insert to `/rest/v1/orders` returns 201 (was 401/42501).
+- Existing orders confirmed present: `AKRI-47993747` (Khereng Debbarma), `AKRI-RT-952681`.
+- Also pending: fix misleading Admin "Settings → Change Password" panel (`app/admin/page.js`) — it edits localStorage fallback, not the real Supabase password; should be removed/hidden when Supabase is configured.
+- Advance-notice policy already updated site-wide (2–3 days cakes, 7–10 days bulk/events) — commit `599d06e`, deployed.
+- Custom domain `akribakes.com` REGISTERED Aug 12 2026 (Hostinger). Code switched to root domain (SITE_URL, no basePath, CNAME committed). PENDING: add GitHub Pages A records + www CNAME in Hostinger DNS, set custom domain in GitHub Pages settings, enable HTTPS.
