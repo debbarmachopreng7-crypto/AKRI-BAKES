@@ -94,12 +94,10 @@ export default function CheckoutPage() {
 
   const handleUPITap = () => {
     if (!validate()) return;
-    setPayment("upi");
+    setPayment("qr");
     setSelectedApp(null);
     setUpiPaid(true);
-    const ref = `AKRI-${Date.now().toString(36).toUpperCase()}`;
-    setUpiRef(ref);
-    window.open(generateUPILink(total, ref), "_blank");
+    setUpiRef(`AKRI-${Date.now().toString(36).toUpperCase()}`);
   };
 
   const handleQRTap = () => {
@@ -332,7 +330,7 @@ export default function CheckoutPage() {
                 <button type="button" onClick={handleUPITap}
                   className="flex w-full items-center gap-3 rounded-2xl border border-[#E8E0D8] px-4 py-3.5 text-left text-sm font-medium text-[#26110B] transition hover:bg-[#EDE8E0]">
                   <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#812CA1] text-xs font-bold text-white">UPI</span>
-                  <span>Pay via UPI</span>
+                  <span>Pay via UPI QR</span>
                 </button>
 
                 {/* Scan QR (desktop fallback) */}
