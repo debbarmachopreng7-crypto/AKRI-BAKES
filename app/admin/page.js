@@ -8,7 +8,7 @@ import AdminGate from "../../components/AdminGate";
 import Breadcrumbs from "../../components/Breadcrumbs";
 import { isSupabaseConfigured } from "../../lib/supabase";
 
-const statuses = ["Awaiting Payment Confirmation", "Pending", "Ready For Pickup", "Completed"];
+const statuses = ["Awaiting Payment Confirmation", "Pending", "Ready For Pickup", "Completed", "Cancelled"];
 
 const filters = [
   { id: "all", label: "All Orders" },
@@ -17,6 +17,7 @@ const filters = [
   { id: "Pending", label: "Pending" },
   { id: "Ready For Pickup", label: "Ready For Pickup" },
   { id: "Completed", label: "Completed" },
+  { id: "Cancelled", label: "Cancelled" },
   { id: "custom", label: "Custom Cakes" },
 ];
 
@@ -45,13 +46,13 @@ function PhotoModal({ src, fileName, onClose }) {
 
 function SettingsPanel() {
   const useSupabase = isSupabaseConfigured();
-
-  if (useSupabase) return null;
   const [show, setShow] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
+
+  if (useSupabase) return null;
 
   const handleChangePassword = () => {
     if (!currentPassword || !newPassword || !confirmPassword) {
@@ -171,6 +172,7 @@ export default function AdminPage() {
       ["Pending", orders.filter((o) => o.status === "Pending").length],
       ["Ready For Pickup", orders.filter((o) => o.status === "Ready For Pickup").length],
       ["Completed", orders.filter((o) => o.status === "Completed").length],
+      ["Cancelled", orders.filter((o) => o.status === "Cancelled").length],
       ["Custom Cakes", orders.filter((o) => o.hasCustomCake).length],
     ];
   }, [orders]);
@@ -302,8 +304,12 @@ export default function AdminPage() {
                                   onClick={() => updateOrderStatus(order.orderId, status)}
                                   className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${
                                     order.status === status
-                                      ? "border-[#26110B] bg-[#26110B] text-white"
-                                      : "border-[#E8E0D8] bg-white text-[#26110B] hover:bg-[#f5f5f5]"
+                                      ? status === "Cancelled"
+                                        ? "border-red-300 bg-red-600 text-white"
+                                        : "border-[#26110B] bg-[#26110B] text-white"
+                                      : status === "Cancelled"
+                                        ? "border-red-200 bg-white text-red-600 hover:bg-red-50"
+                                        : "border-[#E8E0D8] bg-white text-[#26110B] hover:bg-[#f5f5f5]"
                                   }`}
                                 >
                                   {status}

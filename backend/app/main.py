@@ -14,7 +14,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-STATUSES = ["Awaiting Payment Confirmation", "Pending", "Ready For Pickup", "Completed"]
+STATUSES = ["Awaiting Payment Confirmation", "Pending", "Ready For Pickup", "Completed", "Cancelled"]
 
 # ── OTP in-memory store ──────────────────────────────────────────
 otp_store: dict[str, dict] = {}

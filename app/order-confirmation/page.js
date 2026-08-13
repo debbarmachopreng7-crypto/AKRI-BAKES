@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { usePageTitle } from "../../components/usePageTitle";
 import { useSearchParams } from "next/navigation";
@@ -34,11 +34,32 @@ function buildOrderMessage(order) {
 function Confirmation() {
   const searchParams = useSearchParams();
   const orderId = searchParams.get("id");
-  const { orders, ready } = useCart();
+  const { orders, ready, cancelOrder } = useCart();
+  const [canceling, setCanceling] = useState(false);
+  const [cancelError, setCancelError] = useState("");
+  const [cancelled, setCancelled] = useState(false);
 
   const order = orderId
     ? orders.find((item) => item.orderId === orderId)
     : orders[0];
+
+  useEffect(() => {
+    if (order?.status === "Cancelled") setCancelled(true);
+  }, [order?.status]);
+
+  const handleCancelOrder = async () => {
+    if (!order || cancelled) return;
+    setCanceling(true);
+    setCancelError("");
+    try {
+      await cancelOrder(order.orderId);
+      setCancelled(true);
+    } catch {
+      setCancelError("Could not cancel this order. Please contact the store.");
+    } finally {
+      setCanceling(false);
+    }
+  };
 
   if (!ready) {
     return <p className="text-[#26110B]/70">Loading your order&hellip;</p>;
@@ -57,13 +78,27 @@ function Confirmation() {
   }
 
   const isAwaitingPayment = order.status === "Awaiting Payment Confirmation";
+  const isCancelled = order.status === "Cancelled" || cancelled;
+  const canCancel = !["Ready For Pickup", "Completed", "Cancelled"].includes(order.status || "");
+  const statusBadgeClasses = isCancelled
+    ? "rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-700"
+    : isAwaitingPayment
+      ? "rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-800"
+      : "rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-800";
 
   return (
     <div className="text-center">
       <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#8B7355]">Thank You</p>
       <h1 className="mt-5 font-serif text-5xl font-bold text-[#26110B]">Order ID: {order.orderId}</h1>
 
-      {isAwaitingPayment ? (
+      {isCancelled ? (
+        <div className="mx-auto mt-6 max-w-md rounded-[20px] border border-red-200 bg-red-50 p-6 text-left">
+          <p className="text-sm font-semibold text-red-700">Order Cancelled</p>
+          <p className="mt-2 text-sm text-red-700">
+            Your order has been cancelled successfully. If this was a mistake, please contact the store on WhatsApp or call <strong>8259917757</strong>.
+          </p>
+        </div>
+      ) : isAwaitingPayment ? (
         <div className="mx-auto mt-6 max-w-md rounded-[20px] border border-amber-200 bg-amber-50 p-6 text-left">
           <p className="text-sm font-semibold text-amber-800">Payment Pending</p>
           <p className="mt-2 text-sm text-amber-700">
@@ -114,6 +149,22 @@ function Confirmation() {
         </p>
       </div>
 
+      {!isCancelled && canCancel ? (
+        <div className="mx-auto mt-6 max-w-md rounded-[20px] border border-[#E8E0D8] bg-white p-6 text-left shadow-sm">
+          <p className="text-sm font-medium text-[#26110B]">Need to cancel this order?</p>
+          <p className="mt-2 text-sm text-[#8B7355]">You can cancel this order before it is prepared or picked up. This action will update the order status to Cancelled.</p>
+          <button
+            type="button"
+            onClick={handleCancelOrder}
+            disabled={canceling}
+            className="mt-4 inline-flex w-full justify-center rounded-full border border-red-200 bg-red-50 px-6 py-3 text-sm font-medium text-red-600 transition hover:bg-red-100 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {canceling ? "Cancelling…" : "Cancel Order"}
+          </button>
+          {cancelError ? <p className="mt-3 text-sm text-red-600">{cancelError}</p> : null}
+        </div>
+      ) : null}
+
       <div className="mx-auto mt-8 max-w-md space-y-2 rounded-[20px] border border-[#E8E0D8] bg-white p-8 text-left text-[#26110B]/80 shadow-sm">
         <p><span className="font-medium text-[#26110B]">Name:</span> {order.name}</p>
         <p><span className="font-medium text-[#26110B]">Phone:</span> {order.phone}</p>
@@ -135,11 +186,7 @@ function Confirmation() {
         <p><span className="font-medium text-[#26110B]">Total:</span> ₹{order.total}</p>
         <p>
           <span className="font-medium text-[#26110B]">Status:</span>{" "}
-          {isAwaitingPayment ? (
-            <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-800">Awaiting Payment Confirmation</span>
-          ) : (
-            <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-800">{order.status}</span>
-          )}
+          <span className={statusBadgeClasses}>{isCancelled ? "Cancelled" : order.status}</span>
         </p>
       </div>
 

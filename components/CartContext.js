@@ -258,6 +258,11 @@ export function CartProvider({ children }) {
     );
   };
 
+  const cancelOrder = async (orderId) => {
+    await updateOrderStatus(orderId, "Cancelled");
+    return true;
+  };
+
   const value = {
     items,
     orders,
@@ -270,6 +275,7 @@ export function CartProvider({ children }) {
     count,
     placeOrder,
     updateOrderStatus,
+    cancelOrder,
     refreshOrders,
   };
 
