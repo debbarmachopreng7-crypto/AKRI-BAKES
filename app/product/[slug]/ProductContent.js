@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { FadeIn, SlideUp, StaggerContainer, StaggerItem } from "../../../components/animations";
 import ProductOrder from "./ProductOrder";
@@ -35,11 +36,12 @@ export default function ProductContent({ product }) {
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
             >
               {getCakeImage(product.name) && (
-                <img
+                <Image
                   src={getCakeImage(product.name)}
                   alt={product.name}
-                  loading="lazy"
-                  className="absolute inset-0 h-full w-full object-cover"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover"
                   onError={(e) => { e.currentTarget.style.display = "none"; }}
                 />
               )}

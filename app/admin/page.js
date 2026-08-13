@@ -1,10 +1,12 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { useCart } from "../../components/CartContext";
 import { usePageTitle } from "../../components/usePageTitle";
 import AdminGate from "../../components/AdminGate";
 import Breadcrumbs from "../../components/Breadcrumbs";
+import { isSupabaseConfigured } from "../../lib/supabase";
 
 const statuses = ["Awaiting Payment Confirmation", "Pending", "Ready For Pickup", "Completed"];
 
@@ -33,7 +35,7 @@ function PhotoModal({ src, fileName, onClose }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4" onClick={onClose}>
       <div className="relative max-w-2xl" onClick={(e) => e.stopPropagation()}>
-        <img src={src} alt={fileName} className="max-h-[80vh] w-auto rounded-2xl border-4 border-white shadow-2xl" />
+        <Image src={src} alt={fileName} width={900} height={700} unoptimized className="max-h-[80vh] w-auto rounded-2xl border-4 border-white shadow-2xl" />
         <p className="mt-3 text-center text-sm text-white">{fileName}</p>
         <button type="button" onClick={onClose} className="absolute -right-4 -top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white text-xl shadow-lg hover:bg-[#f5f5f5]">&times;</button>
       </div>
@@ -42,6 +44,9 @@ function PhotoModal({ src, fileName, onClose }) {
 }
 
 function SettingsPanel() {
+  const useSupabase = isSupabaseConfigured();
+
+  if (useSupabase) return null;
   const [show, setShow] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");

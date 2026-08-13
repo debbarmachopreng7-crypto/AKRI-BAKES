@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useMemo, useRef, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { usePageTitle } from "../../components/usePageTitle";
@@ -419,7 +420,7 @@ export default function BuildYourCakePage() {
                 <div className="mt-4">
                   {inspirationPhoto ? (
                     <div className="relative inline-block">
-                      <img src={inspirationPhoto} alt="Inspiration" className="h-48 w-48 rounded-2xl border border-[#E8E0D8] object-cover shadow-sm" />
+                      <Image src={inspirationPhoto} alt="Inspiration" width={192} height={192} unoptimized className="h-48 w-48 rounded-2xl border border-[#E8E0D8] object-cover shadow-sm" />
                       <p className="mt-2 text-xs text-[#8B7355]">{photoFileName}</p>
                       <button type="button" onClick={clearPhoto} className="mt-2 rounded-full border border-[#E8E0D8] px-3 py-1 text-xs text-[#26110B] hover:bg-[#EDE8E0]">Remove</button>
                     </div>

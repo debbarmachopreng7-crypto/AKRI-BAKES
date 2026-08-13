@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Footer() {
   return (
@@ -15,25 +16,37 @@ export default function Footer() {
             backgroundColor: "transparent",
           }}
         >
-          <img
+          <Image
             src="https://upload.wikimedia.org/wikipedia/commons/7/71/PhonePe_Logo.svg"
             alt="Official PhonePe Logo"
-            style={{ height: 32, width: "auto", objectFit: "contain" }}
+            width={120}
+            height={32}
+            unoptimized
+            className="h-8 w-auto object-contain"
           />
-          <img
+          <Image
             src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Google_Pay_Logo.svg"
             alt="Official Google Pay India Logo"
-            style={{ height: 32, width: "auto", objectFit: "contain" }}
+            width={120}
+            height={32}
+            unoptimized
+            className="h-8 w-auto object-contain"
           />
-          <img
+          <Image
             src="https://upload.wikimedia.org/wikipedia/commons/2/24/Paytm_Logo_%28standalone%29.svg"
             alt="Official Paytm Logo"
-            style={{ height: 32, width: "auto", objectFit: "contain" }}
+            width={120}
+            height={32}
+            unoptimized
+            className="h-8 w-auto object-contain"
           />
-          <img
+          <Image
             src="https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo-vector.svg"
             alt="Official UPI Network Logo"
-            style={{ height: 32, width: "auto", objectFit: "contain" }}
+            width={120}
+            height={32}
+            unoptimized
+            className="h-8 w-auto object-contain"
           />
         </div>
 

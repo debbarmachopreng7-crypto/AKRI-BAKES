@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { usePageTitle } from "../../components/usePageTitle";
@@ -124,11 +125,15 @@ export default function AboutPage() {
             <SlideUp>
               <div className="relative">
                 <div className="overflow-hidden rounded-[2rem] border border-[#E8E0D8] shadow-[0_20px_50px_rgba(38,17,11,0.12)]">
-                  <img
-                    src={`${ASSET_PREFIX}/gallery/signature-chocolate-cake.jpg`}
-                    alt="A dark chocolate truffle cake handcrafted by Akri Bakes"
-                    className="aspect-[4/3] h-full w-full object-cover"
-                  />
+                  <div className="relative aspect-[4/3] w-full overflow-hidden">
+                    <Image
+                      src={`${ASSET_PREFIX}/gallery/signature-chocolate-cake.jpg`}
+                      alt="A dark chocolate truffle cake handcrafted by Akri Bakes"
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      className="object-cover"
+                    />
+                  </div>
                 </div>
                 <motion.div
                   initial={{ opacity: 0, y: 16 }}
