@@ -346,8 +346,8 @@ export default function CheckoutPage() {
                   <span>Pay by scanning a QR code</span>
                 </button>
 
-                {/* GPay / Paytm / PhonePe */}
-                <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                {/* GPay / Paytm / PhonePe / any UPI app */}
+                <div className="grid grid-cols-2 gap-2 sm:gap-3">
                   {UPI_APPS.map((app) => (
                     <button key={app.id} type="button" onClick={() => handleAppTap(app)}
                       className="flex flex-col items-center gap-1.5 rounded-2xl border border-[#E8E0D8] px-3 py-4 text-center text-xs font-medium text-[#26110B] transition hover:bg-[#EDE8E0]">

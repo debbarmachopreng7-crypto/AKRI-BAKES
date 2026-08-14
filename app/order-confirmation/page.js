@@ -120,7 +120,7 @@ function Confirmation() {
             rel="noopener noreferrer"
             onClick={(e) => {
               e.preventDefault();
-              window.open(generateUPILink(order.total, order.orderId, "gpay"), "_blank");
+              window.open(generateUPILink(order.total, order.orderId, "upi"), "_blank");
             }}
             className="mt-4 inline-flex w-full justify-center rounded-full bg-[#BC6153] px-6 py-3 text-sm font-medium text-white transition hover:bg-[#A85547]"
           >

@@ -44,6 +44,17 @@ export const UPI_APPS = [
     ),
     package: "com.phonepe.app",
   },
+  {
+    id: "upi",
+    label: "Any UPI App",
+    color: "#BC6153",
+    icon: (
+      <svg viewBox="0 0 48 48" className="h-8 w-8">
+        <rect width="48" height="48" rx="10" fill="#BC6153"/>
+        <text x="24" y="30" textAnchor="middle" fill="white" fontSize="16" fontWeight="700" fontFamily="Arial, sans-serif">UPI</text>
+      </svg>
+    ),
+  },
 ];
 
 export function buildUPIQuery(amount, orderRef) {
