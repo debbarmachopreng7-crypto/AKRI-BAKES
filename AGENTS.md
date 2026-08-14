@@ -4,7 +4,7 @@ Premium bakery website (Akri Bakes, Dimapur, Nagaland) — Next.js static export
 
 ## Deploy
 
-- Live: https://debbarmachopreng7-crypto.github.io/AKRI-BAKES/
+- Live: https://akribakes.com (custom domain; HTTPS cert auto-provisioned by GitHub Pages)
 - Remote: https://github.com/debbarmachopreng7-crypto/AKRI-BAKES.git (branch `complete-ordering-system`)
 - Workflow: `.github/workflows/deploy.yml` — build + `actions/deploy-pages@v4`, runs on push and workflow_dispatch
 - Deploy takes ~5-10 min (large video assets). Verify: `curl -s "https://api.github.com/repos/debbarmachopreng7-crypto/AKRI-BAKES/actions/runs?per_page=1"`
@@ -12,7 +12,7 @@ Premium bakery website (Akri Bakes, Dimapur, Nagaland) — Next.js static export
 
 ## Build / verify
 
-- `npm run build` (static export to `out/`; Pages served with `/AKRI-BAKES/` prefix via `next.config.mjs` basePath)
+- `npm run build` (static export to `out/`; root-domain serving, no basePath)
 - Local preview: `python3 -m http.server 9444` serving `out/`
 - Homepage: `app/page.js`; Gallery: `app/gallery/page.js`
 
@@ -36,13 +36,11 @@ Orders are stored in Supabase (Postgres) when configured; otherwise the site fal
 - Legacy generic REST backend: `NEXT_PUBLIC_API_URL` (`/orders`, `/api/otp/send`, `/api/otp/verify`), still honored after Supabase.
 - Admin login on live site: `/admin` — staff email + password (Supabase) or localStorage password `akribakes2026` when not configured.
 
-## Session status (Aug 10) — PENDING ACTION
+## Session status (Aug 14) — RESOLVED, manual verification pending
 
-Live ordering/staff backend was **broken**: `orders` grants were missing in Supabase project `abvkxofzzrmgvpasqcsr` (anon/staff got `permission denied`). Owner ran `supabase/fix-grants.sql` in the SQL Editor (Success), but PostgREST still cached old permissions.
-
-**Next step (1 line):** run `NOTIFY pgrst, 'reload schema';` in the Supabase SQL Editor, then verify anon can insert an order via REST (insert test snippet in chat history; test order id `AKRI-TEST0001`).
-- Verify: anon insert to `/rest/v1/orders` returns 201 (was 401/42501).
-- Existing orders confirmed present: `AKRI-47993747` (Khereng Debbarma), `AKRI-RT-952681`.
-- Also pending: fix misleading Admin "Settings → Change Password" panel (`app/admin/page.js`) — it edits localStorage fallback, not the real Supabase password; should be removed/hidden when Supabase is configured.
-- Advance-notice policy already updated site-wide (2–3 days cakes, 7–10 days bulk/events) — commit `599d06e`, deployed.
-- Custom domain `akribakes.com` REGISTERED Aug 12 2026 (Hostinger). Code switched to root domain (SITE_URL, no basePath, CNAME committed). DNS configured: 4× A `@` → GitHub Pages IPs, `www` CNAME → `debbarmachopreng7-crypto.github.io` (done via Hostinger zone import). Custom domain set in GitHub Pages; site live at https://akribakes.com (HTTPS cert auto-provisioned by GitHub).
+- **Supabase grants fixed + verified**: `fix-grants.sql` ran, PostgREST reload took effect — anon INSERT to `/rest/v1/orders` returns **201** (verified live Aug 14 via `.env.local` anon key). NOTE: inserts succeed only without `Prefer: return=representation` (anon has no SELECT policy); the site's `CartContext.js` insert never sends it, so real orders are unaffected.
+- **Admin "Settings → Change Password" panel** (`app/admin/page.js`): already returns `null` when Supabase is configured (`if (useSupabase) return null`), so it no longer misleads. localStorage-password fallback path remains for non-Supabase mode.
+- **Order-confirmation page made Supabase-aware** (commit `aad79d0`, deployed): in Supabase mode the WhatsApp "send order" handoff is replaced with a "sent to store" notice, the cancel button routes via WhatsApp (anon can't update DB), and "What happens next?" wording adapts. Menu size pricing fix (range/cheesecake/pie) shipped in the same commit.
+- **Secret key security**: service-role key that was pasted in chat was DELETED Aug 14 (project `abvkxofzzrmgvpasqcsr`); test order `AKRI-TEST-ANON` deleted. Site only ever uses the anon key.
+- **Still to verify manually (owner/staff)**: place one real order on the live site end-to-end (arrives in Supabase → appears on `/admin` via realtime → staff can update status), and confirm staff login on `/admin` (Supabase Auth) works.
+- **Custom domain** `akribakes.com` REGISTERED Aug 12 2026 (Hostinger). Code switched to root domain (SITE_URL, no basePath, CNAME committed). DNS configured: 4× A `@` → GitHub Pages IPs, `www` CNAME → `debbarmachopreng7-crypto.github.io`. Custom domain set in GitHub Pages; site live at https://akribakes.com (HTTPS cert auto-provisioned).
