@@ -18,7 +18,6 @@ export const UPI_APPS = [
       </svg>
     ),
     package: "com.google.android.apps.nbu.paisa.user",
-    uriScheme: "tez",
   },
   {
     id: "paytm",
@@ -31,7 +30,6 @@ export const UPI_APPS = [
       </svg>
     ),
     package: "net.one97.paytm",
-    uriScheme: "paytmmp",
   },
   {
     id: "phonepe",
@@ -45,25 +43,30 @@ export const UPI_APPS = [
       </svg>
     ),
     package: "com.phonepe.app",
-    uriScheme: "phonepe",
   },
 ];
 
-export function generateUPILink(amount, orderRef, appId) {
-  const { UPI_ID, BUSINESS_NAME } = UPI_CONFIG;
-  const params = new URLSearchParams({
-    pa: UPI_ID,
-    pn: BUSINESS_NAME,
+export function buildUPIQuery(amount, orderRef) {
+  return new URLSearchParams({
+    pa: UPI_CONFIG.UPI_ID,
+    pn: UPI_CONFIG.BUSINESS_NAME,
     am: amount.toString(),
     cu: "INR",
     tn: `Order ${orderRef}`,
-  });
+    tr: orderRef,
+  }).toString();
+}
+
+export function generateUPILink(amount, orderRef, appId) {
+  const query = buildUPIQuery(amount, orderRef);
 
   const app = UPI_APPS.find((a) => a.id === appId);
-  if (app && app.uriScheme) {
-    return `${app.uriScheme}://upi/pay?${params.toString()}`;
+  const isAndroid = typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent);
+  if (app?.package && isAndroid) {
+    const fallback = encodeURIComponent(`upi://pay?${query}`);
+    return `intent://upi/pay?${query.replace(/\+/g, "%20")}#Intent;scheme=upi;package=${app.package};S.browser_fallback_url=${fallback};end`;
   }
-  return `upi://pay?${params.toString()}`;
+  return `upi://pay?${query}`;
 }
 
 export async function copyUPIId() {

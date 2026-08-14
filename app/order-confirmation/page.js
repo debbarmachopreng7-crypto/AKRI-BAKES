@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePageTitle } from "../../components/usePageTitle";
 import { useSearchParams } from "next/navigation";
 import { useCart } from "../../components/CartContext";
-import { UPI_CONFIG, UPI_APPS, generateUPILink } from "../../components/upiConfig";
+import { UPI_CONFIG, UPI_APPS, generateUPILink, buildUPIQuery } from "../../components/upiConfig";
 import { isSupabaseConfigured } from "../../lib/supabase";
 
 const STORE_WHATSAPP = "918259917757";
@@ -115,9 +115,13 @@ function Confirmation() {
             Mention Order ID <strong>{order.orderId}</strong> in the payment note.
           </p>
           <a
-            href={generateUPILink(order.total, order.orderId, "gpay")}
+            href={`upi://pay?${buildUPIQuery(order.total, order.orderId)}`}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={(e) => {
+              e.preventDefault();
+              window.open(generateUPILink(order.total, order.orderId, "gpay"), "_blank");
+            }}
             className="mt-4 inline-flex w-full justify-center rounded-full bg-[#BC6153] px-6 py-3 text-sm font-medium text-white transition hover:bg-[#A85547]"
           >
             Pay ₹{order.total} via UPI
