@@ -216,7 +216,9 @@ function PriceDisplay({ item, pricing }) {
 function OrderModal({ category, item, onClose }) {
   const router = useRouter();
   const { addItem } = useCart();
-  const [size, setSize] = useState("1 lb");
+  const [size, setSize] = useState(() =>
+    category.pricing === "cheesecake" || category.pricing === "pie" ? "Mini" : "1 lb",
+  );
   const [message, setMessage] = useState("");
   const [pickupDate, setPickupDate] = useState("");
   const [pickupTime, setPickupTime] = useState("3:00 PM");
@@ -226,7 +228,15 @@ function OrderModal({ category, item, onClose }) {
   const isCheesecake = category.pricing === "cheesecake";
   const isPie = category.pricing === "pie";
 
-  const price = isPiece ? item.price : (item.price2 ?? item.price ?? 0);
+  const price = isPiece
+    ? item.price
+    : isRange
+      ? size === "2 lb" ? item.price2 : item.price1
+      : isCheesecake
+        ? size === "Mini" ? item.mini : size === "6 inch" ? item.inch6 : item.inch75
+        : isPie
+          ? size === "Mini" ? item.mini : size === "Small" ? item.small : size === "Medium" ? item.medium : item.large
+          : 0;
 
   const sizeOptions = category.pricing === "cheesecake"
     ? ["Mini", "6 inch", "7.5 inch"]

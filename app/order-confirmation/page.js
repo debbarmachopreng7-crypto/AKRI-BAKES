@@ -6,8 +6,11 @@ import { usePageTitle } from "../../components/usePageTitle";
 import { useSearchParams } from "next/navigation";
 import { useCart } from "../../components/CartContext";
 import { UPI_CONFIG, UPI_APPS, generateUPILink } from "../../components/upiConfig";
+import { isSupabaseConfigured } from "../../lib/supabase";
 
 const STORE_WHATSAPP = "918259917757";
+
+const supabaseLive = isSupabaseConfigured();
 
 function buildOrderMessage(order) {
   const lines = [`🍰 New Order — ${order.orderId}`, ""];
@@ -128,41 +131,70 @@ function Confirmation() {
         </p>
       )}
 
-      <div className="mx-auto mt-6 max-w-md rounded-[20px] border border-[#BC6153] bg-[#FDF1EE] p-6 text-left">
-        <p className="text-sm font-semibold text-[#A85547]">
-          One last step — send us your order
-        </p>
-        <p className="mt-2 text-sm leading-6 text-[#8B7355]">
-          Tap the button below to send this order to Akri Bakes on WhatsApp. We only receive
-          your order once you send it — the store doesn&rsquo;t see it automatically.
-        </p>
-        <a
-          href={`https://wa.me/${STORE_WHATSAPP}?text=${encodeURIComponent(buildOrderMessage(order))}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg"
-        >
-          Send order via WhatsApp
-        </a>
-        <p className="mt-3 text-xs text-[#8B7355]">
-          WhatsApp automatically opens with your full order details pre-filled — just press send.
-        </p>
-      </div>
+      {!supabaseLive ? (
+        <div className="mx-auto mt-6 max-w-md rounded-[20px] border border-[#BC6153] bg-[#FDF1EE] p-6 text-left">
+          <p className="text-sm font-semibold text-[#A85547]">
+            One last step — send us your order
+          </p>
+          <p className="mt-2 text-sm leading-6 text-[#8B7355]">
+            Tap the button below to send this order to Akri Bakes on WhatsApp. We only receive
+            your order once you send it — the store doesn&rsquo;t see it automatically.
+          </p>
+          <a
+            href={`https://wa.me/${STORE_WHATSAPP}?text=${encodeURIComponent(buildOrderMessage(order))}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg"
+          >
+            Send order via WhatsApp
+          </a>
+          <p className="mt-3 text-xs text-[#8B7355]">
+            WhatsApp automatically opens with your full order details pre-filled — just press send.
+          </p>
+        </div>
+      ) : (
+        <div className="mx-auto mt-6 max-w-md rounded-[20px] border border-[#BC6153] bg-[#FDF1EE] p-6 text-left">
+          <p className="text-sm font-semibold text-[#A85547]">
+            Your order has been sent to the store
+          </p>
+          <p className="mt-2 text-sm leading-6 text-[#8B7355]">
+            The store has received your order automatically. We&rsquo;ll confirm it with you on
+            WhatsApp or by phone. Need to reach us? Call or WhatsApp <strong>8259917757</strong>.
+          </p>
+        </div>
+      )}
 
       {!isCancelled && canCancel ? (
-        <div className="mx-auto mt-6 max-w-md rounded-[20px] border border-[#E8E0D8] bg-white p-6 text-left shadow-sm">
-          <p className="text-sm font-medium text-[#26110B]">Need to cancel this order?</p>
-          <p className="mt-2 text-sm text-[#8B7355]">You can cancel this order before it is prepared or picked up. This action will update the order status to Cancelled.</p>
-          <button
-            type="button"
-            onClick={handleCancelOrder}
-            disabled={canceling}
-            className="mt-4 inline-flex w-full justify-center rounded-full border border-red-200 bg-red-50 px-6 py-3 text-sm font-medium text-red-600 transition hover:bg-red-100 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {canceling ? "Cancelling…" : "Cancel Order"}
-          </button>
-          {cancelError ? <p className="mt-3 text-sm text-red-600">{cancelError}</p> : null}
-        </div>
+        supabaseLive ? (
+          <div className="mx-auto mt-6 max-w-md rounded-[20px] border border-[#E8E0D8] bg-white p-6 text-left shadow-sm">
+            <p className="text-sm font-medium text-[#26110B]">Need to cancel this order?</p>
+            <p className="mt-2 text-sm text-[#8B7355]">
+              The store has already received your order. To cancel, message us on WhatsApp with your Order ID — we&rsquo;ll confirm it with you.
+            </p>
+            <a
+              href={`https://wa.me/${STORE_WHATSAPP}?text=${encodeURIComponent(`Hi Akri Bakes! I'd like to cancel my order ${order.orderId}.`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex w-full justify-center rounded-full border border-red-200 bg-red-50 px-6 py-3 text-sm font-medium text-red-600 transition hover:bg-red-100"
+            >
+              Cancel via WhatsApp
+            </a>
+          </div>
+        ) : (
+          <div className="mx-auto mt-6 max-w-md rounded-[20px] border border-[#E8E0D8] bg-white p-6 text-left shadow-sm">
+            <p className="text-sm font-medium text-[#26110B]">Need to cancel this order?</p>
+            <p className="mt-2 text-sm text-[#8B7355]">You can cancel this order before it is prepared or picked up. This action will update the order status to Cancelled.</p>
+            <button
+              type="button"
+              onClick={handleCancelOrder}
+              disabled={canceling}
+              className="mt-4 inline-flex w-full justify-center rounded-full border border-red-200 bg-red-50 px-6 py-3 text-sm font-medium text-red-600 transition hover:bg-red-100 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {canceling ? "Cancelling…" : "Cancel Order"}
+            </button>
+            {cancelError ? <p className="mt-3 text-sm text-red-600">{cancelError}</p> : null}
+          </div>
+        )
       ) : null}
 
       <div className="mx-auto mt-8 max-w-md space-y-2 rounded-[20px] border border-[#E8E0D8] bg-white p-8 text-left text-[#26110B]/80 shadow-sm">
@@ -196,7 +228,7 @@ function Confirmation() {
           <ol className="mt-4 space-y-3 text-sm text-[#26110B]/70">
             <li className="flex gap-3">
               <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#BC6153] text-xs font-bold text-white">1</span>
-              <span>Send your order to the store on WhatsApp using the button above.</span>
+              <span>{supabaseLive ? "Your order has been received by the store." : "Send your order to the store on WhatsApp using the button above."}</span>
             </li>
             <li className="flex gap-3">
               <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#BC6153] text-xs font-bold text-white">2</span>
