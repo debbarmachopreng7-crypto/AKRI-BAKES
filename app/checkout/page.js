@@ -356,6 +356,9 @@ export default function CheckoutPage() {
                     </button>
                   ))}
                 </div>
+                <p className="mt-3 text-xs text-[#8B7355]">
+                  App doesn&rsquo;t open? Use <strong>Any UPI App</strong> to pick your installed payment app.
+                </p>
               </div>
 
               {/* QR card */}

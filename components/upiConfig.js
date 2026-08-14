@@ -74,7 +74,7 @@ export function generateUPILink(amount, orderRef, appId) {
   const app = UPI_APPS.find((a) => a.id === appId);
   const isAndroid = typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent);
   if (app?.package && isAndroid) {
-    return `intent://upi/pay?${query.replace(/\+/g, "%20")}#Intent;scheme=upi;package=${app.package};end`;
+    return `intent://pay?${query.replace(/\+/g, "%20")}#Intent;scheme=upi;package=${app.package};end`;
   }
   return `upi://pay?${query}`;
 }
