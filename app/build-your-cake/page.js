@@ -69,11 +69,17 @@ function getFlavorUpcharge(flavor, size) {
   return base;
 }
 
-const frostingOptions = [
+const celebrationFrostingOptions = [
+  { name: "Fresh Cream", upcharge: 0 },
+  { name: "Cream Cheese Frosting", upcharge: 0 },
+  { name: "Chocolate Ganache", upcharge: 0 },
+  { name: "Fondant", upcharge: 400 },
+];
+
+const freshCreamFrostingOptions = [
   { name: "Fresh Cream", upcharge: 0 },
   { name: "Cream Cheese Frosting", upcharge: 150 },
   { name: "Chocolate Ganache", upcharge: 200 },
-  { name: "Fondant", upcharge: 400 },
 ];
 
 const decorationPrices = {
@@ -138,6 +144,8 @@ export default function BuildYourCakePage() {
 
   const isPlain = cakeCategory === "Plain Cake";
   const isFreshCream = cakeCategory === "Fresh Cream Cake";
+  const isCelebration = cakeCategory === "Celebration Cake";
+  const currentFrostingOptions = isCelebration ? celebrationFrostingOptions : freshCreamFrostingOptions;
 
   const unitPrice = useMemo(() => {
     if (isPlain) {
@@ -148,10 +156,10 @@ export default function BuildYourCakePage() {
     const baseMap = isFreshCream ? freshCreamBaseBySize : celebrationBaseBySize;
     const baseCake = baseMap[size] ?? 0;
     const flavorUpcharge = getFlavorUpcharge(flavor, size);
-    const frostingUpcharge = frostingOptions.find((f) => f.name === frosting)?.upcharge ?? 0;
+    const frostingUpcharge = currentFrostingOptions.find((f) => f.name === frosting)?.upcharge ?? 0;
     const decorationPrice = decorationPrices[decoration] ?? 0;
     return baseCake + flavorUpcharge + frostingUpcharge + decorationPrice;
-  }, [isPlain, isFreshCream, size, flavor, plainFlavor, frosting, decoration]);
+  }, [isPlain, isFreshCream, size, flavor, plainFlavor, frosting, decoration, currentFrostingOptions]);
 
   const total = unitPrice * quantity;
 
@@ -175,7 +183,7 @@ export default function BuildYourCakePage() {
     const baseMap = isFreshCream ? freshCreamBaseBySize : celebrationBaseBySize;
     const baseCake = baseMap[size] ?? 0;
     const flavorUpcharge = getFlavorUpcharge(flavor, size);
-    const frostingUpcharge = frostingOptions.find((f) => f.name === frosting)?.upcharge ?? 0;
+    const frostingUpcharge = currentFrostingOptions.find((f) => f.name === frosting)?.upcharge ?? 0;
     const decorationPrice = decorationPrices[decoration] ?? 0;
     return [
       { label: `Base Cake (${size})`, amount: baseCake },
@@ -183,7 +191,7 @@ export default function BuildYourCakePage() {
       { label: `Frosting (${frosting})`, amount: frostingUpcharge },
       ...(decoration === "None" ? [] : [{ label: decoration, amount: decorationPrice }]),
     ].filter((item) => item.amount >= 0);
-  }, [isPlain, isFreshCream, size, flavor, plainFlavor, frosting, decoration]);
+  }, [isPlain, isFreshCream, size, flavor, plainFlavor, frosting, decoration, currentFrostingOptions]);
 
   const handleAddToCart = () => {
     addItem({
@@ -232,7 +240,7 @@ export default function BuildYourCakePage() {
                 <div className="mt-5 grid gap-3 sm:grid-cols-3">
                   {cakeCategories.map((cat) => (
                     <ScaleOnHover key={cat}>
-                    <button type="button" onClick={() => { setCakeCategory(cat); if (cat === "Plain Cake") setDecoration("None"); }}
+                    <button type="button" onClick={() => { setCakeCategory(cat); setFrosting("Fresh Cream"); if (cat === "Plain Cake") setDecoration("None"); }}
                       className={`rounded-2xl border px-4 py-3 text-center text-sm font-medium transition ${
                         cakeCategory === cat
                           ? "border-[#26110B] bg-[#26110B] text-white"
@@ -363,7 +371,7 @@ export default function BuildYourCakePage() {
               <div className="rounded-[2rem] border border-[#E8E0D8] bg-white p-7 shadow-sm">
                 <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#8B7355]">5) Frosting</p>
                 <div className="mt-5 grid gap-3 sm:grid-cols-2">
-                  {frostingOptions.map((item) => (
+                  {currentFrostingOptions.map((item) => (
                     <ScaleOnHover key={item.name}>
                     <button type="button" onClick={() => setFrosting(item.name)}
                       className={`rounded-2xl border px-4 py-3 text-center text-sm font-medium transition ${

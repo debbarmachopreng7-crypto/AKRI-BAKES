@@ -32,7 +32,7 @@ const cakeData = {
       { name: "Red Velvet with Cream Cheese", price1: 800, price2: 1500 },
       { name: "Blue Velvet with Cream Cheese", price1: 800, price2: 1500 },
       { name: "Tres Leches (Milk Cake) — Plain", price1: 800, price2: 1500 },
-      { name: "Rasmalai, Nuts & Rasgula", price1: 700, price2: 1400 },
+      { name: "Rasmalai, Nuts & Rasgula", price1: 800, price2: 1500 },
       { name: "Chocolate & Nuts", price1: 800, price2: 1500 },
       { name: "Carrot Cake with Cream Cheese", price1: 800, price2: 1500 },
       { name: "Dark Chocolate Truffle", price1: 800, price2: 1600 },
