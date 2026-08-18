@@ -79,7 +79,7 @@ const stats = [
   { value: "10,000+", label: "Instagram Family" },
   { value: "30+", label: "Cake Flavours" },
   { value: "Many", label: "Weddings Served" },
-  { value: "2–3", label: "Days Advance Order" },
+  { value: "2–3", label: "Days Advance Notice" },
 ];
 
 export default function AboutPage() {

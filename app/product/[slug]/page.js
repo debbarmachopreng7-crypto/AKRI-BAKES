@@ -20,20 +20,20 @@ const products = {
   "coconut-lotus-biscoff": { name: "Coconut Lotus Biscoff", price1: 800, price2: 1500, description: "Coconut cake with Lotus Biscoff spread." },
 
   // Cheesecakes
-  "lotus-biscoff-cheesecake": { name: "Lotus Biscoff Cheesecake", price1: 600, price2: 1400, description: "Creamy cheesecake with a Lotus Biscoff base and topping." },
-  "classic-new-york-cheesecake": { name: "New York Cheesecake", price1: 600, price2: 1400, description: "Rich and creamy classic New York style cheesecake." },
-  "mango-cheesecake": { name: "Mango Cheesecake", price1: 600, price2: 1400, description: "Creamy cheesecake with a fresh mango topping." },
-  "blueberry-cheesecake": { name: "Blueberry Cheesecake", price1: 600, price2: 1400, description: "Classic cheesecake topped with blueberry compote." },
-  "chocolate-cheesecake": { name: "Chocolate Cheesecake", price1: 600, price2: 1400, description: "Rich chocolate cheesecake on an Oreo crust." },
-  "basque-burnt-cheesecake": { name: "Basque Burnt Cheesecake", price1: 600, price2: 1400, description: "Caramelized Basque style burnt cheesecake." },
-  "japanese-cheesecake": { name: "Japanese Cheesecake", price1: 600, price2: 1400, description: "Light and fluffy cotton cheesecake." },
+  "lotus-biscoff-cheesecake": { name: "Lotus Biscoff Cheesecake", type: "cheesecake", price1: 600, price2: 1000, price3: 1400, description: "Creamy cheesecake with a Lotus Biscoff base and topping." },
+  "classic-new-york-cheesecake": { name: "New York Cheesecake", type: "cheesecake", price1: 600, price2: 1000, price3: 1400, description: "Rich and creamy classic New York style cheesecake." },
+  "mango-cheesecake": { name: "Mango Cheesecake", type: "cheesecake", price1: 600, price2: 1000, price3: 1400, description: "Creamy cheesecake with a fresh mango topping." },
+  "blueberry-cheesecake": { name: "Blueberry Cheesecake", type: "cheesecake", price1: 600, price2: 1000, price3: 1400, description: "Classic cheesecake topped with blueberry compote." },
+  "chocolate-cheesecake": { name: "Chocolate Cheesecake", type: "cheesecake", price1: 600, price2: 1000, price3: 1400, description: "Rich chocolate cheesecake on an Oreo crust." },
+  "basque-burnt-cheesecake": { name: "Basque Burnt Cheesecake", type: "cheesecake", price1: 600, price2: 1000, price3: 1400, description: "Caramelized Basque style burnt cheesecake." },
+  "japanese-cheesecake": { name: "Japanese Cheesecake", type: "cheesecake", price1: 600, price2: 1000, price3: 1400, description: "Light and fluffy cotton cheesecake." },
 
   // Mousse Cakes
   "mango-mousse-cake": { name: "Mango Mousse Cake", price1: 1000, price2: 2000, description: "Light mango mousse cake with layers of fresh mango." },
   "chocolate-mousse-cake": { name: "Chocolate Mousse Cake", price1: 1000, price2: 2000, description: "Rich chocolate mousse cake with silky ganache layers." },
   "coffee-mousse-cake": { name: "Coffee Mousse Cake", price1: 1000, price2: 2000, description: "Coffee-infused mousse cake for coffee lovers." },
   "strawberry-mousse": { name: "Strawberry Mousse", price1: 1000, price2: 2000, description: "Fresh strawberry mousse cake with a light sponge." },
-  "hazelnut-pralin-mousse": { name: "Hazelnut Pralin Mousse", price1: 1000, price2: 2000, description: "Nutty hazelnut praline mousse cake." },
+  "hazelnut-praline-mousse": { name: "Hazelnut Praline Mousse", price1: 1000, price2: 2000, description: "Nutty hazelnut praline mousse cake." },
   "banoffee-mousse": { name: "Banoffee Mousse", price1: 1000, price2: 2000, description: "Banana and toffee mousse cake." },
   "young-coconut-mousse": { name: "Young Coconut Mousse", price1: 1000, price2: 2000, description: "Refreshing young coconut mousse cake." },
   "raspberry-white-mousse": { name: "Raspberry White Mousse", price1: 1000, price2: 2000, description: "Raspberry and white chocolate mousse cake." },

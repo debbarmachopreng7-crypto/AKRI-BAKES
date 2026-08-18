@@ -75,8 +75,8 @@ const cakeData = {
     items: [
       { name: "Mango Mousse", price1: 1000, price2: 2000 },
       { name: "Young Coconut Mousse", price1: 1000, price2: 2000 },
-      { name: "Hazelnut Pralin Mousse", price1: 1000, price2: 2000 },
-      { name: "Mandarine Orange Cheese Mousse", price1: 1000, price2: 2000 },
+      { name: "Hazelnut Praline Mousse", price1: 1000, price2: 2000 },
+      { name: "Mandarin Orange Cheese Mousse", price1: 1000, price2: 2000 },
       { name: "Raspberry White Mousse", price1: 1000, price2: 2000 },
       { name: "Banoffee Mousse", price1: 1000, price2: 2000 },
       { name: "Chocolate Kunaffa Pistachio Mousse", price1: 1000, price2: 2000 },

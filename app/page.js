@@ -112,7 +112,7 @@ const marqueeItems = [
   "Tiramisu",
   "Basque Burnt Cheesecake",
   "Dark Chocolate Truffle",
-  "Hazelnut Pralin Mousse",
+  "Hazelnut Praline Mousse",
   "Key Lime Pie",
   "Rainbow Cake",
   "Tres Leches",
@@ -378,7 +378,7 @@ export default function HomePage() {
           {[
             { stat: <Counter to={10000} suffix="+" />, label: "Instagram Family" },
             { stat: <Counter to={30} suffix="+" />, label: "Cake Flavours" },
-            { stat: <Counter to={10} prefix="7–" />, label: "Days Advance Order" },
+            { stat: <Counter to={10} prefix="7–" />, label: "Days Advance Notice" },
             { stat: "Dimapur", label: "Pickup &amp; Delivery" },
           ].map((s) => (
             <StaggerItem key={s.label}>

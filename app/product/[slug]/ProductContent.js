@@ -8,9 +8,12 @@ import Breadcrumbs from "../../../components/Breadcrumbs";
 import { getCakeImage } from "../../../lib/cakeImages";
 
 export default function ProductContent({ product }) {
-  const priceLabel = product.price2
-    ? `\u20B9${product.price1} \u2014 \u20B9${product.price2}`
-    : `\u20B9${product.price1}`;
+  const isCheesecake = product.type === "cheesecake";
+  const priceLabel = isCheesecake
+    ? `Mini \u20B9${product.price1} \u00B7 6" \u20B9${product.price2} \u00B7 7.5" \u20B9${product.price3}`
+    : product.price2
+      ? `\u20B9${product.price1} \u2014 \u20B9${product.price2}`
+      : `\u20B9${product.price1}`;
 
   return (
     <main>

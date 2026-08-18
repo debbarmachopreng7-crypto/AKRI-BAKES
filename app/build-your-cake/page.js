@@ -36,6 +36,7 @@ const celebrationFlavorPrices = {
   "Chocolate World Cake": 0, "Coconut-Lotus Biscoff / Raspberry": 0,
   "Tiramisu": 0, "Lemon Meringue": 0, "Russian Honey Cake": 0,
   "Matcha Strawberry White Chocolate": 0,
+  "Rasmalai, Nuts & Rasgula": 0,
   "Dark Chocolate Truffle": 100, "White Chocolate Truffle": 100,
   "Rainbow Cake": 100, "Salted Caramel Fudge": 100,
   "New York Cheesecake": 400, "Lotus Biscoff": 300,
@@ -196,7 +197,7 @@ export default function BuildYourCakePage() {
   const handleAddToCart = () => {
     addItem({
       type: "custom",
-      name: isPlain ? `Plain ${plainFlavor} Cake` : `Custom ${flavor} Cake`,
+      name: isPlain ? `Plain ${plainFlavor}` : `Custom ${flavor} Cake`,
       cakeCategory,
       size: isPlain ? "1 lb" : size,
       occasion,

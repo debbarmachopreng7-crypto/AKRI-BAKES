@@ -21,12 +21,19 @@ const timeSlots = [
 export default function ProductOrder({ product }) {
   const router = useRouter();
   const { addItem } = useCart();
-  const [size, setSize] = useState("1 lb");
+  const isCheesecake = product.type === "cheesecake";
+  const [size, setSize] = useState(isCheesecake ? "Mini" : "1 lb");
   const [message, setMessage] = useState("");
   const [pickupDate, setPickupDate] = useState("");
   const [pickupTime, setPickupTime] = useState("3:00 PM");
 
-  const price = size === "2 lb" ? product.price2 : product.price1;
+  const sizeOptions = isCheesecake
+    ? ["Mini", "6 inch", "7.5 inch"]
+    : ["1 lb", "2 lb"];
+
+  const price = isCheesecake
+    ? size === "Mini" ? product.price1 : size === "6 inch" ? product.price2 : product.price3
+    : size === "2 lb" ? product.price2 : product.price1;
 
   const handleAddToCart = () => {
     addItem({
@@ -44,9 +51,9 @@ export default function ProductOrder({ product }) {
   return (
     <div className="mt-8 space-y-6">
       <div className="rounded-[2rem] border border-[#E8E0D8] bg-white p-6 shadow-sm">
-        <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#8B7355]">Weight</p>
+        <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#8B7355]">{isCheesecake ? "Size" : "Weight"}</p>
         <div className="mt-4 flex gap-3">
-          {["1 lb", "2 lb"].map((option) => (
+          {sizeOptions.map((option) => (
             <button
               key={option}
               type="button"
