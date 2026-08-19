@@ -60,24 +60,27 @@ export default function AdminGate({ children }) {
   // ── Password login ─────────────────────────────────────────
   const handlePasswordLogin = async (event) => {
     event.preventDefault();
-    if (useSupabase) {
-      setPasswordError("");
+    setPasswordError("");
+
+    // Try Supabase login first if email is provided
+    if (useSupabase && email.trim()) {
       try {
         const { error } = await supabase.auth.signInWithPassword({
           email: email.trim(),
           password,
         });
-        if (error) {
-          setPasswordError(error.message);
+        if (!error) {
+          setAuthed(true);
+          setStep("authed");
           return;
         }
-        setAuthed(true);
-        setStep("authed");
+        // If Supabase fails, fall through to local password check
       } catch {
-        setPasswordError("Could not reach the server. Please try again.");
+        // Network error — fall through to local password check
       }
-      return;
     }
+
+    // Local password fallback
     const stored = getStoredPassword();
     if (password === stored) {
       try { sessionStorage.setItem(AUTH_KEY, "1"); } catch { /* ignore */ }
@@ -85,7 +88,7 @@ export default function AdminGate({ children }) {
       setStep("authed");
       setPasswordError("");
     } else {
-      setPasswordError("Incorrect password.");
+      setPasswordError("Incorrect password. Try again or use Forgot Password.");
     }
   };
 
@@ -239,16 +242,16 @@ export default function AdminGate({ children }) {
             <form onSubmit={handlePasswordLogin}>
               <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#8B7355]">Staff Area</p>
               <h1 className="mt-4 font-serif text-3xl font-semibold text-[#26110B]">Admin Login</h1>
-              <p className="mt-3 text-sm text-[#8B7355]">Enter the admin email and password to continue.</p>
+              <p className="mt-3 text-sm text-[#8B7355]">Enter the admin password to continue.</p>
               {useSupabase ? (
                 <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Staff email" autoComplete="email" autoFocus
+                  placeholder="Staff email (optional)" autoComplete="email"
                   className="mt-6 w-full rounded-full border border-[#E8E0D8] px-5 py-3 text-center text-[#26110B] outline-none focus:border-[#26110B]"
                 />
               ) : null}
               <input type="password" value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Staff password" autoFocus
+                placeholder="Admin password" autoFocus
                 className="mt-6 w-full rounded-full border border-[#E8E0D8] px-5 py-3 text-center text-[#26110B] outline-none focus:border-[#26110B]"
               />
               {passwordError ? <p className="mt-3 text-sm text-red-600">{passwordError}</p> : null}
