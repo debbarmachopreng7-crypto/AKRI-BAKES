@@ -170,9 +170,9 @@ export default function AdminPage() {
   };
 
   const filteredOrders = useMemo(() => {
-    if (activeFilter === "all") return orders;
-    if (activeFilter === "today") return orders.filter((o) => isToday(o.createdAt));
-    if (activeFilter === "custom") return orders.filter((o) => o.hasCustomCake);
+    if (activeFilter === "all") return orders.filter((o) => o.status !== "Cancelled");
+    if (activeFilter === "today") return orders.filter((o) => isToday(o.createdAt) && o.status !== "Cancelled");
+    if (activeFilter === "custom") return orders.filter((o) => o.hasCustomCake && o.status !== "Cancelled");
     if (activeFilter === "awaiting-payment") return orders.filter((o) => o.status === "Awaiting Payment Confirmation");
     return orders.filter((o) => o.status === activeFilter);
   }, [orders, activeFilter]);
