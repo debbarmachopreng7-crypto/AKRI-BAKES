@@ -113,7 +113,7 @@ export default function BuildYourCakePage() {
 
   const [cakeCategory, setCakeCategory] = useState("Celebration Cake");
   const [occasion, setOccasion] = useState("Birthday");
-  const [size, setSize] = useState("2 lb");
+  const [size, setSize] = useState("1 lb");
   const [flavor, setFlavor] = useState("Red Velvet");
   const [plainFlavor, setPlainFlavor] = useState(plainCakes[0].name);
   const [frosting, setFrosting] = useState("Fresh Cream");
