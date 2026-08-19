@@ -3,6 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { supabase, isSupabaseConfigured } from "../lib/supabase";
 import { sendOrderConfirmation } from "../lib/email";
+import { sendTelegramMessage, buildNewOrderAlert, buildStatusUpdateAlert } from "../lib/telegram";
 
 const STORE_WHATSAPP = "918259917757";
 
@@ -309,9 +310,10 @@ export function CartProvider({ children }) {
       ...details,
       total: details.total ?? subtotal,
     };
-    setOrders((current) => [order, ...current]);
-    clearCart();
-    return order;
+      setOrders((current) => [order, ...current]);
+      clearCart();
+      sendTelegramMessage(buildNewOrderAlert(order));
+      return order;
   };
 
   const updateOrderStatus = async (orderId, status) => {
@@ -332,6 +334,8 @@ export function CartProvider({ children }) {
           const { message: confMsg, customerWa } = buildAdminConfirmedMessage(order);
           if (customerWa) window.open(`https://wa.me/${customerWa}?text=${encodeURIComponent(confMsg)}`, "_blank");
         }
+        // Telegram alert to admin
+        if (order) sendTelegramMessage(buildStatusUpdateAlert(order, status));
         if (order?.email) sendOrderConfirmation({ ...order, status });
         return updated;
       });

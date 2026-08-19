@@ -71,6 +71,7 @@ export default function Footer() {
             >
               Instagram
             </a>
+            <Link href="/reviews" className="text-sm text-[#8B7355] transition-colors hover:text-[#26110B]">Reviews</Link>
             <Link href="/contact" className="text-sm text-[#8B7355] transition-colors hover:text-[#26110B]">Contact</Link>
             <Link href="/terms" className="text-sm text-[#8B7355] transition-colors hover:text-[#26110B]">Terms &amp; Refunds</Link>
             <Link href="/privacy" className="text-sm text-[#8B7355] transition-colors hover:text-[#26110B]">Privacy</Link>

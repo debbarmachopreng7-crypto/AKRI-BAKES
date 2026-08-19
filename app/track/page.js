@@ -3,9 +3,9 @@
 import { Suspense, useState } from "react";
 import Link from "next/link";
 import { usePageTitle } from "../../components/usePageTitle";
-import { useCart } from "../../components/CartContext";
 import { motion } from "framer-motion";
 import Breadcrumbs from "../../components/Breadcrumbs";
+import { supabase, isSupabaseConfigured } from "../../lib/supabase";
 
 const statusColors = {
   Pending: "bg-amber-100 text-amber-800",
@@ -17,20 +17,63 @@ const statusColors = {
 
 const statusSteps = ["Pending", "Awaiting Payment Confirmation", "Ready For Pickup", "Completed"];
 
+function fromRow(row) {
+  return {
+    orderId: row.order_id,
+    items: row.items || [],
+    status: row.status,
+    hasCustomCake: row.has_custom_cake,
+    createdAt: row.created_at,
+    name: row.name,
+    phone: row.phone,
+    email: row.email || "",
+    method: row.method,
+    pickupDate: row.pickup_date,
+    pickupTime: row.pickup_time,
+    deliveryArea: row.delivery_area,
+    address: row.address,
+    payment: row.payment,
+    total: row.total,
+    notes: row.notes,
+  };
+}
+
 function TrackPage() {
   usePageTitle("Track Order | Akri Bakes");
-  const { orders, ready } = useCart();
   const [orderId, setOrderId] = useState("");
   const [searched, setSearched] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [matchedOrders, setMatchedOrders] = useState([]);
+  const useSupabase = isSupabaseConfigured();
 
-  const query = orderId.trim().toUpperCase();
-  const matchedOrders = query
-    ? orders.filter((o) => o.orderId && o.orderId.toUpperCase().includes(query))
-    : [];
-
-  const handleSearch = (e) => {
+  const handleSearch = async (e) => {
     e.preventDefault();
+    const query = orderId.trim().toUpperCase();
+    if (!query) return;
+    setLoading(true);
     setSearched(true);
+
+    if (useSupabase) {
+      try {
+        const { data, error } = await supabase
+          .from("orders")
+          .select("*")
+          .ilike("order_id", `%${query}%`)
+          .order("created_at", { ascending: false })
+          .limit(10);
+        if (error) throw error;
+        setMatchedOrders((data || []).map(fromRow));
+      } catch {
+        setMatchedOrders([]);
+      }
+    } else {
+      const raw = window.localStorage.getItem("akri_orders");
+      const all = raw ? JSON.parse(raw) : [];
+      setMatchedOrders(
+        all.filter((o) => o.orderId && o.orderId.toUpperCase().includes(query)),
+      );
+    }
+    setLoading(false);
   };
 
   return (
@@ -60,23 +103,21 @@ function TrackPage() {
           onChange={(e) => {
             setOrderId(e.target.value);
             setSearched(false);
+            setMatchedOrders([]);
           }}
           placeholder="e.g. AKRI-123456"
           className="flex-1 rounded-2xl border border-[#E8E0D8] bg-white px-5 py-3.5 text-[#26110B] outline-none transition placeholder:text-[#B8A898] focus:border-[#26110B]"
         />
         <button
           type="submit"
-          className="rounded-full bg-[#26110B] px-8 py-3.5 font-medium text-white transition hover:bg-[#3D2219]"
+          disabled={loading}
+          className="rounded-full bg-[#26110B] px-8 py-3.5 font-medium text-white transition hover:bg-[#3D2219] disabled:opacity-50"
         >
-          Track
+          {loading ? "Searching..." : "Track"}
         </button>
       </form>
 
-      {!ready && (
-        <p className="mt-8 text-center text-sm text-[#8B7355]">Loading your orders...</p>
-      )}
-
-      {ready && searched && matchedOrders.length === 0 && (
+      {searched && !loading && matchedOrders.length === 0 && (
         <div className="mt-12 rounded-[2rem] border border-[#E8E0D8] bg-white p-8 text-center">
           <p className="text-lg font-semibold text-[#26110B]">No orders found</p>
           <p className="mt-2 text-sm text-[#8B7355]">
@@ -85,7 +126,7 @@ function TrackPage() {
         </div>
       )}
 
-      {ready && searched && matchedOrders.length > 0 && (
+      {!loading && matchedOrders.length > 0 && (
         <div className="mt-8 space-y-6">
           {matchedOrders.map((order) => {
             const currentStep = order.status === "Cancelled"

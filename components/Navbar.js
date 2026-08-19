@@ -11,6 +11,7 @@ const menuItems = [
   { name: "CAKES", href: "/cakes" },
   { name: "BUILD YOUR CAKE", href: "/build-your-cake" },
   { name: "CELEBRATIONS", href: "/gallery" },
+  { name: "REVIEWS", href: "/reviews" },
   { name: "ABOUT", href: "/about" },
   { name: "CONTACT", href: "/contact" },
 ];
