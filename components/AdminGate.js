@@ -74,7 +74,6 @@ export default function AdminGate({ children }) {
           setStep("authed");
           return;
         }
-        // If Supabase fails, fall through to local password check
       } catch {
         // Network error — fall through to local password check
       }

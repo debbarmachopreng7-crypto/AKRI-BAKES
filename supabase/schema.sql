@@ -35,6 +35,12 @@ create policy "anon can insert orders" on public.orders
   for insert to anon
   with check (order_id like 'AKRI-%');
 
+-- Allow reading orders for the admin (anon reads for dashboard display).
+drop policy if exists "anon can read orders" on public.orders;
+create policy "anon can read orders" on public.orders
+  for select to anon
+  using (true);
+
 -- Staff (Supabase Auth users): read and update every order.
 drop policy if exists "staff can read orders" on public.orders;
 create policy "staff can read orders" on public.orders
