@@ -93,7 +93,7 @@ export default function RootLayout({ children }) {
               description: "Premium cakes & patisserie in Dimapur, Nagaland. Celebration cakes, cheesecakes, mousse cakes, bento cakes, pies & tarts.",
               url: `${SITE_URL}/`,
               telephone: "+91 82599 17757",
-              email: "akribakes@gmail.com",
+              email: "akribakes2020@gmail.com",
               address: {
                 "@type": "PostalAddress",
                 streetAddress: "Zion Hospital Road, Purana Bazar",

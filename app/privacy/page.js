@@ -26,7 +26,7 @@ const sections = [
   },
   {
     title: "Contact details",
-    body: "To review, correct, or delete the information you've shared with us, contact Akri Bakes on WhatsApp at +91 82599 17757 or email akribakes@gmail.com. We're happy to help.",
+    body: "To review, correct, or delete the information you've shared with us, contact Akri Bakes on WhatsApp at +91 82599 17757 or email akribakes2020@gmail.com. We're happy to help.",
   },
   {
     title: "Changes to this policy",

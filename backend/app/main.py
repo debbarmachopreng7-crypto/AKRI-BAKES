@@ -19,9 +19,9 @@ STATUSES = ["Awaiting Payment Confirmation", "Pending", "Ready For Pickup", "Com
 # ── OTP in-memory store ──────────────────────────────────────────
 otp_store: dict[str, dict] = {}
 
-SMTP_EMAIL = os.environ.get("SMTP_EMAIL", "akribakes@gmail.com")
+SMTP_EMAIL = os.environ.get("SMTP_EMAIL", "akribakes2020@gmail.com")
 SMTP_PASS = os.environ.get("SMTP_PASSWORD", "")
-ADMIN_EMAIL = "akribakes@gmail.com"
+ADMIN_EMAIL = "akribakes2020@gmail.com"
 ADMIN_PHONE = "8259917757"
 
 
