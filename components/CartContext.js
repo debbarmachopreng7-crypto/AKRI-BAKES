@@ -29,6 +29,27 @@ function buildWhatsAppMessage(order) {
   return lines.join("\n");
 }
 
+function buildCustomerConfirmation(order) {
+  const lines = [
+    `Hi ${order.name}! Your order with Akri Bakes is confirmed.`,
+    "",
+    `Order ID: ${order.orderId}`,
+    "",
+    "Items:",
+  ];
+  for (const item of order.items || []) {
+    const size = item.size ? ` (${item.size})` : "";
+    const qty = item.quantity ?? 1;
+    lines.push(`• ${item.name}${size} × ${qty}`);
+  }
+  lines.push("", `Total: ₹${order.total}`);
+  lines.push(`Payment: ${order.payment}`);
+  lines.push(`${order.method === "Delivery" ? "Delivery" : "Pickup"}: ${order.pickupDate}${order.pickupTime ? " at " + order.pickupTime : ""}`);
+  if (order.method === "Delivery" && order.deliveryArea) lines.push(`Area: ${order.deliveryArea}`);
+  lines.push("", "We'll notify you when your order is ready. Thank you for choosing Akri Bakes!");
+  return lines.join("\n");
+}
+
 const CartContext = createContext(null);
 
 const CART_KEY = "akri_cart";

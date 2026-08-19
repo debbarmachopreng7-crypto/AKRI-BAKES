@@ -47,14 +47,38 @@ function Confirmation() {
     ? orders.find((item) => item.orderId === orderId)
     : orders[0];
 
-  // Auto-send WhatsApp notification to store when order is placed
+  // Auto-send WhatsApp notification to store + confirmation to customer
   useEffect(() => {
     if (!order || notifiedRef.current) return;
     notifiedRef.current = true;
-    const msg = buildOrderMessage(order);
-    const url = `https://wa.me/${STORE_WHATSAPP}?text=${encodeURIComponent(msg)}`;
-    window.open(url, "_blank");
+    // Notify store
+    const storeMsg = buildOrderMessage(order);
+    window.open(`https://wa.me/${STORE_WHATSAPP}?text=${encodeURIComponent(storeMsg)}`, "_blank");
   }, [order]);
+
+  // Build customer confirmation message
+  const buildCustomerConfirmation = (o) => {
+    const lines = [
+      `Hi ${o.name}! Your order with Akri Bakes is confirmed.`,
+      "",
+      `Order ID: ${o.orderId}`,
+      "",
+      "Items:",
+    ];
+    for (const item of o.items || []) {
+      const size = item.size ? ` (${item.size})` : "";
+      const qty = item.quantity ?? 1;
+      lines.push(`• ${item.name}${size} × ${qty}`);
+    }
+    lines.push("", `Total: ₹${o.total}`);
+    lines.push(`Payment: ${o.payment}`);
+    lines.push(`${o.method === "Delivery" ? "Delivery" : "Pickup"}: ${o.pickupDate}${o.pickupTime ? " at " + o.pickupTime : ""}`);
+    if (o.method === "Delivery" && o.deliveryArea) lines.push(`Area: ${o.deliveryArea}`);
+    lines.push("", "We'll notify you when your order is ready. Thank you for choosing Akri Bakes!");
+    return lines.join("\n");
+  };
+
+  const customerWhatsApp = order?.phone ? `91${order.phone.replace(/\s+/g, "").replace(/^0/, "")}` : null;
 
   useEffect(() => {
     if (order?.status === "Cancelled") setCancelled(true);
@@ -253,6 +277,25 @@ function Confirmation() {
           <span className={statusBadgeClasses}>{isCancelled ? "Cancelled" : order.status}</span>
         </p>
       </div>
+
+      {customerWhatsApp && (
+        <div className="mx-auto mt-6 max-w-md rounded-[20px] border border-[#25D366]/30 bg-[#25D366]/5 p-6 text-left">
+          <p className="text-sm font-semibold text-[#128C7E]">
+            Get order confirmation on your WhatsApp
+          </p>
+          <p className="mt-2 text-sm leading-6 text-[#8B7355]">
+            Tap below to receive your order details on WhatsApp. Save it for easy tracking.
+          </p>
+          <a
+            href={`https://wa.me/${customerWhatsApp}?text=${encodeURIComponent(buildCustomerConfirmation(order))}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg"
+          >
+            Send to My WhatsApp
+          </a>
+        </div>
+      )}
 
       {isAwaitingPayment ? (
         <div className="mx-auto mt-6 max-w-md rounded-[20px] border border-[#E8E0D8] bg-white p-6 text-left shadow-sm">
