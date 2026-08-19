@@ -266,6 +266,20 @@ export function CartProvider({ children }) {
     return true;
   };
 
+  const deleteOrder = async (orderId) => {
+    if (useSupabase) {
+      const { error } = await supabase
+        .from("orders")
+        .delete()
+        .eq("order_id", orderId);
+      if (error) {
+        console.error("Failed to delete order:", error);
+        throw new Error("Failed to delete order. Please try again.");
+      }
+    }
+    setOrders((current) => current.filter((order) => order.orderId !== orderId));
+  };
+
   const value = {
     items,
     orders,
@@ -279,6 +293,7 @@ export function CartProvider({ children }) {
     placeOrder,
     updateOrderStatus,
     cancelOrder,
+    deleteOrder,
     refreshOrders,
   };
 

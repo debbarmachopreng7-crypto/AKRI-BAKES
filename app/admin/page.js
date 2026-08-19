@@ -149,7 +149,7 @@ function SettingsPanel() {
 
 export default function AdminPage() {
   usePageTitle("Admin | Akri Bakes");
-  const { orders, ready, updateOrderStatus, refreshOrders } = useCart();
+  const { orders, ready, updateOrderStatus, deleteOrder, refreshOrders } = useCart();
   const [activeFilter, setActiveFilter] = useState("all");
   const [photoModal, setPhotoModal] = useState(null);
   const [statusMsg, setStatusMsg] = useState("");
@@ -165,6 +165,18 @@ export default function AdminPage() {
       setTimeout(() => setStatusMsg(""), 3000);
     } catch (err) {
       setStatusMsg(err.message || "Update failed. Try again.");
+      setTimeout(() => setStatusMsg(""), 5000);
+    }
+  };
+
+  const handleDeleteOrder = async (orderId) => {
+    if (!confirm(`Delete order ${orderId} permanently? This cannot be undone.`)) return;
+    try {
+      await deleteOrder(orderId);
+      setStatusMsg(`Order ${orderId} deleted`);
+      setTimeout(() => setStatusMsg(""), 3000);
+    } catch (err) {
+      setStatusMsg(err.message || "Delete failed. Try again.");
       setTimeout(() => setStatusMsg(""), 5000);
     }
   };
@@ -333,6 +345,15 @@ export default function AdminPage() {
                                   {status}
                                 </button>
                               ))}
+                              {order.status === "Cancelled" ? (
+                                <button
+                                  type="button"
+                                  onClick={() => handleDeleteOrder(order.orderId)}
+                                  className="rounded-full border border-red-300 bg-white px-3 py-1.5 text-xs font-medium text-red-600 transition hover:bg-red-50"
+                                >
+                                  Delete
+                                </button>
+                              ) : null}
                             </div>
                           </div>
                         </div>
