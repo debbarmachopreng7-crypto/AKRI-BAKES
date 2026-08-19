@@ -70,6 +70,9 @@ export default function CheckoutPage() {
     setCopied(false);
     setFieldErrors({});
     setError("");
+    if (next === "Pickup") {
+      setForm((current) => ({ ...current, area: "", address: "" }));
+    }
   };
 
   const handleCOD = () => {

@@ -128,6 +128,11 @@ export default function BuildYourCakePage() {
   const handleFileChange = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    if (file.size > 10 * 1024 * 1024) {
+      alert("Image must be under 10 MB. Please choose a smaller file.");
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      return;
+    }
     setPhotoFileName(file.name);
     try {
       const base64 = await toBase64(file);
@@ -195,6 +200,10 @@ export default function BuildYourCakePage() {
   }, [isPlain, isFreshCream, size, flavor, plainFlavor, frosting, decoration, currentFrostingOptions]);
 
   const handleAddToCart = () => {
+    if (!pickupDate) {
+      alert("Please select a pickup date before adding to cart.");
+      return;
+    }
     addItem({
       type: "custom",
       name: isPlain ? `Plain ${plainFlavor}` : `Custom ${flavor} Cake`,

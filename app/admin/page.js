@@ -191,13 +191,13 @@ export default function AdminPage() {
 
   const stats = useMemo(() => {
     return [
-      ["Today's Orders", orders.filter((o) => isToday(o.createdAt)).length],
+      ["Today's Orders", orders.filter((o) => isToday(o.createdAt) && o.status !== "Cancelled").length],
       ["Awaiting Payment", orders.filter((o) => o.status === "Awaiting Payment Confirmation").length],
       ["Pending", orders.filter((o) => o.status === "Pending").length],
       ["Ready For Pickup", orders.filter((o) => o.status === "Ready For Pickup").length],
       ["Completed", orders.filter((o) => o.status === "Completed").length],
       ["Cancelled", orders.filter((o) => o.status === "Cancelled").length],
-      ["Custom Cakes", orders.filter((o) => o.hasCustomCake).length],
+      ["Custom Cakes", orders.filter((o) => o.hasCustomCake && o.status !== "Cancelled").length],
     ];
   }, [orders]);
 
