@@ -50,6 +50,44 @@ function buildCustomerConfirmation(order) {
   return lines.join("\n");
 }
 
+function buildOrderReceivedMessage(order) {
+  const phone = order.phone?.replace(/\s+/g, "").replace(/^0/, "") || "";
+  const customerWa = phone ? `91${phone}` : null;
+  const lines = [
+    `Hi ${order.name}, thank you for your order with Akri Bakes!`,
+    "",
+    `Order ID: ${order.orderId}`,
+    `Total: ₹${order.total}`,
+    `Payment: ${order.payment}`,
+    "",
+    "We've received your order and will confirm it shortly.",
+    "You can track your order at: akribakes.com/track",
+    "",
+    "— Akri Bakes, Dimapur",
+  ];
+  return { message: lines.join("\n"), customerWa };
+}
+
+function buildAdminConfirmedMessage(order) {
+  const phone = order.phone?.replace(/\s+/g, "").replace(/^0/, "") || "";
+  const customerWa = phone ? `91${phone}` : null;
+  const lines = [
+    `Hi ${order.name}, great news!`,
+    "",
+    `Your order ${order.orderId} with Akri Bakes is confirmed.`,
+    "",
+    `${order.method === "Delivery" ? "Delivery" : "Pickup"}: ${order.pickupDate}${order.pickupTime ? " at " + order.pickupTime : ""}`,
+    `Total: ₹${order.total}`,
+    "",
+    order.status === "Ready For Pickup"
+      ? "Your order is ready for pickup! Please visit us."
+      : "Your order has been confirmed. We'll notify you when it's ready.",
+    "",
+    "— Akri Bakes, Dimapur",
+  ];
+  return { message: lines.join("\n"), customerWa };
+}
+
 const CartContext = createContext(null);
 
 const CART_KEY = "akri_cart";
@@ -289,6 +327,11 @@ export function CartProvider({ children }) {
       setOrders((current) => {
         const updated = current.map((order) => (order.orderId === orderId ? { ...order, status } : order));
         const order = updated.find((o) => o.orderId === orderId);
+        // Send WhatsApp to customer when admin confirms
+        if (order && ["Ready For Pickup", "Completed"].includes(status)) {
+          const { message: confMsg, customerWa } = buildAdminConfirmedMessage(order);
+          if (customerWa) window.open(`https://wa.me/${customerWa}?text=${encodeURIComponent(confMsg)}`, "_blank");
+        }
         if (order?.email) sendOrderConfirmation({ ...order, status });
         return updated;
       });
@@ -313,9 +356,16 @@ export function CartProvider({ children }) {
       return;
     }
 
-    setOrders((current) =>
-      current.map((order) => (order.orderId === orderId ? { ...order, status } : order)),
-    );
+    // Local mode
+    setOrders((current) => {
+      const updated = current.map((order) => (order.orderId === orderId ? { ...order, status } : order));
+      const order = updated.find((o) => o.orderId === orderId);
+      if (order && ["Ready For Pickup", "Completed"].includes(status)) {
+        const { message: confMsg, customerWa } = buildAdminConfirmedMessage(order);
+        if (customerWa) window.open(`https://wa.me/${customerWa}?text=${encodeURIComponent(confMsg)}`, "_blank");
+      }
+      return updated;
+    });
   };
 
   const cancelOrder = async (orderId) => {

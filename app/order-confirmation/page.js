@@ -47,14 +47,23 @@ function Confirmation() {
     ? orders.find((item) => item.orderId === orderId)
     : orders[0];
 
-  // Auto-send WhatsApp notification to store + confirmation to customer
+  const customerWhatsApp = order?.phone ? `91${order.phone.replace(/\s+/g, "").replace(/^0/, "")}` : null;
+
+  // Auto-send WhatsApp notification to store + instant confirmation to customer
   useEffect(() => {
     if (!order || notifiedRef.current) return;
     notifiedRef.current = true;
     // Notify store
     const storeMsg = buildOrderMessage(order);
     window.open(`https://wa.me/${STORE_WHATSAPP}?text=${encodeURIComponent(storeMsg)}`, "_blank");
-  }, [order]);
+    // Instant confirmation to customer
+    if (customerWhatsApp) {
+      const custMsg = buildCustomerConfirmation(order);
+      setTimeout(() => {
+        window.open(`https://wa.me/${customerWhatsApp}?text=${encodeURIComponent(custMsg)}`, "_blank");
+      }, 1500);
+    }
+  }, [order, customerWhatsApp]);
 
   // Build customer confirmation message
   const buildCustomerConfirmation = (o) => {
@@ -77,8 +86,6 @@ function Confirmation() {
     lines.push("", "We'll notify you when your order is ready. Thank you for choosing Akri Bakes!");
     return lines.join("\n");
   };
-
-  const customerWhatsApp = order?.phone ? `91${order.phone.replace(/\s+/g, "").replace(/^0/, "")}` : null;
 
   useEffect(() => {
     if (order?.status === "Cancelled") setCancelled(true);
@@ -281,19 +288,11 @@ function Confirmation() {
       {customerWhatsApp && (
         <div className="mx-auto mt-6 max-w-md rounded-[20px] border border-[#25D366]/30 bg-[#25D366]/5 p-6 text-left">
           <p className="text-sm font-semibold text-[#128C7E]">
-            Get order confirmation on your WhatsApp
+            Order confirmation sent to your WhatsApp
           </p>
           <p className="mt-2 text-sm leading-6 text-[#8B7355]">
-            Tap below to receive your order details on WhatsApp. Save it for easy tracking.
+            Check your WhatsApp for order details. You&rsquo;ll receive another message when the store confirms your order.
           </p>
-          <a
-            href={`https://wa.me/${customerWhatsApp}?text=${encodeURIComponent(buildCustomerConfirmation(order))}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg"
-          >
-            Send to My WhatsApp
-          </a>
         </div>
       )}
 
