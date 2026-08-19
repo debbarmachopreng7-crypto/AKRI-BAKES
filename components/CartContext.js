@@ -3,6 +3,31 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { supabase, isSupabaseConfigured } from "../lib/supabase";
 
+const STORE_WHATSAPP = "918259917757";
+
+function buildWhatsAppMessage(order) {
+  const lines = [`${order.orderId}`, ""];
+  lines.push("Items:");
+  for (const item of order.items || []) {
+    const size = item.size ? ` (${item.size})` : "";
+    const qty = item.quantity ?? 1;
+    lines.push(`• ${item.name}${size} × ${qty} = ₹${item.price * qty}`);
+    if (item.type === "custom" && item.message) lines.push(`   Note: ${item.message}`);
+  }
+  lines.push("", `Total: ₹${order.total}`, `Payment: ${order.payment}`, "");
+  lines.push(`Name: ${order.name}`);
+  lines.push(`Phone: ${order.phone}`);
+  lines.push(`Method: ${order.method || "Pickup"}`);
+  lines.push(`${order.method === "Delivery" ? "Delivery" : "Pickup"}: ${order.pickupDate}`);
+  if (order.pickupTime) lines.push(`Time: ${order.pickupTime}`);
+  if (order.method === "Delivery") {
+    if (order.deliveryArea) lines.push(`Area: ${order.deliveryArea}`);
+    if (order.address) lines.push(`Address: ${order.address}`);
+  }
+  if (order.notes) lines.push(`Notes: ${order.notes}`);
+  return lines.join("\n");
+}
+
 const CartContext = createContext(null);
 
 const CART_KEY = "akri_cart";
@@ -188,8 +213,15 @@ export function CartProvider({ children }) {
         ...details,
         total: details.total ?? subtotal,
       };
-      const { error } = await supabase.from("orders").insert(toRow(order));
-      if (error) throw new Error("Could not place order. Please try again.");
+      try {
+        const { error } = await supabase.from("orders").insert(toRow(order));
+        if (error) throw error;
+      } catch {
+        // Supabase down — fall back to WhatsApp
+        const msg = buildWhatsAppMessage(order);
+        window.open(`https://wa.me/${STORE_WHATSAPP}?text=${encodeURIComponent(msg)}`, "_blank");
+        order.whatsappFallback = true;
+      }
       setOrders((current) => [order, ...current]);
       clearCart();
       return order;

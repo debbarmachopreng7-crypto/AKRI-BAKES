@@ -145,7 +145,25 @@ function Confirmation() {
         </p>
       )}
 
-      {!supabaseLive ? (
+      {order?.whatsappFallback ? (
+        <div className="mx-auto mt-6 max-w-md rounded-[20px] border border-amber-300 bg-amber-50 p-6 text-left">
+          <p className="text-sm font-semibold text-amber-800">
+            Order sent via WhatsApp
+          </p>
+          <p className="mt-2 text-sm leading-6 text-amber-700">
+            Our ordering system is temporarily offline, so we sent your order directly to the store on WhatsApp.
+            Please press <strong>Send</strong> in the WhatsApp chat that opened. The store will confirm your order by phone.
+          </p>
+          <a
+            href={`https://wa.me/${STORE_WHATSAPP}?text=${encodeURIComponent(buildOrderMessage(order))}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg"
+          >
+            Open WhatsApp again
+          </a>
+        </div>
+      ) : !supabaseLive ? (
         <div className="mx-auto mt-6 max-w-md rounded-[20px] border border-[#BC6153] bg-[#FDF1EE] p-6 text-left">
           <p className="text-sm font-semibold text-[#A85547]">
             One last step — send us your order
