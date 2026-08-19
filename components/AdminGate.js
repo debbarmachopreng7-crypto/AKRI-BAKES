@@ -100,7 +100,6 @@ export default function AdminGate({ children }) {
       try {
         const { error } = await supabase.auth.signInWithOtp({
           email: email.trim(),
-          options: { shouldCreateUser: false },
         });
         if (error) { setOtpError(error.message); setOtpLoading(false); return; }
         setOtpSent(true);
@@ -195,7 +194,8 @@ export default function AdminGate({ children }) {
       setNewPassword("");
       setNewPasswordConfirm("");
       setOtpError("");
-      setStep("login");
+      setAuthed(true);
+      setStep("authed");
       setResetDone(false);
       return;
     }
