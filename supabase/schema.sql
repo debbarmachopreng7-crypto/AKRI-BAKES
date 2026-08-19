@@ -50,6 +50,13 @@ drop policy if exists "staff can update orders" on public.orders;
 create policy "staff can update orders" on public.orders
   for update to authenticated using (true);
 
+-- Allow anon to update order status (admin uses local password, not Supabase Auth).
+drop policy if exists "anon can update order status" on public.orders;
+create policy "anon can update order status" on public.orders
+  for update to anon
+  using (true)
+  with check (true);
+
 -- Push new / changed orders to the admin dashboard instantly.
 do $$
 begin

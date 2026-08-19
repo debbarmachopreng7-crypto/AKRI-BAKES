@@ -152,10 +152,22 @@ export default function AdminPage() {
   const { orders, ready, updateOrderStatus, refreshOrders } = useCart();
   const [activeFilter, setActiveFilter] = useState("all");
   const [photoModal, setPhotoModal] = useState(null);
+  const [statusMsg, setStatusMsg] = useState("");
 
   useEffect(() => {
     if (ready) refreshOrders();
   }, [ready, refreshOrders]);
+
+  const handleStatusChange = async (orderId, status) => {
+    try {
+      await updateOrderStatus(orderId, status);
+      setStatusMsg(`Order ${orderId} → ${status}`);
+      setTimeout(() => setStatusMsg(""), 3000);
+    } catch (err) {
+      setStatusMsg(err.message || "Update failed. Try again.");
+      setTimeout(() => setStatusMsg(""), 5000);
+    }
+  };
 
   const filteredOrders = useMemo(() => {
     if (activeFilter === "all") return orders;
@@ -222,6 +234,12 @@ export default function AdminPage() {
 
             <div>
               <h2 className="font-serif text-3xl font-semibold text-[#26110B]">Orders</h2>
+
+              {statusMsg ? (
+                <div className="mt-4 rounded-full bg-[#26110B] px-5 py-2.5 text-sm font-medium text-white shadow-md">
+                  {statusMsg}
+                </div>
+              ) : null}
 
               {!ready ? (
                 <div className="mt-6 text-[#26110B]">Loading orders…</div>
@@ -301,7 +319,7 @@ export default function AdminPage() {
                                 <button
                                   key={status}
                                   type="button"
-                                  onClick={() => updateOrderStatus(order.orderId, status)}
+                                  onClick={() => handleStatusChange(order.orderId, status)}
                                   className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${
                                     order.status === status
                                       ? status === "Cancelled"

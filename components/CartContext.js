@@ -224,10 +224,13 @@ export function CartProvider({ children }) {
 
   const updateOrderStatus = async (orderId, status) => {
     if (useSupabase) {
-      try {
-        await supabase.from("orders").update({ status }).eq("order_id", orderId);
-      } catch {
-        /* network error: realtime will sync when it reconnects */
+      const { error } = await supabase
+        .from("orders")
+        .update({ status })
+        .eq("order_id", orderId);
+      if (error) {
+        console.error("Failed to update order status:", error);
+        throw new Error("Failed to update order. Please try again.");
       }
       setOrders((current) =>
         current.map((order) => (order.orderId === orderId ? { ...order, status } : order)),
