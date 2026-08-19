@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePageTitle } from "../../components/usePageTitle";
 import { useSearchParams } from "next/navigation";
@@ -41,10 +41,20 @@ function Confirmation() {
   const [canceling, setCanceling] = useState(false);
   const [cancelError, setCancelError] = useState("");
   const [cancelled, setCancelled] = useState(false);
+  const notifiedRef = useRef(false);
 
   const order = orderId
     ? orders.find((item) => item.orderId === orderId)
     : orders[0];
+
+  // Auto-send WhatsApp notification to store when order is placed
+  useEffect(() => {
+    if (!order || notifiedRef.current) return;
+    notifiedRef.current = true;
+    const msg = buildOrderMessage(order);
+    const url = `https://wa.me/${STORE_WHATSAPP}?text=${encodeURIComponent(msg)}`;
+    window.open(url, "_blank");
+  }, [order]);
 
   useEffect(() => {
     if (order?.status === "Cancelled") setCancelled(true);

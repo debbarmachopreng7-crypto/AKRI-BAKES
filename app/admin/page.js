@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useCart } from "../../components/CartContext";
 import { usePageTitle } from "../../components/usePageTitle";
 import AdminGate from "../../components/AdminGate";
@@ -153,10 +153,38 @@ export default function AdminPage() {
   const [activeFilter, setActiveFilter] = useState("all");
   const [photoModal, setPhotoModal] = useState(null);
   const [statusMsg, setStatusMsg] = useState("");
+  const [newOrderFlash, setNewOrderFlash] = useState(null);
+  const prevOrderCount = useRef(orders.length);
 
+  // Browser notification + sound when new order arrives
   useEffect(() => {
-    if (ready) refreshOrders();
-  }, [ready, refreshOrders]);
+    if (!ready || orders.length === 0) return;
+    if (orders.length > prevOrderCount.current) {
+      const newest = orders[0];
+      // Play notification sound
+      try {
+        const audio = new Audio("data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVggoKIeGBGPGeqy9+tfGczMmB8goaJfW1HPmKszuOwe2UxL117goeKg3NtS0Bhrc3ksXlkMC1deYGGiYV1cE5CY67O5bF5Yy8sXXiBhoiFd3FQQmSvz+aye2MvLFx3gIWIhXdyUUNlr8/lsXpjLytcd4CFiIV3c1JEZrDR57J8ZC8rW3aAhIeEd3RURGex0+ezfWUvKlt1f4OGhHd0VUZpstXptH5mLyladH+DhYN2dVZIbLTW67Z/Zy8oWXR+goODdXVYSG222O24gGgvJ1hze4GDgXR2Wkpvt9nuuYFpLyZYcnuAgH90d1tNcbrb8LuCaS8lV3F5f399dXheUXO93vK+g2ouI1Zwd359e3h7YVR2wOD0wIVrLSBUb3Z8e3l6fGRZe8Pj98OGaisbUGx0eXl4eXxoXn3H5vrIiWkoF05pcnV2dXR2b2V/yej9y4xoJBZLZm9ycnFycGtlh87tAsqLZiIUSWRrb3BxcXBuaYPR8QbMimIeEEZhaWxub3BwcG9vhNL0C86JXxkLQ11maWxucHFwcXBydHl/fXtybnR5gYF+fHt2cnFydHl+fnx7d3NydHl+fnx7eHRzdXp/f318eXN0dnp+f319enN1d3t/f359enN2eHx/f359e3R2eX1/f39+fHR3en5/f39+fHR4e39/gH9+fHR5fH9/gH9/fHR6fX+AgH9/fHR7fn+AgIB/fHR8f4CAgIB/fHV9gICAgIB/fHV+gYCAgIB/fHWBgYCAgH9/fHWBgYCAgH9+fHWBgYCAf39+fHWBgYB/f359fHSBgYB/f359fHWBgYB/f359fHWBgoB/f358fHWBgoB/f358fHWCgoB/f358fHWCgoB/f358fHWDgoB/f357fHWDgoB/f357fHWEgoB/f357fHWEgoB/f357fHWFgoB/f356fHWFgoB/f356fHWGgoB/f356fHWGgoB/f356fHWGgoB/f355fHWGgoB/f355fHWHgoB/f355fHWHgoB/f355fHWHgoB/f355fHWHgoB/f354fHWIgoB/f354fHWIgoB/f354fHWIgoB/f354fHWIgoB/f354fHWIgoB/f353fHWIgoB/f353fHWIgoB/f353fHWJgoB/f353fHWJgoB/f353fHWJgoB/f352fHWJgoB/f352fHWJgoB/f352fHWJgoB/f352fHWJgoB/f352fHWJgoA=").play();
+      } catch { /* ignore audio errors */ }
+      // Browser notification
+      if (Notification.permission === "granted") {
+        new Notification("New Order — Akri Bakes", {
+          body: `${newest.orderId} from ${newest.name}\nTotal: ₹${newest.total}\n${newest.method}`,
+          icon: "/favicon.ico",
+        });
+      }
+      // Flash the new order
+      setNewOrderFlash(newest.orderId);
+      setTimeout(() => setNewOrderFlash(null), 5000);
+    }
+    prevOrderCount.current = orders.length;
+  }, [orders, ready]);
+
+  // Request notification permission on mount
+  useEffect(() => {
+    if (typeof window !== "undefined" && "Notification" in window && Notification.permission === "default") {
+      Notification.requestPermission();
+    }
+  }, []);
 
   const handleStatusChange = async (orderId, status) => {
     try {
@@ -264,8 +292,10 @@ export default function AdminPage() {
                   {filteredOrders.map((order) => {
                     const hasPhoto = order.items?.some((item) => item.inspirationPhoto);
                     return (
-                      <div key={order.orderId} className={`rounded-[2rem] border bg-white p-6 shadow-sm ${
-                        hasPhoto ? "border-amber-300" : "border-[#E8E0D8]"
+                      <div key={order.orderId} className={`rounded-[2rem] border bg-white p-6 shadow-sm transition ${
+                        newOrderFlash === order.orderId
+                          ? "border-green-400 shadow-green-200 shadow-lg animate-pulse"
+                          : hasPhoto ? "border-amber-300" : "border-[#E8E0D8]"
                       }`}>
                         <div className="flex flex-wrap items-start justify-between gap-4">
                           <div>
