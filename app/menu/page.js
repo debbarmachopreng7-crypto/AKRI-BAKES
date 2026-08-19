@@ -219,6 +219,7 @@ function OrderModal({ category, item, onClose }) {
   const [size, setSize] = useState(() =>
     category.pricing === "cheesecake" || category.pricing === "pie" ? "Mini" : "1 lb",
   );
+  const [quantity, setQuantity] = useState(1);
   const [message, setMessage] = useState("");
   const [pickupDate, setPickupDate] = useState("");
   const [pickupTime, setPickupTime] = useState("3:00 PM");
@@ -245,15 +246,17 @@ function OrderModal({ category, item, onClose }) {
     : ["1 lb", "2 lb"];
 
   const handleAdd = () => {
-    addItem({
-      type: "menu",
-      name: item.name,
-      size: isPiece ? "Standard" : size,
-      message: message.trim(),
-      pickupDate,
-      pickupTime,
-      price,
-    });
+    for (let i = 0; i < quantity; i++) {
+      addItem({
+        type: "menu",
+        name: item.name,
+        size: isPiece ? "Standard" : size,
+        message: message.trim(),
+        pickupDate,
+        pickupTime,
+        price,
+      });
+    }
     onClose();
     router.push("/cart");
   };
@@ -281,6 +284,21 @@ function OrderModal({ category, item, onClose }) {
             </div>
           ) : null}
 
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#8B7355]">Quantity</p>
+            <div className="mt-2 flex items-center gap-3">
+              <button type="button" onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-[#E8E0D8] text-lg font-semibold text-[#26110B] transition hover:bg-[#F9F8F6]">
+                &minus;
+              </button>
+              <span className="w-8 text-center text-lg font-semibold text-[#26110B]">{quantity}</span>
+              <button type="button" onClick={() => setQuantity((q) => Math.min(20, q + 1))}
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-[#E8E0D8] text-lg font-semibold text-[#26110B] transition hover:bg-[#F9F8F6]">
+                +
+              </button>
+            </div>
+          </div>
+
           <label className="block text-sm font-medium text-[#26110B]">
             <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.25em] text-[#8B7355]">Message on Cake</span>
             <input value={message} onChange={(e) => setMessage(e.target.value)} placeholder="e.g. Happy Birthday!" className="w-full rounded-2xl border border-[#E8E0D8] bg-[#F9F8F6] px-4 py-3 text-[#26110B] outline-none focus:border-[#26110B]" />
@@ -302,7 +320,7 @@ function OrderModal({ category, item, onClose }) {
 
         <div className="mt-6 flex items-center justify-between rounded-2xl bg-[#F9F8F6] px-4 py-3">
           <span className="text-sm font-semibold uppercase tracking-[0.25em] text-[#8B7355]">Total</span>
-          <span className="text-xl font-semibold text-[#26110B]">{formatPrice(price)}</span>
+          <span className="text-xl font-semibold text-[#26110B]">{formatPrice(price * quantity)}</span>
         </div>
 
         <button type="button" onClick={handleAdd} className="mt-4 inline-flex w-full justify-center rounded-full bg-[#26110B] px-6 py-3 font-medium text-white transition hover:bg-[#3D2219]">

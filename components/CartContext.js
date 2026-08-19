@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { supabase, isSupabaseConfigured } from "../lib/supabase";
+import { sendOrderConfirmation } from "../lib/email";
 
 const STORE_WHATSAPP = "918259917757";
 
@@ -264,9 +265,12 @@ export function CartProvider({ children }) {
         console.error("Failed to update order status:", error);
         throw new Error("Failed to update order. Please try again.");
       }
-      setOrders((current) =>
-        current.map((order) => (order.orderId === orderId ? { ...order, status } : order)),
-      );
+      setOrders((current) => {
+        const updated = current.map((order) => (order.orderId === orderId ? { ...order, status } : order));
+        const order = updated.find((o) => o.orderId === orderId);
+        if (order?.email) sendOrderConfirmation({ ...order, status });
+        return updated;
+      });
       return;
     }
     if (useBackend) {

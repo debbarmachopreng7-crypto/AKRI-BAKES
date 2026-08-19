@@ -95,11 +95,26 @@ export default function Navbar() {
         </nav>
 
         {/* Cart Button */}
-        <motion.div whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.92 }}>
+        <div className="flex items-center gap-2">
           <Link
-            href="/cart"
-            className="relative flex h-11 w-11 items-center justify-center rounded-full bg-[#BC6153] text-white transition hover:bg-[#A85547]"
+            href="/track"
+            className={`hidden md:flex items-center gap-1.5 rounded-full border px-3 py-2 text-[11px] font-medium uppercase tracking-[0.2em] transition-colors ${
+              pathname === "/track"
+                ? "border-[#BC6153] text-[#BC6153]"
+                : "border-[#E8E0D8] text-[#8B7355] hover:bg-[#F9F8F6]"
+            }`}
           >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
+              <path d="M12 6v6l4 2" />
+            </svg>
+            Track
+          </Link>
+          <motion.div whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.92 }}>
+            <Link
+              href="/cart"
+              className="relative flex h-11 w-11 items-center justify-center rounded-full bg-[#BC6153] text-white transition hover:bg-[#A85547]"
+            >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="9" cy="21" r="1" />
               <circle cx="20" cy="21" r="1" />
@@ -116,6 +131,7 @@ export default function Navbar() {
             ) : null}
           </Link>
         </motion.div>
+        </div>
       </div>
 
       {/* Mobile Menu */}
@@ -143,6 +159,16 @@ export default function Navbar() {
                 </Link>
               );
             })}
+            <Link
+              href="/track"
+              className={`rounded-2xl px-4 py-3 text-sm font-medium uppercase tracking-[0.15em] transition ${
+                pathname === "/track"
+                  ? "bg-[#26110B] text-white"
+                  : "text-[#26110B] hover:bg-[#F9F8F6]"
+              }`}
+            >
+              Track Order
+            </Link>
           </div>
         </motion.div>
       )}

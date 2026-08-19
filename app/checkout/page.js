@@ -9,6 +9,7 @@ import { deliveryAreas, getDeliveryCharge } from "../../components/deliveryAreas
 import { UPI_CONFIG, UPI_APPS, generateUPILink, copyUPIId } from "../../components/upiConfig";
 import { QRCodeSVG } from "qrcode.react";
 import Breadcrumbs from "../../components/Breadcrumbs";
+import { sendOrderConfirmation } from "../../lib/email";
 
 const timeSlots = [
   "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM",
@@ -134,6 +135,7 @@ export default function CheckoutPage() {
         total,
         status: "Awaiting Payment Confirmation",
       });
+      sendOrderConfirmation(order);
       router.push(`/order-confirmation?id=${order.orderId}`);
     } catch (err) {
       setError(err.message || "Could not place order. Please try again.");
@@ -154,6 +156,7 @@ export default function CheckoutPage() {
         total,
         status: "Pending",
       });
+      sendOrderConfirmation(order);
       router.push(`/order-confirmation?id=${order.orderId}`);
     } catch (err) {
       setError(err.message || "Could not place order. Please try again.");
