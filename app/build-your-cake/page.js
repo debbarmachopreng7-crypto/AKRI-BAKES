@@ -442,6 +442,9 @@ export default function BuildYourCakePage() {
                   <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
                 </div>
                 <p className="mt-3 text-xs text-[#A09080]">PNG, JPG, WEBP — up to 10 MB</p>
+                <p className="mt-3 rounded-2xl border border-dashed border-[#BC6153]/50 bg-[#BC6153]/5 px-4 py-3 text-xs leading-6 text-[#8B7355]">
+                  <strong>Please note:</strong> Custom image cakes may incur additional charges depending on complexity. Standard cakes have no extra charges. Final pricing confirmed by the store after review.
+                </p>
               </div>
               </motion.div>
 
