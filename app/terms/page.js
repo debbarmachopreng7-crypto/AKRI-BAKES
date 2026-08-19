@@ -38,7 +38,7 @@ const sections = [
   },
   {
     title: "Questions",
-    body: "For anything on this page, contact us on WhatsApp at +91 82599 17757 or email Akribake2020@gmail.com.",
+    body: "For anything on this page, contact us on WhatsApp at +91 82599 17757 or email akribakes@gmail.com.",
   },
 ];
 

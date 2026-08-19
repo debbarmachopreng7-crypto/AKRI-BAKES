@@ -99,8 +99,8 @@ export default function ContactPage() {
                 <ContactLine
                   icon={<MailIcon />}
                   label="Email"
-                  value="Akribake2020@gmail.com"
-                  href="mailto:Akribake2020@gmail.com"
+                  value="akribakes@gmail.com"
+                  href="mailto:akribakes@gmail.com"
                 />
               </div>
 

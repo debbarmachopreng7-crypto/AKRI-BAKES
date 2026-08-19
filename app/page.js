@@ -795,11 +795,11 @@ export default function HomePage() {
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/50">Get in Touch</p>
               <p className="mt-4 text-lg font-medium">{PHONE}</p>
-              <p className="mt-2 text-sm text-white/60">Akribake2020@gmail.com</p>
+              <p className="mt-2 text-sm text-white/60">akribakes@gmail.com</p>
               <div className="mt-4 flex gap-3">
                 <a href={`tel:${PHONE}`} className="rounded-full bg-white/10 px-4 py-2 text-xs font-medium text-white transition hover:bg-white/20">Call</a>
                 <a href={`https://wa.me/91${PHONE}`} target="_blank" rel="noopener noreferrer" className="rounded-full bg-white/10 px-4 py-2 text-xs font-medium text-white transition hover:bg-white/20">WhatsApp</a>
-                <a href="mailto:Akribake2020@gmail.com" className="rounded-full bg-white/10 px-4 py-2 text-xs font-medium text-white transition hover:bg-white/20">Email</a>
+                <a href="mailto:akribakes@gmail.com" className="rounded-full bg-white/10 px-4 py-2 text-xs font-medium text-white transition hover:bg-white/20">Email</a>
               </div>
             </div>
           </div>
