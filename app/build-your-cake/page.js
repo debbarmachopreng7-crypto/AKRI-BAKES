@@ -124,6 +124,8 @@ export default function BuildYourCakePage() {
   const [pickupTime, setPickupTime] = useState("3:00 PM");
   const [inspirationPhoto, setInspirationPhoto] = useState(null);
   const [photoFileName, setPhotoFileName] = useState("");
+  const [showCustomSizeModal, setShowCustomSizeModal] = useState(false);
+  const [customSizeInput, setCustomSizeInput] = useState("");
 
   const handleFileChange = async (e) => {
     const file = e.target.files?.[0];
@@ -224,6 +226,38 @@ export default function BuildYourCakePage() {
     router.push("/cart");
   };
 
+  const handleCustomSizeSubmit = () => {
+    if (!customSizeInput.trim()) {
+      alert("Please enter your custom size.");
+      return;
+    }
+    if (!pickupDate) {
+      alert("Please select a pickup date before adding to cart.");
+      return;
+    }
+    addItem({
+      type: "custom",
+      name: `Custom ${flavor} Cake (Quote)`,
+      cakeCategory,
+      size: customSizeInput.trim(),
+      occasion,
+      flavor: isPlain ? plainFlavor : flavor,
+      frosting: isPlain ? "None" : frosting,
+      decoration,
+      message,
+      pickupDate,
+      pickupTime,
+      price: 0,
+      quantity,
+      isCustomQuote: true,
+      inspirationPhoto: inspirationPhoto || "",
+      photoFileName: photoFileName || "",
+    });
+    setShowCustomSizeModal(false);
+    setCustomSizeInput("");
+    router.push("/cart");
+  };
+
   return (
     <main>
       <Breadcrumbs items={[{ label: "Build Your Cake" }]} />
@@ -310,7 +344,7 @@ export default function BuildYourCakePage() {
                   ))}
                   <ScaleOnHover>
                   <button type="button"
-                    onClick={() => window.open("https://wa.me/918259917757?text=" + encodeURIComponent("Hi Akri Bakes! I'd like a custom cake quote for a size larger than 5 lb. Please help me with pricing."), "_blank")}
+                    onClick={() => setShowCustomSizeModal(true)}
                     className="rounded-2xl border border-dashed border-[#D0C8B8] bg-[#F9F8F6] px-4 py-3 text-center text-sm text-[#8B7355] hover:border-[#BC6153] hover:bg-[#BC6153]/5 transition">
                     Custom (quote)
                   </button>
@@ -527,6 +561,56 @@ export default function BuildYourCakePage() {
         </div>
       </section>
       </SlideUp>
+
+      {/* ── Custom Size Modal ── */}
+      <AnimatePresence>
+        {showCustomSizeModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+            onClick={() => setShowCustomSizeModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="w-full max-w-md rounded-[2rem] bg-white p-8 shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h2 className="font-serif text-2xl font-semibold text-[#26110B]">Custom Size Quote</h2>
+              <p className="mt-2 text-sm text-[#8B7355]">
+                Enter your custom size (e.g., 6 lb, 8 lb, 10 lb, or any specific weight).
+                Our team will review and confirm the price.
+              </p>
+              <input
+                type="text"
+                value={customSizeInput}
+                onChange={(e) => setCustomSizeInput(e.target.value)}
+                placeholder="e.g., 6 lb, 8 lb, 10 lb..."
+                className="mt-5 w-full rounded-2xl border border-[#E8E0D8] bg-[#F9F8F6] px-4 py-3 text-[#26110B] outline-none focus:border-[#26110B]"
+              />
+              <div className="mt-6 flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => { setShowCustomSizeModal(false); setCustomSizeInput(""); }}
+                  className="flex-1 rounded-full border border-[#E8E0D8] bg-white px-6 py-3 font-medium text-[#26110B] transition hover:bg-[#EDE8E0]"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleCustomSizeSubmit}
+                  className="flex-1 rounded-full bg-[#26110B] px-6 py-3 font-medium text-white transition hover:bg-[#3D2219]"
+                >
+                  Add to Cart
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   );
 }
