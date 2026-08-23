@@ -310,7 +310,8 @@ export default function BuildYourCakePage() {
                   ))}
                   <ScaleOnHover>
                   <button type="button"
-                    className="rounded-2xl border border-dashed border-[#D0C8B8] bg-[#F9F8F6] px-4 py-3 text-center text-sm text-[#8B7355]">
+                    onClick={() => window.open("https://wa.me/918259917757?text=" + encodeURIComponent("Hi Akri Bakes! I'd like a custom cake quote for a size larger than 5 lb. Please help me with pricing."), "_blank")}
+                    className="rounded-2xl border border-dashed border-[#D0C8B8] bg-[#F9F8F6] px-4 py-3 text-center text-sm text-[#8B7355] hover:border-[#BC6153] hover:bg-[#BC6153]/5 transition">
                     Custom (quote)
                   </button>
                   </ScaleOnHover>
